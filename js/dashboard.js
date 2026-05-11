@@ -300,7 +300,7 @@ function renderUsersPage(){
       <td><span class="rbadge ${u.role==='superadmin'?'r-sa':u.role==='editor'?'r-ed':'r-vi'}">${{superadmin:'Super Admin',editor:'Editor',viewer:'Espectador'}[u.role]||u.role}</span></td>
       <td style="font-size:10px">${tBadges}</td>
       <td style="font-size:10px;color:var(--gray-600)">${u.created?new Date(u.created).toLocaleDateString('es-EC'):'—'}</td>
-      <td>${u.locked?`<span style="font-size:9px;color:var(--gray-400)">🔒 Protegido</span>`:`<button class="btn btn-d" style="padding:3px 8px;font-size:9px" onclick="deleteUser('${esc(u.username)}')">Eliminar</button>`}</td>
+      <td style="display:flex;gap:4px;align-items:center">${u.locked?`<span style="font-size:9px;color:var(--gray-400)">🔒 Protegido</span>`:`<button class="btn" style="padding:3px 8px;font-size:9px;background:var(--navy);color:#fff" onclick="editUser('${esc(u.username)}')">Editar</button><button class="btn btn-d" style="padding:3px 8px;font-size:9px" onclick="deleteUser('${esc(u.username)}')">Eliminar</button>`}</td>
     </tr>`;}).join('');
   // Actualizar contador en panel de sync
   const exportable=users.filter(u=>!u.locked&&u.role!=='superadmin');
@@ -356,6 +356,69 @@ function showToast(msg,isErr=false){
   const t=document.getElementById('toast');
   t.textContent=msg;t.style.background=isErr?'var(--red)':'var(--navy)';
   t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+function editUser(uname){
+  const u=getUsers().find(x=>x.username===uname);
+  if(!u)return;
+  document.getElementById('eu-username').value=uname;
+  document.getElementById('eu-username-lbl').textContent=uname;
+  document.getElementById('eu-name').value=u.name||'';
+  document.getElementById('eu-pass').value='';
+  document.getElementById('eu-role').value=u.role||'viewer';
+  updateEditPermPreview();
+  // tenant checkboxes
+  const src=TENANTS.length>0?TENANTS:DEFAULT_TENANTS;
+  const assigned=u.tenants||[];
+  const wrap=document.getElementById('eu-tenants');
+  if(wrap){
+    wrap.innerHTML='<div style="margin-bottom:4px"><div style="font-size:10px;font-weight:700;color:var(--gray-600);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px">Bases de datos accesibles</div><div style="display:flex;flex-wrap:wrap;gap:6px">'
+      +src.map(t=>`<label style="display:flex;align-items:center;gap:5px;background:var(--gray-bg);border-radius:6px;padding:5px 9px;cursor:pointer;font-size:11px;font-weight:600;color:var(--navy)"><input type="checkbox" class="eu-tenant-cb" value="${t.id}"${assigned.includes(t.id)?' checked':''} style="accent-color:${t.color}"><span style="width:8px;height:8px;border-radius:50%;background:${t.color};display:inline-block"></span>${t.name}</label>`).join('')
+      +'</div></div>';
+  }
+  const msg=document.getElementById('eu-form-msg');
+  if(msg){msg.textContent='';msg.style.display='none';}
+  const modal=document.getElementById('edit-user-modal');
+  if(modal){modal.style.display='flex';}
+}
+
+function cancelEditUser(){
+  const modal=document.getElementById('edit-user-modal');
+  if(modal)modal.style.display='none';
+}
+
+async function saveEditUser(){
+  const uname=document.getElementById('eu-username').value;
+  const name=document.getElementById('eu-name').value.trim();
+  const pass=document.getElementById('eu-pass').value;
+  const role=document.getElementById('eu-role').value;
+  const tenantIds=Array.from(document.querySelectorAll('.eu-tenant-cb:checked')).map(cb=>cb.value);
+  if(!name){showEuMsg('El nombre no puede estar vacío.','fm-err');return;}
+  if(pass&&pass.length<6){showEuMsg('Contraseña mínimo 6 caracteres.','fm-err');return;}
+  const users=getUsers();
+  const idx=users.findIndex(x=>x.username===uname);
+  if(idx<0){showEuMsg('Usuario no encontrado.','fm-err');return;}
+  users[idx].name=name;
+  users[idx].role=role;
+  users[idx].tenants=tenantIds;
+  if(pass)users[idx].pwdHash=hashPwd(pass);
+  showEuMsg('⏳ Guardando…','fm-ok');
+  const ok=await saveUsers(users);
+  showEuMsg(ok?'✓ Guardado y sincronizado con GitHub.':'✓ Guardado localmente.','fm-ok');
+  renderUsersPage();
+  showToast(ok?`✓ Usuario "${uname}" actualizado`:`✓ "${uname}" guardado localmente`);
+  setTimeout(cancelEditUser, 1200);
+}
+
+function updateEditPermPreview(){
+  const role=document.getElementById('eu-role')?.value||'viewer';
+  const el=document.getElementById('eu-perm-list');
+  if(el)el.innerHTML=(ROLE_PERMS[role]||[]).map(p=>`<div>✓ ${p}</div>`).join('');
+}
+
+function showEuMsg(msg,cls){
+  const el=document.getElementById('eu-form-msg');
+  if(el){el.textContent=msg;el.className=`form-msg ${cls}`;el.style.display='block';}
 }
 
 function renderTenantCheckboxes(){
