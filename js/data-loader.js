@@ -9,11 +9,13 @@
   // Topbar
   const titles={dashboard:'Dashboard',map:'Mapa de Rutas',upload:'Cargar Planificación',config:'Configuración',users:'Gestión de Usuarios'};
   document.getElementById('tb-title').textContent=titles[page]||page;
-  document.getElementById('tb-sub').textContent=SESSION?`${SESSION.name} · KrezcoCargo SAS`:'KrezcoCargo SAS';
+  const tenantName=ACTIVE_TENANT?ACTIVE_TENANT.name:'KrezcoCargo SAS';
+  document.getElementById('tb-sub').textContent=SESSION?`${SESSION.name} · ${tenantName}`:tenantName;
   document.getElementById('date-ctrl').style.display=page==='dashboard'?'':'none';
   // Page-specific init
   if(page==='users')renderUsersPage();
   if(page==='config')loadConfig2();
+  if(page==='upload')buildUploadTenantSelect();
   if(page==='map'){renderMapStats();initSICMap();if(_mapCreated&&SCHOOLS.length>0)renderMapMarkers();}
 }
 
@@ -22,7 +24,7 @@
 ═══════════════════════════════════════════════════════════ */
 function loadFromStorage(){
   try{
-    const raw=localStorage.getItem('kc_data');
+    const raw=localStorage.getItem(getDataCacheKey());
     if(raw){const o=JSON.parse(raw);SCHOOLS=o.schools||[];CFG=Object.assign(CFG,o.cfg||{});
       const saved=getSavedClientName();if(saved)CFG.clienteNombre=saved;
       if(SCHOOLS.length>0){
@@ -43,7 +45,7 @@ async function loadFromGitHubThenRender(){
     SCHOOLS=remote.schools;CFG=Object.assign(CFG,remote.cfg||{});
     const saved=getSavedClientName();if(saved)CFG.clienteNombre=saved;
     // Cache locally
-    localStorage.setItem('kc_data',JSON.stringify(Object.assign({},remote,{updatedAt:remote.updatedAt||new Date().toLocaleString('es-EC')})));
+    localStorage.setItem(getDataCacheKey(),JSON.stringify(Object.assign({},remote,{updatedAt:remote.updatedAt||new Date().toLocaleString('es-EC')})));
     setField('cfg-cliente',CFG.clienteNombre);setField('cfg-programa',CFG.programa);
     setField('cfg-fecha',CFG.fechaInicioISO);setField('cfg-dias',CFG.diasTotal);
     const lu=document.getElementById('last-update');
@@ -57,7 +59,7 @@ async function loadFromGitHubThenRender(){
 }
 
 function saveToStorage(){
-  localStorage.setItem('kc_data',JSON.stringify({schools:SCHOOLS,cfg:CFG,updatedAt:new Date().toLocaleString('es-EC')}));
+  localStorage.setItem(getDataCacheKey(),JSON.stringify({schools:SCHOOLS,cfg:CFG,updatedAt:new Date().toLocaleString('es-EC')}));
   updateSidebarInfo();
 }
 
@@ -73,7 +75,7 @@ function updateSidebarInfo(){
 
 function clearData(){
   if(!confirm('¿Borrar todos los datos cargados?'))return;
-  localStorage.removeItem('kc_data');SCHOOLS=[];
+  localStorage.removeItem(getDataCacheKey());SCHOOLS=[];
   document.getElementById('dashboard').style.display='none';
   document.getElementById('empty-state').style.display='';
   updateSidebarInfo();
@@ -204,8 +206,33 @@ function processRows(rows,fname){
   showToast(`✓ ${SCHOOLS.length.toLocaleString('es-EC')} IE · ${CFG.diasTotal} días`);
 
   // Auto-publish to GitHub so all users see the new data
+  // Use the tenant selected in the upload page selector, or fall back to active tenant
+  const uploadSel=document.getElementById('upload-tenant-sel');
+  const uploadTenantId=uploadSel?uploadSel.value:'';
+  const allTenants=TENANTS.length>0?TENANTS:DEFAULT_TENANTS;
+  const uploadTenant=allTenants.find(t=>t.id===uploadTenantId)||ACTIVE_TENANT;
+  const targetPath=uploadTenant?uploadTenant.dataPath:null;
   const dataPayload={schools:SCHOOLS,cfg:CFG,updatedAt:new Date().toLocaleString('es-EC')};
-  publishToGitHub(dataPayload);
+  publishToGitHub(dataPayload,targetPath);
+}
+
+function buildUploadTenantSelect(){
+  const wrap=document.getElementById('upload-tenant-wrap');
+  if(!wrap)return;
+  if(!SESSION||SESSION.role==='viewer'){wrap.innerHTML='';return;}
+  const accessible=getUserTenants();
+  if(accessible.length<=1){wrap.innerHTML='';return;}
+  const current=ACTIVE_TENANT?ACTIVE_TENANT.id:(accessible[0]?accessible[0].id:'');
+  wrap.innerHTML=`
+    <div style="margin-bottom:14px;padding:12px 16px;background:var(--gray-bg);border-radius:10px;display:flex;align-items:center;gap:12px">
+      <span style="font-size:20px">🗄️</span>
+      <div style="flex:1">
+        <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:4px">¿A qué base de datos subir?</div>
+        <select id="upload-tenant-sel" style="border:1.5px solid var(--gray-200);border-radius:7px;padding:6px 10px;font-size:12px;font-weight:600;color:var(--navy);background:#fff;width:100%;cursor:pointer">
+          ${accessible.map(t=>`<option value="${t.id}"${t.id===current?' selected':''}>${t.name}</option>`).join('')}
+        </select>
+      </div>
+    </div>`;
 }
 
 function mapRow(row){
@@ -304,6 +331,7 @@ function loadConfig2(){
   setField('cfg2-dias',CFG.diasTotal);
   loadConfig2GH();
   checkGHConnectedBadge();
+  if(SESSION&&SESSION.role==='superadmin')renderTenantMgmt();
   const ss=document.getElementById('sys-stats');
   if(ss){
     const _dr=CFG.diaFechasRev||{};
@@ -335,8 +363,7 @@ function saveConfig2(){
   if(SCHOOLS.length>0){
     saveToStorage();
     initDashboard();
-    // Publicar en GitHub para que todos los usuarios vean el nombre actualizado
-    publishToGitHub({schools:SCHOOLS,cfg:CFG,updatedAt:new Date().toLocaleString('es-EC')});
+    publishToGitHub({schools:SCHOOLS,cfg:CFG,updatedAt:new Date().toLocaleString('es-EC')},ACTIVE_TENANT?ACTIVE_TENANT.dataPath:null);
   }
   showToast('✓ Configuración guardada y sincronizada');
   loadConfig2();
