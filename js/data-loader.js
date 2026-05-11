@@ -24,7 +24,7 @@ function loadFromStorage(){
   try{
     const raw=localStorage.getItem('kc_data');
     if(raw){const o=JSON.parse(raw);SCHOOLS=o.schools||[];CFG=Object.assign(CFG,o.cfg||{});
-      CFG.clienteNombre = FORCED_CLIENT_NAME;
+      const saved=getSavedClientName();if(saved)CFG.clienteNombre=saved;
       if(SCHOOLS.length>0){
         setField('cfg-cliente',CFG.clienteNombre);setField('cfg-programa',CFG.programa);
         setField('cfg-fecha',CFG.fechaInicioISO);setField('cfg-dias',CFG.diasTotal);
@@ -41,7 +41,7 @@ async function loadFromGitHubThenRender(){
   const remote=await fetchFromGitHub();
   if(remote&&remote.schools&&remote.schools.length>0){
     SCHOOLS=remote.schools;CFG=Object.assign(CFG,remote.cfg||{});
-    CFG.clienteNombre = FORCED_CLIENT_NAME;
+    const saved=getSavedClientName();if(saved)CFG.clienteNombre=saved;
     // Cache locally
     localStorage.setItem('kc_data',JSON.stringify(Object.assign({},remote,{updatedAt:remote.updatedAt||new Date().toLocaleString('es-EC')})));
     setField('cfg-cliente',CFG.clienteNombre);setField('cfg-programa',CFG.programa);
@@ -260,7 +260,9 @@ function mapRow(row){
    CONFIG
 ═══════════════════════════════════════════════════════════ */
 function readCfgFromForms(){
-  CFG.clienteNombre=document.getElementById('cfg-cliente').value.trim()||'Cliente';
+  const n=document.getElementById('cfg-cliente').value.trim();
+  CFG.clienteNombre=n||CFG.clienteNombre||'';
+  if(n)saveClientName(n);
   CFG.programa=document.getElementById('cfg-programa').value.trim()||'Programa';
   CFG.fechaInicioISO=document.getElementById('cfg-fecha').value||isoToday();
   CFG.diasTotal=parseInt(document.getElementById('cfg-dias').value)||10;
@@ -290,7 +292,9 @@ function loadConfig2(){
 }
 
 function saveConfig2(){
-  CFG.clienteNombre=document.getElementById('cfg2-cliente').value.trim()||CFG.clienteNombre;
+  const newNombre=document.getElementById('cfg2-cliente').value.trim();
+  CFG.clienteNombre=newNombre||CFG.clienteNombre;
+  saveClientName(CFG.clienteNombre);
   CFG.programa=document.getElementById('cfg2-programa').value.trim()||CFG.programa;
   CFG.fechaInicioISO=document.getElementById('cfg2-fecha').value||CFG.fechaInicioISO;
   CFG.diasTotal=parseInt(document.getElementById('cfg2-dias').value)||CFG.diasTotal;
