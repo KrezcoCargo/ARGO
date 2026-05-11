@@ -50,10 +50,13 @@
   },
   {
     "username": "bodgye",
-    "name": "Bodega Quito",
+    "name": "Bodega 2",
     "role": "editor",
     "pwdHash": "e1e0041347ab2fdc208770478751fbad538329c103f50f9643069871b6bbfc61",
     "created": "2026-05-11T21:05:59.784Z",
-    "locked": false
+    "locked": false,
+    "tenants": [
+      "gloria"
+    ]
   }
 ]
