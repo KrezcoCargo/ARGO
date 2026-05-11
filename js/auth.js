@@ -38,8 +38,14 @@ function doLogin(){
   const user=users.find(x=>x.username===u&&x.pwdHash===h);
   if(!user){document.getElementById('lerr').style.display='block';return;}
   document.getElementById('lerr').style.display='none';
-  SESSION={username:user.username,role:user.role,name:user.name};
+  SESSION={username:user.username,role:user.role,name:user.name,tenants:user.tenants||[]};
   sessionStorage.setItem('kc_sess',JSON.stringify(SESSION));
+  // Resolve active tenant (restore previous or default to first accessible)
+  const _src=TENANTS.length>0?TENANTS:DEFAULT_TENANTS;
+  const _accessible=getUserTenants();
+  const _savedId=sessionStorage.getItem('kc_tenant')||'';
+  ACTIVE_TENANT=_accessible.find(t=>t.id===_savedId)||_accessible[0]||null;
+  if(ACTIVE_TENANT)sessionStorage.setItem('kc_tenant',ACTIVE_TENANT.id);
   startApp();
 }
 
@@ -56,10 +62,10 @@ async function initAuth(){
   const loginCard = document.querySelector('#page-login .lcard');
   if(loginCard) loginCard.style.opacity='0.5';
 
-  // Esperar usuarios de GitHub (máx 6s, luego usa caché local)
+  // Esperar usuarios y tenants de GitHub (máx 6s, luego usa caché local)
   try{
     await Promise.race([
-      fetchUsersFromGitHub(),
+      Promise.all([fetchUsersFromGitHub(), fetchTenantsFromGitHub()]),
       new Promise(r=>setTimeout(r,6000))
     ]);
   }catch{}
@@ -70,7 +76,14 @@ async function initAuth(){
   // Intentar restaurar sesión activa
   try{
     const s=sessionStorage.getItem('kc_sess');
-    if(s){SESSION=JSON.parse(s);startApp();return;}
+    if(s){
+      SESSION=JSON.parse(s);
+      const _accessible=getUserTenants();
+      const _savedId=sessionStorage.getItem('kc_tenant')||'';
+      ACTIVE_TENANT=_accessible.find(t=>t.id===_savedId)||_accessible[0]||null;
+      if(ACTIVE_TENANT)sessionStorage.setItem('kc_tenant',ACTIVE_TENANT.id);
+      startApp();return;
+    }
   }catch{}
   document.getElementById('page-login').style.display='';
 }
