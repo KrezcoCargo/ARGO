@@ -53,6 +53,7 @@ function startAutoRefresh(){
       localStorage.setItem('kc_data', JSON.stringify(Object.assign({},remote,{updatedAt:remote.updatedAt||''})));
       _lastDataHash = newHash;
       initDashboard();
+      refreshMapIfActive();
       showRefreshBadge();
     } else if(_lastDataHash === ''){
       _lastDataHash = newHash;
