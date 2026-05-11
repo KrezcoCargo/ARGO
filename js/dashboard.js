@@ -112,7 +112,7 @@ function changeEstado(sel){
   if(ST.est!=='ALL'&&ST.est!==sel.value){renderTable();}
   // auto-publish
   const dataPayload={schools:SCHOOLS,cfg:CFG,updatedAt:new Date().toLocaleString('es-EC')};
-  publishToGitHub(dataPayload);
+  publishToGitHub(dataPayload,ACTIVE_TENANT?ACTIVE_TENANT.dataPath:null);
   showToast(`✓ ${amie} → ${sel.value}`);
 }
 
@@ -289,14 +289,19 @@ function renderMapStats(){/* stats now handled by map count bar */}
 function renderUsersPage(){
   const users=getUsers();
   updatePermPreview();
-  document.getElementById('users-tbody').innerHTML=users.map(u=>`
-    <tr>
+  renderTenantCheckboxes();
+  const src=TENANTS.length>0?TENANTS:DEFAULT_TENANTS;
+  document.getElementById('users-tbody').innerHTML=users.map(u=>{
+    const uTenants=u.role==='superadmin'?src:(u.tenants&&u.tenants.length?src.filter(t=>u.tenants.includes(t.id)):src.slice(0,1));
+    const tBadges=uTenants.map(t=>`<span style="display:inline-flex;align-items:center;gap:3px;background:#F1F5F9;border-radius:4px;padding:2px 6px;font-size:9px;font-weight:600;color:var(--navy);margin:1px"><span style="width:6px;height:6px;border-radius:50%;background:${t.color};display:inline-block"></span>${t.name}</span>`).join('');
+    return`<tr>
       <td style="font-family:monospace;font-size:11px;font-weight:600">${esc(u.username)}</td>
       <td>${esc(u.name||'—')}</td>
       <td><span class="rbadge ${u.role==='superadmin'?'r-sa':u.role==='editor'?'r-ed':'r-vi'}">${{superadmin:'Super Admin',editor:'Editor',viewer:'Espectador'}[u.role]||u.role}</span></td>
+      <td style="font-size:10px">${tBadges}</td>
       <td style="font-size:10px;color:var(--gray-600)">${u.created?new Date(u.created).toLocaleDateString('es-EC'):'—'}</td>
       <td>${u.locked?`<span style="font-size:9px;color:var(--gray-400)">🔒 Protegido</span>`:`<button class="btn btn-d" style="padding:3px 8px;font-size:9px" onclick="deleteUser('${esc(u.username)}')">Eliminar</button>`}</td>
-    </tr>`).join('');
+    </tr>`;}).join('');
   // Actualizar contador en panel de sync
   const exportable=users.filter(u=>!u.locked&&u.role!=='superadmin');
   const panel=document.getElementById('export-panel');
@@ -317,7 +322,8 @@ async function createUser(){
   const users=getUsers();
   if(users.find(u=>u.username===uname)){showFM('Ese usuario ya existe.','fm-err');return;}
   const h=hashPwd(pass);
-  users.push({username:uname,name,role,pwdHash:h,created:new Date().toISOString(),locked:false});
+  const tenantIds=Array.from(document.querySelectorAll('.nu-tenant-cb:checked')).map(cb=>cb.value);
+  users.push({username:uname,name,role,pwdHash:h,created:new Date().toISOString(),locked:false,tenants:tenantIds});
   showFM('⏳ Guardando usuario…','fm-ok');
   const ok=await saveUsers(users);
   showFM(ok?`✓ Usuario "${uname}" creado y sincronizado con GitHub.`:`✓ Usuario "${uname}" creado. (Sin conexión — se sincronizará al reconectar)`,'fm-ok');
@@ -350,4 +356,50 @@ function showToast(msg,isErr=false){
   const t=document.getElementById('toast');
   t.textContent=msg;t.style.background=isErr?'var(--red)':'var(--navy)';
   t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+function renderTenantCheckboxes(){
+  const wrap=document.getElementById('nu-tenants');
+  if(!wrap)return;
+  const src=TENANTS.length>0?TENANTS:DEFAULT_TENANTS;
+  wrap.innerHTML=`<div style="margin-top:10px"><div style="font-size:10px;font-weight:700;color:var(--gray-600);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px">Bases de datos accesibles</div><div style="display:flex;flex-wrap:wrap;gap:6px">`
+    +src.map(t=>`<label style="display:flex;align-items:center;gap:5px;background:var(--gray-bg);border-radius:6px;padding:5px 9px;cursor:pointer;font-size:11px;font-weight:600;color:var(--navy)"><input type="checkbox" class="nu-tenant-cb" value="${t.id}" style="accent-color:${t.color}"><span style="width:8px;height:8px;border-radius:50%;background:${t.color};display:inline-block"></span>${t.name}</label>`).join('')
+    +'</div></div>';
+}
+
+function renderTenantMgmt(){
+  const card=document.getElementById('tenant-mgmt-card');
+  if(card)card.style.display='';
+  const wrap=document.getElementById('tenant-mgmt-wrap');
+  if(!wrap)return;
+  const src=TENANTS.length>0?TENANTS:DEFAULT_TENANTS;
+  wrap.innerHTML=`
+    <div style="margin-top:6px">
+      <div style="font-size:11px;color:var(--gray-600);margin-bottom:10px">Edita los nombres de las bases de datos. Los cambios se guardan en GitHub y son visibles para todos.</div>
+      <div id="tenant-list-edit" style="display:flex;flex-direction:column;gap:8px">
+        ${src.map(t=>`
+          <div style="display:flex;align-items:center;gap:8px;background:var(--gray-bg);border-radius:8px;padding:8px 12px">
+            <span style="width:10px;height:10px;border-radius:50%;background:${t.color};flex-shrink:0"></span>
+            <input id="tname-${t.id}" type="text" value="${esc(t.name)}" style="flex:1;border:1.5px solid var(--gray-200);border-radius:6px;padding:5px 9px;font-size:12px;font-weight:600">
+            <span style="font-size:9px;color:var(--gray-400);font-family:monospace">${t.id}</span>
+          </div>`).join('')}
+      </div>
+      <button onclick="saveTenantNames()" class="btn" style="margin-top:10px;padding:7px 18px;font-size:12px">Guardar nombres</button>
+      <span id="tenant-save-msg" style="font-size:11px;color:var(--green);margin-left:10px;display:none">✓ Guardado</span>
+    </div>`;
+}
+
+async function saveTenantNames(){
+  const src=TENANTS.length>0?[...TENANTS]:DEFAULT_TENANTS.map(t=>({...t}));
+  src.forEach(t=>{
+    const inp=document.getElementById('tname-'+t.id);
+    if(inp&&inp.value.trim())t.name=inp.value.trim();
+  });
+  TENANTS=[...src];
+  localStorage.setItem('kc_tenants',JSON.stringify(src));
+  const ok=await saveTenantsToGitHub(src);
+  const msg=document.getElementById('tenant-save-msg');
+  if(msg){msg.textContent=ok?'✓ Guardado en GitHub':'✓ Guardado localmente';msg.style.display='';setTimeout(()=>msg.style.display='none',3000);}
+  buildTenantSwitcher();
+  showToast(ok?'✓ Bases de datos guardadas en GitHub':'✓ Bases de datos guardadas localmente');
 }
