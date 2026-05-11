@@ -435,6 +435,38 @@
 <div class="toast" id="toast"></div>
 
 
+
+<!-- MODAL EDITAR USUARIO -->
+<div id="edit-user-modal" style="display:none;position:fixed;inset:0;background:rgba(11,22,43,.7);z-index:9999;align-items:center;justify-content:center;padding:16px">
+  <div style="background:#fff;border-radius:14px;max-width:460px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:hidden">
+    <div style="background:var(--navy);padding:16px 20px;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:13px;font-weight:800;color:#fff">✏️ Editar usuario — <span id="eu-username-lbl" style="font-family:monospace;font-weight:600;color:rgba(255,255,255,.7)"></span></div>
+      <button onclick="cancelEditUser()" style="background:none;border:none;color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;line-height:1">×</button>
+    </div>
+    <div style="padding:20px;display:flex;flex-direction:column;gap:12px">
+      <input type="hidden" id="eu-username">
+      <div class="field"><label>Nombre completo</label><input type="text" id="eu-name" placeholder="Nombre completo"></div>
+      <div class="field"><label>Nueva contraseña <span style="font-weight:400;color:var(--gray-400)">(dejar en blanco para no cambiar)</span></label><input type="password" id="eu-pass" placeholder="••••••••" autocomplete="new-password"></div>
+      <div class="field">
+        <label>Rol</label>
+        <select id="eu-role" onchange="updateEditPermPreview()">
+          <option value="viewer">Espectador — solo Dashboard y Mapa</option>
+          <option value="editor">Editor — puede subir Excel</option>
+        </select>
+      </div>
+      <div id="eu-tenants"></div>
+      <div class="perm-box" id="eu-perm-prev">
+        <div class="perm-box-title">Permisos del rol</div>
+        <div id="eu-perm-list" style="font-size:10px;color:var(--gray-600);line-height:1.8;"></div>
+      </div>
+      <div class="form-msg" id="eu-form-msg"></div>
+      <div class="btn-row" style="margin-top:4px">
+        <button class="btn btn-p" onclick="saveEditUser()">Guardar cambios</button>
+        <button class="btn" onclick="cancelEditUser()" style="background:var(--gray-100);color:var(--navy)">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- MODAL RESUMEN EMAIL -->
 <div id="email-modal" style="display:none;position:fixed;inset:0;background:rgba(11,22,43,.7);z-index:9999;align-items:center;justify-content:center;padding:16px">
   <div style="background:#F4F6FB;border-radius:16px;max-width:600px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.35);font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;max-height:92vh;display:flex;flex-direction:column">
@@ -500,14 +532,14 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-<script src="js/config.js?v=4"></script>
-<script src="js/github.js?v=4"></script>
-<script src="js/auth.js?v=4"></script>
-<script src="js/app.js?v=4"></script>
-<script src="js/data-loader.js?v=4"></script>
-<script src="js/dashboard.js?v=4"></script>
-<script src="js/map.js?v=4"></script>
-<script src="js/email.js?v=4"></script>
+<script src="js/config.js?v=5"></script>
+<script src="js/github.js?v=5"></script>
+<script src="js/auth.js?v=5"></script>
+<script src="js/app.js?v=5"></script>
+<script src="js/data-loader.js?v=5"></script>
+<script src="js/dashboard.js?v=5"></script>
+<script src="js/map.js?v=5"></script>
+<script src="js/email.js?v=5"></script>
 <script>window.addEventListener('DOMContentLoaded', initAuth);</script>
 </body>
 </html>
