@@ -41,12 +41,17 @@ function dataHash(schools){
   return String(schools.length) + '_' + (schools.reduce((a,s)=>a+(s.raciones||0),0));
 }
 
+// Combines content hash + updatedAt timestamp so ANY change triggers a refresh
+function remoteHash(remote){
+  return dataHash(remote.schools) + '|' + (remote.updatedAt||'');
+}
+
 function startAutoRefresh(){
   if(_refreshTimer) clearInterval(_refreshTimer);
   _refreshTimer = setInterval(async ()=>{
     const remote = await fetchFromGitHub();
     if(!remote || !remote.schools) return;
-    const newHash = dataHash(remote.schools);
+    const newHash = remoteHash(remote);
     if(newHash !== _lastDataHash && _lastDataHash !== ''){
       SCHOOLS = remote.schools;
       CFG = Object.assign(CFG, remote.cfg||{});
