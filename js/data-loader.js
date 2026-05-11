@@ -49,7 +49,7 @@ async function loadFromGitHubThenRender(){
     const lu=document.getElementById('last-update');
     if(lu)lu.textContent=(remote.updatedAt||'GitHub')+' 🔄';
     _lastDataHash = dataHash(SCHOOLS);
-    updateSidebarInfo();initDashboard();
+    updateSidebarInfo();initDashboard();refreshMapIfActive();
   } else {
     // Fallback to localStorage
     loadFromStorage();
@@ -59,6 +59,11 @@ async function loadFromGitHubThenRender(){
 function saveToStorage(){
   localStorage.setItem('kc_data',JSON.stringify({schools:SCHOOLS,cfg:CFG,updatedAt:new Date().toLocaleString('es-EC')}));
   updateSidebarInfo();
+}
+
+function refreshMapIfActive(){
+  if(currentPage==='map'&&typeof _mapCreated!=='undefined'&&_mapCreated&&SCHOOLS.length>0)
+    renderMapMarkers();
 }
 
 function updateSidebarInfo(){
@@ -181,6 +186,7 @@ function processRows(rows,fname){
 
   saveToStorage();
   initDashboard();
+  refreshMapIfActive();
 
   const ls=document.getElementById('load-status');
   if(ls)ls.innerHTML=`<div class="status-alert alert-ok">✓ ${SCHOOLS.length.toLocaleString('es-EC')} instituciones cargadas desde "${fname}" · Días detectados: ${Object.keys(dCounts).sort((a,b)=>+a-+b).join(', ')}</div>`;
