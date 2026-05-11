@@ -101,7 +101,7 @@ function renderMapMarkers(){
   if(SCHOOLS.length>0){
     /* MODO EXCEL: coloreado por estado */
     const coordMap={};
-    MAP_SCHOOLS.forEach(s=>{coordMap[s.amie]=s;});
+    MAP_SCHOOLS.forEach(s=>{coordMap[String(s.amie).trim().toUpperCase()]=s;});
 
     const {regs,accs,zins,ests}=getActiveFilters();
     // Mostrar el panel de filtro de estado
@@ -110,10 +110,10 @@ function renderMapMarkers(){
 
     const provGroups={};
     SCHOOLS.forEach(s=>{
-      const ref=coordMap[s.amie];
-      // Use MAP_SCHOOLS coords if available, fall back to UTM coords from Excel
-      const lat=(ref&&ref.lat)?ref.lat:s.xlat;
-      const lon=(ref&&ref.lon)?ref.lon:s.xlon;
+      const ref=coordMap[String(s.amie||"").trim().toUpperCase()];
+      // MAP_SCHOOLS coords → Excel UTM coords → Excel direct lat/lon
+      const lat=(ref&&ref.lat)?ref.lat:(s.xlat||s.lat||null);
+      const lon=(ref&&ref.lon)?ref.lon:(s.xlon||s.lon||null);
       if(!lat||!lon)return;
       const canton=s.canton||(ref&&ref.canton)||'';
       if(_activeCanton&&canton!==_activeCanton)return;
