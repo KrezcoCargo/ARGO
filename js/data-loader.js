@@ -143,7 +143,7 @@ function loadFile(file){
 
       // Read DÍAS sheet FIRST so autoDetectDay() has CFG.diaFechas ready when processRows→initDashboard runs
       const diasSN=wb.SheetNames.find(n=>normSheet(n)==='DIAS');
-      if(diasSN){const dws=wb.Sheets[diasSN];const dAoa=XLSX.utils.sheet_to_json(dws,{header:1,defval:null,raw:true});CFG.diaFechas={};CFG.diaFechasRev={};dAoa.forEach(row=>{if(!row||row.length<2)return;const dayNum=parseInt(String(row[0]));const dv=row[1];if(isNaN(dayNum)||dayNum<=0||!dv)return;let iso='';if(dv instanceof Date){iso=dv.getFullYear()+'-'+String(dv.getMonth()+1).padStart(2,'0')+'-'+String(dv.getDate()).padStart(2,'0');}else if(typeof dv==='number'){const epoch=new Date(Math.round((dv-25569)*86400000));iso=epoch.getFullYear()+'-'+String(epoch.getMonth()+1).padStart(2,'0')+'-'+String(epoch.getDate()).padStart(2,'0');}else if(typeof dv==='string'&&dv.length>=8){if(dv.match(/^\d{4}-\d{2}-\d{2}/)){iso=dv.slice(0,10);}else{const p=dv.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);if(p)iso=p[3]+'-'+p[2].padStart(2,'0')+'-'+p[1].padStart(2,'0');}}if(iso){CFG.diaFechas[iso]=dayNum;CFG.diaFechasRev[dayNum]=iso;}});console.log('[KC] diaFechas:',JSON.stringify(CFG.diaFechas));}
+      if(diasSN){const dws=wb.Sheets[diasSN];const dAoa=XLSX.utils.sheet_to_json(dws,{header:1,defval:null,raw:true});CFG.diaFechas={};CFG.diaFechasRev={};dAoa.forEach(row=>{if(!row||row.length<2)return;const dayNum=parseInt(String(row[0]));const dv=row[1];if(isNaN(dayNum)||dayNum<=0||!dv)return;let iso='';if(dv instanceof Date){iso=dv.getFullYear()+'-'+String(dv.getMonth()+1).padStart(2,'0')+'-'+String(dv.getDate()).padStart(2,'0');}else if(typeof dv==='number'){const epoch=new Date(Math.round((dv-25569)*86400000));iso=epoch.getFullYear()+'-'+String(epoch.getMonth()+1).padStart(2,'0')+'-'+String(epoch.getDate()).padStart(2,'0');}else if(typeof dv==='string'&&dv.length>=8){if(dv.match(/^\d{4}-\d{2}-\d{2}/)){iso=dv.slice(0,10);}else{const p=dv.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);if(p)iso=p[3]+'-'+p[2].padStart(2,'0')+'-'+p[1].padStart(2,'0');}}if(iso){CFG.diaFechas[iso]=dayNum;CFG.diaFechasRev[dayNum]=iso;}});console.log('[KC] diaFechas:',JSON.stringify(CFG.diaFechas));const _dn=Object.keys(CFG.diaFechasRev).map(Number).filter(n=>n>0).sort((a,b)=>a-b);if(_dn.length>0){const _d1=CFG.diaFechasRev[_dn[0]];const _dM=_dn[_dn.length-1];if(_d1){CFG.fechaInicioISO=_d1;setField('cfg-fecha',_d1);setField('cfg2-fecha',_d1);}if(_dM>0){CFG.diasTotal=_dM;setField('cfg-dias',_dM);setField('cfg2-dias',_dM);}}}
       const rows=buildRows(aoa,headerRowIdx);
       processRows(rows,file.name);
 
@@ -173,8 +173,9 @@ function processRows(rows,fname){
   SCHOOLS=rows.map(mapRow).filter(s=>s.amie);
   if(!SCHOOLS.length){showToast('No se encontraron registros válidos.',true);return;}
 
+  // If DÍAS sheet didn't provide dates, fall back to max dia from data
   const maxDia=Math.max(...SCHOOLS.map(s=>s.dia).filter(d=>d>0));
-  if(!isNaN(maxDia)&&maxDia>0&&maxDia>CFG.diasTotal){
+  if(!isNaN(maxDia)&&maxDia>0&&Object.keys(CFG.diaFechasRev||{}).length===0){
     CFG.diasTotal=maxDia;
     setField('cfg-dias',maxDia);
   }
@@ -188,9 +189,19 @@ function processRows(rows,fname){
   initDashboard();
   refreshMapIfActive();
 
+  // Build recognized days schedule display
+  const diasRev=CFG.diaFechasRev||{};
+  const dayNums=Object.keys(diasRev).map(Number).filter(n=>n>0).sort((a,b)=>a-b);
+  const diasHtml=dayNums.length>0
+    ?'<div style="margin-top:10px"><div style="font-size:10px;font-weight:700;color:#5C6478;text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px">📅 Días reconocidos (hoja DÍAS)</div>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:4px">'
+      +dayNums.map(d=>{const iso=diasRev[d]||'';const pts=iso.split('-');const lb=pts.length===3?parseInt(pts[2])+' '+MONTHS[parseInt(pts[1])-1]+' '+pts[0]:'—';return`<span style="background:#E8F5E9;border:1px solid #A5D6A7;border-radius:6px;padding:3px 8px;font-size:10px;color:#1B5E20;font-weight:700;white-space:nowrap">Día ${d} · ${lb}</span>`;}).join('')
+      +'</div></div>'
+    :'';
+
   const ls=document.getElementById('load-status');
-  if(ls)ls.innerHTML=`<div class="status-alert alert-ok">✓ ${SCHOOLS.length.toLocaleString('es-EC')} instituciones cargadas desde "${fname}" · Días detectados: ${Object.keys(dCounts).sort((a,b)=>+a-+b).join(', ')}</div>`;
-  showToast(`✓ ${SCHOOLS.length.toLocaleString('es-EC')} IE · días 1-${maxDia}`);
+  if(ls)ls.innerHTML=`<div class="status-alert alert-ok">✓ ${SCHOOLS.length.toLocaleString('es-EC')} instituciones cargadas desde "${fname}" · Inicio: <strong>${CFG.fechaInicioISO||'—'}</strong> · <strong>${CFG.diasTotal} días</strong></div>${diasHtml}`;
+  showToast(`✓ ${SCHOOLS.length.toLocaleString('es-EC')} IE · ${CFG.diasTotal} días`);
 
   // Auto-publish to GitHub so all users see the new data
   const dataPayload={schools:SCHOOLS,cfg:CFG,updatedAt:new Date().toLocaleString('es-EC')};
@@ -294,13 +305,22 @@ function loadConfig2(){
   loadConfig2GH();
   checkGHConnectedBadge();
   const ss=document.getElementById('sys-stats');
-  if(ss)ss.innerHTML=`
+  if(ss){
+    const _dr=CFG.diaFechasRev||{};
+    const _dn=Object.keys(_dr).map(Number).filter(n=>n>0).sort((a,b)=>a-b);
+    const _diasHtml=_dn.length>0
+      ?'<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--gray-100)"><div style="font-size:10px;font-weight:700;color:#5C6478;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px">📅 Calendario de días</div><div style="display:flex;flex-wrap:wrap;gap:3px">'
+        +_dn.map(d=>{const iso=_dr[d]||'';const pts=iso.split('-');const lb=pts.length===3?parseInt(pts[2])+' '+MONTHS[parseInt(pts[1])-1]:' — ';return`<span style="background:#E8F5E9;border:1px solid #A5D6A7;border-radius:4px;padding:2px 6px;font-size:10px;font-weight:600;color:#1B5E20;white-space:nowrap">D${d}·${lb}</span>`;}).join('')
+        +'</div></div>'
+      :'';
+    ss.innerHTML=`
     Instituciones cargadas: <strong>${SCHOOLS.length.toLocaleString('es-EC')}</strong><br>
     Cliente: <strong>${CFG.clienteNombre}</strong><br>
     Programa: <strong>${CFG.programa}</strong><br>
     Período: <strong>${CFG.fechaInicioISO} → ${addDays(CFG.fechaInicioISO,CFG.diasTotal-1)}</strong> (${CFG.diasTotal} días)<br>
     Raciones totales: <strong>${SCHOOLS.reduce((a,s)=>a+s.raciones,0).toLocaleString('es-EC')}</strong><br>
-    Última actualización: <strong>${document.getElementById('last-update').textContent}</strong>`;
+    Última actualización: <strong>${document.getElementById('last-update').textContent}</strong>${_diasHtml}`;
+  }
 }
 
 function saveConfig2(){
