@@ -1,0 +1,9 @@
+[
+  {"username":"aguallpa","name":"Ana Guallpa","role":"viewer","pwdHash":"1d1ca29fcfb9ed3129e4aae6a69f5469ec40f0866d509bdd0e1ed23b450e1d74","created":"2026-01-01T00:00:00.000Z"},
+  {"username":"jacurio","name":"Jorge Acurio","role":"viewer","pwdHash":"b52e8df76ba65f33eb0e77548fd9608d781b605708379514d95bbe3dd3e52ba5","created":"2026-01-01T00:00:00.000Z"},
+  {"username":"mvaldez","name":"Miguel Valdez","role":"viewer","pwdHash":"04566eadc99698fe27741e3eb5141349856e001f415ce169493910c65e6f23a8","created":"2026-01-01T00:00:00.000Z"},
+  {"username":"op1","name":"Operador1","role":"viewer","pwdHash":"29af981a91929120bbf7009afff591d8b85fdb0343dc64710978510441a55c7f","created":"2026-01-01T00:00:00.000Z"},
+  {"username":"op2","name":"Operador2","role":"viewer","pwdHash":"3bd14cc3efe4aac49994c902096d6189871853a0cd861e99b7003bbc352cd152","created":"2026-01-01T00:00:00.000Z"},
+  {"username":"op3","name":"Operador3","role":"viewer","pwdHash":"1ecd5bfd3f8af6915c42dcd7407cf15e3757b635ceb414d189e1226473970dd4","created":"2026-01-01T00:00:00.000Z"},
+  {"username":"boduio","name":"Bodega","role":"editor","pwdHash":"08c26ad95e368f57be44911abb1b9535e4f1abb0d05f188721540c5b11a4d695","created":"2026-05-08T00:00:00.000Z"}
+]
