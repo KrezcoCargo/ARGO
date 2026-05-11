@@ -59,6 +59,7 @@
       </div>
     </div>
     <div class="sidebar-nav" id="sb-nav"></div>
+    <div id="sb-tenant"></div>
     <div class="sidebar-footer">
       <div class="logout-btn" onclick="doLogout()"><span>🚪</span><span class="logout-text">&nbsp;Cerrar sesión</span></div>
       <div class="sidebar-data-info" id="sb-data-info">Sin datos cargados</div>
@@ -237,6 +238,7 @@
       <div class="section-card">
         <div class="section-title">Cargar Planificación</div>
         <div class="section-sub">Sube el archivo Excel con la distribución de instituciones. Los datos quedan guardados en el navegador y son visibles para todos los usuarios.</div>
+        <div id="upload-tenant-wrap"></div>
         <div id="load-status"></div>
         <div class="field-grid">
           <div class="field"><label>Nombre del cliente</label><input type="text" id="cfg-cliente" value="Grupo Gloria"></div>
@@ -366,7 +368,7 @@
           <div class="section-title">Usuarios registrados</div>
           <div class="section-sub">Solo el superadministrador puede crear o eliminar usuarios.</div>
           <table class="utbl">
-            <thead><tr><th>Usuario</th><th>Nombre</th><th>Rol</th><th>Creado</th><th>Acciones</th></tr></thead>
+            <thead><tr><th>Usuario</th><th>Nombre</th><th>Rol</th><th>Bases de datos</th><th>Creado</th><th>Acciones</th></tr></thead>
             <tbody id="users-tbody"></tbody>
           </table>
         </div>
@@ -387,12 +389,25 @@
               <div class="perm-box-title">Permisos del rol</div>
               <div id="perm-list" style="font-size:10px;color:var(--gray-600);line-height:1.8;"></div>
             </div>
+            <div id="nu-tenants"></div>
             <div class="form-msg" id="form-msg"></div>
             <div class="btn-row" style="margin-top:12px"><button class="btn btn-p" onclick="createUser()">+ Crear usuario</button></div>
           </div>
         </div>
       </div>
 
+
+      <!-- TENANT MANAGEMENT (superadmin only, rendered by JS) -->
+      <div class="section-card" id="tenant-mgmt-card" style="margin-top:16px;display:none">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <span style="font-size:24px">🗄️</span>
+          <div>
+            <div class="section-title" style="margin-bottom:2px">Bases de datos</div>
+            <div style="font-size:11px;color:var(--gray-600)">Edita los nombres de las bases de datos que aparecen en el selector.</div>
+          </div>
+        </div>
+        <div id="tenant-mgmt-wrap"></div>
+      </div>
       <!-- SYNC PANEL -->
       <div class="section-card" id="export-panel" style="margin-top:16px;border:2px solid var(--green);">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
@@ -485,14 +500,14 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-<script src="js/config.js?v=3"></script>
-<script src="js/github.js?v=3"></script>
-<script src="js/auth.js?v=3"></script>
-<script src="js/app.js?v=3"></script>
-<script src="js/data-loader.js?v=3"></script>
-<script src="js/dashboard.js?v=3"></script>
-<script src="js/map.js?v=3"></script>
-<script src="js/email.js?v=3"></script>
+<script src="js/config.js?v=4"></script>
+<script src="js/github.js?v=4"></script>
+<script src="js/auth.js?v=4"></script>
+<script src="js/app.js?v=4"></script>
+<script src="js/data-loader.js?v=4"></script>
+<script src="js/dashboard.js?v=4"></script>
+<script src="js/map.js?v=4"></script>
+<script src="js/email.js?v=4"></script>
 <script>window.addEventListener('DOMContentLoaded', initAuth);</script>
 </body>
 </html>
