@@ -241,13 +241,19 @@ function mapRow(row){
     problema:'problema',problem:'problema',novedad:'problema',con_problema:'problema',no_entregado_problema:'problema'};
   const estado=eMap[eRaw]||'pendiente';
 
-  // Extract UTM Zone 17S coordinates from Excel (X=Easting, Y=Northing)
-  const utmX=nvF(['x'],null),utmY=nvF(['y'],null);
+  // Coordenadas: 1) lat/lon directas del Excel, 2) UTM Zone 17S (X/Y), 3) null
   let xlat=null,xlon=null;
-  if(utmX&&utmY&&utmX>100000&&utmY>1000000){
-    xlat=(utmY-10000000)/111320;
-    xlon=-81+(utmX-500000)/(111320*Math.cos((xlat||0)*Math.PI/180));
-    if(xlat<-6||xlat>2||xlon<-92||xlon>-75){xlat=null;xlon=null;}
+  const directLat=nvF(['lat','latitud','latitude','latdec','y_dd'],null);
+  const directLon=nvF(['lon','lng','longitud','longitude','londec','x_dd'],null);
+  if(directLat&&directLon&&directLat>=-6&&directLat<=2&&directLon>=-92&&directLon<=-75){
+    xlat=directLat; xlon=directLon;
+  } else {
+    const utmX=nvF(['x','este','easting'],null),utmY=nvF(['y','norte','northing'],null);
+    if(utmX&&utmY&&utmX>100000&&utmY>1000000){
+      xlat=(utmY-10000000)/111320;
+      xlon=-81+(utmX-500000)/(111320*Math.cos((xlat||0)*Math.PI/180));
+      if(xlat<-6||xlat>2||xlon<-92||xlon>-75){xlat=null;xlon=null;}
+    }
   }
   const regRaw=nvS(['regimen','region','reg','zonaeducativa','zonaedu'],'').toUpperCase().trim();
   const reg=regRaw.includes('COSTA')?'COSTA':regRaw.includes('SIERRA')?'SIERRA':'';
@@ -306,8 +312,14 @@ function saveConfig2(){
   CFG.diasTotal=parseInt(document.getElementById('cfg2-dias').value)||CFG.diasTotal;
   setField('cfg-cliente',CFG.clienteNombre);setField('cfg-programa',CFG.programa);
   setField('cfg-fecha',CFG.fechaInicioISO);setField('cfg-dias',CFG.diasTotal);
-  if(SCHOOLS.length>0){saveToStorage();initDashboard();}
-  showToast('✓ Configuración guardada');loadConfig2();
+  if(SCHOOLS.length>0){
+    saveToStorage();
+    initDashboard();
+    // Publicar en GitHub para que todos los usuarios vean el nombre actualizado
+    publishToGitHub({schools:SCHOOLS,cfg:CFG,updatedAt:new Date().toLocaleString('es-EC')});
+  }
+  showToast('✓ Configuración guardada y sincronizada');
+  loadConfig2();
 }
 
 /* ═══════════════════════════════════════════════════════════
