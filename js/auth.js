@@ -49,14 +49,24 @@ function doLogout(){
   document.getElementById('page-login').style.display='';
 }
 
-/* ── Al cargar la página: refresca usuarios desde GitHub y luego inicia ── */
+/* ── Al cargar la página: espera usuarios de GitHub ANTES de mostrar el login ── */
 async function initAuth(){
-  // Primero asegurar superadmin en caché local
   ensureMaster();
-  // Refrescar usuarios desde GitHub (en segundo plano, sin bloquear login)
-  fetchUsersFromGitHub().then(users=>{
-    if(users&&users.length>0) ensureMaster(); // re-asegurar superadmin tras merge
-  });
+  // Mostrar spinner mientras carga
+  const loginCard = document.querySelector('#page-login .lcard');
+  if(loginCard) loginCard.style.opacity='0.5';
+
+  // Esperar usuarios de GitHub (máx 6s, luego usa caché local)
+  try{
+    await Promise.race([
+      fetchUsersFromGitHub(),
+      new Promise(r=>setTimeout(r,6000))
+    ]);
+  }catch{}
+  ensureMaster();
+
+  if(loginCard) loginCard.style.opacity='1';
+
   // Intentar restaurar sesión activa
   try{
     const s=sessionStorage.getItem('kc_sess');
