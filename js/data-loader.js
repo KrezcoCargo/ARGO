@@ -24,7 +24,8 @@
 ═══════════════════════════════════════════════════════════ */
 function loadFromStorage(){
   try{
-    const raw=localStorage.getItem(getDataCacheKey());
+    // Try current tenant key first, then legacy 'kc_data' for backward compat
+    const raw=localStorage.getItem(getDataCacheKey())||localStorage.getItem('kc_data');
     if(raw){const o=JSON.parse(raw);SCHOOLS=o.schools||[];CFG=Object.assign(CFG,o.cfg||{});
       const saved=getSavedClientName();if(saved)CFG.clienteNombre=saved;
       if(SCHOOLS.length>0){
@@ -50,7 +51,7 @@ async function loadFromGitHubThenRender(){
     setField('cfg-fecha',CFG.fechaInicioISO);setField('cfg-dias',CFG.diasTotal);
     const lu=document.getElementById('last-update');
     if(lu)lu.textContent=(remote.updatedAt||'GitHub')+' 🔄';
-    _lastDataHash = dataHash(SCHOOLS);
+    _lastDataHash = dataHash(SCHOOLS) + '|' + (remote.updatedAt||'');
     updateSidebarInfo();initDashboard();refreshMapIfActive();
   } else {
     // Fallback to localStorage
@@ -172,24 +173,38 @@ function buildRows(aoa,headerRowIdx){
 
 function processRows(rows,fname){
   if(!rows.length){showToast('El archivo no tiene datos.',true);return;}
-  SCHOOLS=rows.map(mapRow).filter(s=>s.amie);
-  if(!SCHOOLS.length){showToast('No se encontraron registros válidos.',true);return;}
+
+  // Use local variable — only assign to global SCHOOLS if uploading for the active tenant
+  const newSchools=rows.map(mapRow).filter(s=>s.amie);
+  if(!newSchools.length){showToast('No se encontraron registros válidos.',true);return;}
+
+  // Determine upload target tenant BEFORE touching SCHOOLS
+  const uploadSel=document.getElementById('upload-tenant-sel');
+  const uploadTenantId=uploadSel?uploadSel.value:'';
+  const allTenants=TENANTS.length>0?TENANTS:DEFAULT_TENANTS;
+  const uploadTenant=allTenants.find(t=>t.id===uploadTenantId)||ACTIVE_TENANT;
+  const targetPath=uploadTenant?uploadTenant.dataPath:null;
+  const isCurrentTenant=!uploadTenant||!ACTIVE_TENANT||uploadTenant.id===ACTIVE_TENANT.id;
 
   // If DÍAS sheet didn't provide dates, fall back to max dia from data
-  const maxDia=Math.max(...SCHOOLS.map(s=>s.dia).filter(d=>d>0));
+  const maxDia=Math.max(...newSchools.map(s=>s.dia).filter(d=>d>0));
   if(!isNaN(maxDia)&&maxDia>0&&Object.keys(CFG.diaFechasRev||{}).length===0){
     CFG.diasTotal=maxDia;
     setField('cfg-dias',maxDia);
   }
 
-  const dCounts={};SCHOOLS.forEach(s=>{dCounts[s.dia]=(dCounts[s.dia]||0)+1;});
-  const eCounts={};SCHOOLS.forEach(s=>{eCounts[s.estado]=(eCounts[s.estado]||0)+1;});
+  const dCounts={};newSchools.forEach(s=>{dCounts[s.dia]=(dCounts[s.dia]||0)+1;});
+  const eCounts={};newSchools.forEach(s=>{eCounts[s.estado]=(eCounts[s.estado]||0)+1;});
   console.log('[KC] Dia distribution:',JSON.stringify(dCounts));
   console.log('[KC] Estado distribution:',JSON.stringify(eCounts));
 
-  saveToStorage();
-  initDashboard();
-  refreshMapIfActive();
+  // Only update the active tenant's view if uploading for THIS tenant
+  if(isCurrentTenant){
+    SCHOOLS=newSchools;
+    saveToStorage();
+    initDashboard();
+    refreshMapIfActive();
+  }
 
   // Build recognized days schedule display
   const diasRev=CFG.diaFechasRev||{};
@@ -201,18 +216,13 @@ function processRows(rows,fname){
       +'</div></div>'
     :'';
 
+  const tenantLabel=uploadTenant&&!isCurrentTenant?` → <strong>${uploadTenant.name}</strong>`:'';
   const ls=document.getElementById('load-status');
-  if(ls)ls.innerHTML=`<div class="status-alert alert-ok">✓ ${SCHOOLS.length.toLocaleString('es-EC')} instituciones cargadas desde "${fname}" · Inicio: <strong>${CFG.fechaInicioISO||'—'}</strong> · <strong>${CFG.diasTotal} días</strong></div>${diasHtml}`;
-  showToast(`✓ ${SCHOOLS.length.toLocaleString('es-EC')} IE · ${CFG.diasTotal} días`);
+  if(ls)ls.innerHTML=`<div class="status-alert alert-ok">✓ ${newSchools.length.toLocaleString('es-EC')} instituciones cargadas desde "${fname}"${tenantLabel} · Inicio: <strong>${CFG.fechaInicioISO||'—'}</strong> · <strong>${CFG.diasTotal} días</strong></div>${diasHtml}`;
+  showToast(`✓ ${newSchools.length.toLocaleString('es-EC')} IE · ${CFG.diasTotal} días`+(isCurrentTenant?'':' → '+uploadTenant.name));
 
-  // Auto-publish to GitHub so all users see the new data
-  // Use the tenant selected in the upload page selector, or fall back to active tenant
-  const uploadSel=document.getElementById('upload-tenant-sel');
-  const uploadTenantId=uploadSel?uploadSel.value:'';
-  const allTenants=TENANTS.length>0?TENANTS:DEFAULT_TENANTS;
-  const uploadTenant=allTenants.find(t=>t.id===uploadTenantId)||ACTIVE_TENANT;
-  const targetPath=uploadTenant?uploadTenant.dataPath:null;
-  const dataPayload={schools:SCHOOLS,cfg:CFG,updatedAt:new Date().toLocaleString('es-EC')};
+  // Publish to GitHub using newSchools (never the stale global SCHOOLS)
+  const dataPayload={schools:newSchools,cfg:CFG,updatedAt:new Date().toLocaleString('es-EC')};
   publishToGitHub(dataPayload,targetPath);
 }
 
