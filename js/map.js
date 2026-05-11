@@ -1,4 +1,5 @@
-﻿   SICAE MAP DATA & LOGIC
+/* ═══════════════════════════════════════
+   SICAE MAP DATA & LOGIC
 ════════════════════════════════════════ */
 const MAP_PCOLORS={
   'AZUAY':'#1565C0','BOLÍVAR':'#01879B','CAÑAR':'#6A1B9A','CARCHI':'#AD1457',
