@@ -50,7 +50,7 @@ function showGHStatus(msg,type){
   el.style.cssText=styles[type]||styles.info;el.textContent=msg;el.style.display='block';
 }
 
-async function publishToGitHub(dataObj){
+async function publishToGitHub(dataObj,targetPath){
   const cfg=getGHCfg();
   if(!cfg.owner||!cfg.repo){
     showPublishStatus('⚠️ GitHub no configurado. Ve a ⚙️ Configuración → Sincronización con GitHub.','warn');
@@ -61,7 +61,8 @@ async function publishToGitHub(dataObj){
     return false;
   }
   showPublishStatus('⏳ Publicando en GitHub…','info');
-  const url=`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
+  const path=targetPath||getDataPath()||cfg.path;
+  const url=`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`;
   const headers={Authorization:`token ${cfg.token}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'};
   let sha=null;
   try{const r=await fetch(url,{headers});if(r.ok){const j=await r.json();sha=j.sha;}}catch{}
@@ -95,7 +96,7 @@ async function fetchFromGitHub(){
   const owner=(typeof GH_REPO_CFG!=='undefined'&&GH_REPO_CFG.owner)?GH_REPO_CFG.owner:stored.owner||'';
   const repo=(typeof GH_REPO_CFG!=='undefined'&&GH_REPO_CFG.repo)?GH_REPO_CFG.repo:stored.repo||'';
   const branch=(typeof GH_REPO_CFG!=='undefined'&&GH_REPO_CFG.branch)?GH_REPO_CFG.branch:stored.branch||'main';
-  const path=(typeof GH_REPO_CFG!=='undefined'&&GH_REPO_CFG.path)?GH_REPO_CFG.path:stored.path||'data.json';
+  const path=getDataPath();
   if(!owner||!repo)return null;
   const apiUrl=`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}&_=${Date.now()}`;
   try{
@@ -148,6 +149,33 @@ async function fetchUsersFromGitHub(){
     }
   }catch{}
   return null;
+}
+
+/* ── Tenants: leer/escribir data/tenants.json ── */
+async function fetchTenantsFromGitHub(){
+  const owner=GH_REPO_CFG.owner||'';const repo=GH_REPO_CFG.repo||'';const branch=GH_REPO_CFG.branch||'main';
+  if(!owner||!repo){TENANTS=[...DEFAULT_TENANTS];return TENANTS;}
+  try{
+    const url=`https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${GH_TENANTS_PATH}?_=${Date.now()}`;
+    const r=await fetch(url,{cache:'no-store'});
+    if(r.ok){const t=await r.json();localStorage.setItem('kc_tenants',JSON.stringify(t));TENANTS=[...t];return t;}
+  }catch{}
+  try{const c=localStorage.getItem('kc_tenants');if(c){TENANTS=JSON.parse(c);return TENANTS;}}catch{}
+  TENANTS=[...DEFAULT_TENANTS];return TENANTS;
+}
+async function saveTenantsToGitHub(tenants){
+  const cfg=getGHCfg();if(!cfg.owner||!cfg.repo||!cfg.token)return false;
+  const url=`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${GH_TENANTS_PATH}`;
+  const headers={Authorization:`token ${cfg.token}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'};
+  let sha=null;try{const r=await fetch(url,{headers});if(r.ok){const j=await r.json();sha=j.sha;}}catch{}
+  const b64=btoa(unescape(encodeURIComponent(JSON.stringify(tenants,null,2))));
+  const body={message:`Update tenants — ${new Date().toLocaleString('es-EC')}`,content:b64,branch:cfg.branch||'main'};
+  if(sha)body.sha=sha;
+  try{
+    const r=await fetch(url,{method:'PUT',headers,body:JSON.stringify(body)});
+    if(r.ok){TENANTS=[...tenants];localStorage.setItem('kc_tenants',JSON.stringify(tenants));}
+    return r.ok;
+  }catch{return false;}
 }
 
 function loadConfig2GH(){
