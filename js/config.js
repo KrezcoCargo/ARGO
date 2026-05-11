@@ -67,8 +67,15 @@ const NAV_ITEMS = {
   ]
 };
 
-let SCHOOLS=[], CFG={clienteNombre:'Grupo Gloria',programa:'Programa',fechaInicioISO:'',diasTotal:0,diaFechas:{}};
-const FORCED_CLIENT_NAME = 'Grupo Gloria';
+let SCHOOLS=[], CFG={clienteNombre:'',programa:'Programa',fechaInicioISO:'',diasTotal:0,diaFechas:{}};
+
+/* Lee el nombre del cliente guardado localmente (tiene prioridad sobre cualquier dato externo) */
+function getSavedClientName(){
+  return localStorage.getItem('kc_client')||'';
+}
+function saveClientName(name){
+  if(name) localStorage.setItem('kc_client', name);
+}
 let ST={scope:'DAY',prov:'ALL',est:'ALL',dia:1,q:''};
 let SESSION=null;
 let currentPage='dashboard';
