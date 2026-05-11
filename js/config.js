@@ -79,3 +79,26 @@ function saveClientName(name){
 let ST={scope:'DAY',prov:'ALL',est:'ALL',dia:1,q:''};
 let SESSION=null;
 let currentPage='dashboard';
+
+/* ═══════════════════════════════════════════════════════════
+   MULTI-TENANT
+═══════════════════════════════════════════════════════════ */
+const GH_TENANTS_PATH='data/tenants.json';
+let TENANTS=[];
+let ACTIVE_TENANT=null;
+const DEFAULT_TENANTS=[
+  {id:'krezco',  name:'KrezcoCargo',           dataPath:'data.json',              color:'#F47C20'},
+  {id:'gloria',  name:'Grupo Gloria',           dataPath:'data/gloria.json',       color:'#1565C0'},
+  {id:'worldvision',name:'World Vision Ecuador',dataPath:'data/worldvision.json',  color:'#2E7D32'},
+  {id:'pruebas', name:'Pruebas',                dataPath:'data/pruebas.json',      color:'#888'}
+];
+function getDataPath(){return(ACTIVE_TENANT&&ACTIVE_TENANT.dataPath)||GH_REPO_CFG.path;}
+function getDataCacheKey(){return'kc_data_'+(ACTIVE_TENANT?ACTIVE_TENANT.id:'default');}
+function getUserTenants(){
+  if(!SESSION)return[];
+  const src=TENANTS.length>0?TENANTS:DEFAULT_TENANTS;
+  if(SESSION.role==='superadmin')return src;
+  const ids=SESSION.tenants||[];
+  if(!ids.length)return src.slice(0,1); // backward-compat: default to first tenant
+  return src.filter(t=>ids.includes(t.id));
+}
