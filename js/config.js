@@ -69,12 +69,15 @@ const NAV_ITEMS = {
 
 let SCHOOLS=[], CFG={clienteNombre:'',programa:'Programa',fechaInicioISO:'',diasTotal:0,diaFechas:{}};
 
-/* Lee el nombre del cliente guardado localmente (tiene prioridad sobre cualquier dato externo) */
+/* Nombre del cliente — clave por tenant para que cada base de datos tenga el suyo */
 function getSavedClientName(){
-  return localStorage.getItem('kc_client')||'';
+  const k='kc_client_'+(ACTIVE_TENANT?ACTIVE_TENANT.id:'');
+  return localStorage.getItem(k)||localStorage.getItem('kc_client')||'';
 }
-function saveClientName(name){
-  if(name) localStorage.setItem('kc_client', name);
+function saveClientName(name, tenantId){
+  if(!name) return;
+  const id=tenantId||(ACTIVE_TENANT?ACTIVE_TENANT.id:'');
+  localStorage.setItem('kc_client_'+id, name);
 }
 let ST={scope:'DAY',prov:'ALL',est:'ALL',dia:1,q:''};
 let SESSION=null;
