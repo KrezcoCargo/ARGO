@@ -103,6 +103,40 @@ function nk(k){
 /* ═══════════════════════════════════════════════════════════
    EXCEL PARSER — dynamic header detection
 ═══════════════════════════════════════════════════════════ */
+function parseExcelDate(dv){
+  if(!dv) return '';
+  // JavaScript Date object (cellDates:true)
+  if(dv instanceof Date){
+    if(isNaN(dv.getTime())) return '';
+    return dv.getFullYear()+'-'+String(dv.getMonth()+1).padStart(2,'0')+'-'+String(dv.getDate()).padStart(2,'0');
+  }
+  // Excel serial number (40000–60000 covers 2009–2064)
+  if(typeof dv==='number'&&dv>40000&&dv<60000){
+    const epoch=new Date(Math.round((dv-25569)*86400000));
+    return epoch.getUTCFullYear()+'-'+String(epoch.getUTCMonth()+1).padStart(2,'0')+'-'+String(epoch.getUTCDate()).padStart(2,'0');
+  }
+  if(typeof dv==='string'){
+    const s=dv.trim();
+    if(!s) return '';
+    // YYYY-MM-DD or YYYY-M-D
+    const pISO=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if(pISO) return pISO[1]+'-'+pISO[2].padStart(2,'0')+'-'+pISO[3].padStart(2,'0');
+    // DD/MM/YYYY or D/M/YYYY  (Latin America standard)
+    const pSlash=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if(pSlash) return pSlash[3]+'-'+pSlash[2].padStart(2,'0')+'-'+pSlash[1].padStart(2,'0');
+    // DD-MM-YYYY or D-M-YYYY
+    const pDash=s.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+    if(pDash) return pDash[3]+'-'+pDash[2].padStart(2,'0')+'-'+pDash[1].padStart(2,'0');
+    // YYYY/MM/DD
+    const pYSlash=s.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
+    if(pYSlash) return pYSlash[1]+'-'+pYSlash[2].padStart(2,'0')+'-'+pYSlash[3].padStart(2,'0');
+    // DD/MM/YY (2-digit year → assume 2000+)
+    const pShort=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2})$/);
+    if(pShort) return '20'+pShort[3]+'-'+pShort[2].padStart(2,'0')+'-'+pShort[1].padStart(2,'0');
+  }
+  return '';
+}
+
 function handleFile(ev){const f=ev.target.files[0];if(f)loadFile(f);ev.target.value='';}
 
 function loadFile(file){
@@ -115,7 +149,7 @@ function loadFile(file){
       // Find best sheet: prefer PLANIFICACION (has DÍA, ESTADO, AMIE), then BBD PESOS, then first non-config
       const SKIP=['CONFIG','PESOS TOTAL'];
       const normSheet=n=>n.trim().toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Z]/g,'');
-      const skipSheet=n=>{const u=normSheet(n);return u==='DIAS'||u==='CONFIG'||n.toUpperCase()==='PESOS TOTAL';};
+      const skipSheet=n=>{const u=normSheet(n);return u==='DIAS'||u==='DIA'||u==='CONFIG'||n.toUpperCase()==='PESOS TOTAL';};
       let sheetName = wb.SheetNames.find(n=>n.toUpperCase()==='PLANIFICACION')
         || wb.SheetNames.find(n=>n.toUpperCase()==='BBD PESOS')
         || wb.SheetNames.find(n=>n.toUpperCase()==='IE')
@@ -148,8 +182,33 @@ function loadFile(file){
       }
 
       // Read DÍAS sheet FIRST so autoDetectDay() has CFG.diaFechas ready when processRows→initDashboard runs
-      const diasSN=wb.SheetNames.find(n=>normSheet(n)==='DIAS');
-      if(diasSN){const dws=wb.Sheets[diasSN];const dAoa=XLSX.utils.sheet_to_json(dws,{header:1,defval:null,raw:true});CFG.diaFechas={};CFG.diaFechasRev={};dAoa.forEach(row=>{if(!row||row.length<2)return;const dayNum=parseInt(String(row[0]));const dv=row[1];if(isNaN(dayNum)||dayNum<=0||!dv)return;let iso='';if(dv instanceof Date){iso=dv.getFullYear()+'-'+String(dv.getMonth()+1).padStart(2,'0')+'-'+String(dv.getDate()).padStart(2,'0');}else if(typeof dv==='number'){const epoch=new Date(Math.round((dv-25569)*86400000));iso=epoch.getFullYear()+'-'+String(epoch.getMonth()+1).padStart(2,'0')+'-'+String(epoch.getDate()).padStart(2,'0');}else if(typeof dv==='string'&&dv.length>=8){if(dv.match(/^\d{4}-\d{2}-\d{2}/)){iso=dv.slice(0,10);}else{const p=dv.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);if(p)iso=p[3]+'-'+p[2].padStart(2,'0')+'-'+p[1].padStart(2,'0');}}if(iso){CFG.diaFechas[iso]=dayNum;CFG.diaFechasRev[dayNum]=iso;}});console.log('[KC] diaFechas:',JSON.stringify(CFG.diaFechas));const _dn=Object.keys(CFG.diaFechasRev).map(Number).filter(n=>n>0).sort((a,b)=>a-b);if(_dn.length>0){const _d1=CFG.diaFechasRev[_dn[0]];const _dM=_dn[_dn.length-1];if(_d1){CFG.fechaInicioISO=_d1;setField('cfg-fecha',_d1);setField('cfg2-fecha',_d1);}if(_dM>0){CFG.diasTotal=_dM;setField('cfg-dias',_dM);setField('cfg2-dias',_dM);}}}
+      const diasSN=wb.SheetNames.find(n=>{const u=normSheet(n);return u==='DIAS'||u==='DIA'||u.startsWith('DIA');});
+      if(diasSN){
+        const dws=wb.Sheets[diasSN];
+        const dAoa=XLSX.utils.sheet_to_json(dws,{header:1,defval:null,raw:true});
+        CFG.diaFechas={};CFG.diaFechasRev={};
+        dAoa.forEach(row=>{
+          if(!row||row.length<2)return;
+          // Day number: find first numeric cell in the row (usually col 0, sometimes col 1)
+          let dayNum=NaN,dvIdx=1;
+          for(let ci=0;ci<Math.min(row.length,3);ci++){
+            const v=parseInt(String(row[ci]));
+            if(!isNaN(v)&&v>0&&v<=366){dayNum=v;dvIdx=ci+1;break;}
+          }
+          if(isNaN(dayNum))return;
+          const dv=row[dvIdx];
+          if(!dv)return;
+          const iso=parseExcelDate(dv);
+          if(iso){CFG.diaFechas[iso]=dayNum;CFG.diaFechasRev[dayNum]=iso;}
+        });
+        console.log('[KC] diaFechas:',JSON.stringify(CFG.diaFechas));
+        const _dn=Object.keys(CFG.diaFechasRev).map(Number).filter(n=>n>0).sort((a,b)=>a-b);
+        if(_dn.length>0){
+          const _d1=CFG.diaFechasRev[_dn[0]];const _dM=_dn[_dn.length-1];
+          if(_d1){CFG.fechaInicioISO=_d1;setField('cfg-fecha',_d1);setField('cfg2-fecha',_d1);}
+          if(_dM>0){CFG.diasTotal=_dM;setField('cfg-dias',_dM);setField('cfg2-dias',_dM);}
+        }
+      }
       const rows=buildRows(aoa,headerRowIdx);
       processRows(rows,file.name);
 
