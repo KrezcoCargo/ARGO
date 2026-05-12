@@ -91,17 +91,17 @@ function buildTenantSwitcher(){
   if(!accessible.length){el.innerHTML='';return;}
   const multi=accessible.length>1;
   el.innerHTML=`
-    <div style="padding:8px 14px 4px;border-top:1px solid rgba(255,255,255,.1)">
-      <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px">BASE DE DATOS</div>
+    <div class="tb-wrap">
+      <div class="tb-section-label">Base de datos</div>
       <div style="position:relative">
-        <div onclick="${multi?'toggleTenantPicker()':''}" style="display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);border-radius:7px;padding:6px 10px;${multi?'cursor:pointer':''}">
-          <span style="width:8px;height:8px;border-radius:50%;background:${ACTIVE_TENANT?.color||'#999'};flex-shrink:0"></span>
-          <span style="font-size:11px;font-weight:700;color:#fff;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${ACTIVE_TENANT?.name||'—'}</span>
-          ${multi?'<span style="color:rgba(255,255,255,.4);font-size:9px">▾</span>':''}
+        <div class="tb-active-btn" onclick="${multi?'toggleTenantPicker()':''}">
+          <span class="tb-dot" style="background:${ACTIVE_TENANT?.color||'#999'}"></span>
+          <span class="tb-name">${ACTIVE_TENANT?.name||'—'}</span>
+          ${multi?'<span class="tb-chevron">▾</span>':''}
         </div>
-        <div id="tenant-picker" style="display:none;position:absolute;top:calc(100%+4px);left:0;right:0;background:#1a2540;border-radius:8px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.5);z-index:600">
-          ${accessible.map(t=>`<div onclick="switchTenant('${t.id}')" style="padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;color:#fff;transition:background .1s;${t.id===ACTIVE_TENANT?.id?'background:rgba(255,255,255,.14)':''}">
-            <span style="width:9px;height:9px;border-radius:50%;background:${t.color};flex-shrink:0"></span>${t.name}
+        <div id="tenant-picker" style="display:none;position:absolute;top:calc(100%+6px);left:0;right:0;background:#1a2540;border-radius:10px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.55);z-index:600">
+          ${accessible.map(t=>`<div onclick="switchTenant('${t.id}')" class="tb-picker-item${t.id===ACTIVE_TENANT?.id?' tb-picker-active':''}">
+            <span style="width:9px;height:9px;border-radius:50%;background:${t.color};flex-shrink:0;display:inline-block"></span>${t.name}
           </div>`).join('')}
         </div>
       </div>
@@ -110,7 +110,27 @@ function buildTenantSwitcher(){
 
 function toggleTenantPicker(){
   const p=document.getElementById('tenant-picker');
-  if(p)p.style.display=p.style.display==='none'?'block':'none';
+  if(!p)return;
+  const isOpen=p.style.display!=='none';
+  if(isOpen){p.style.display='none';return;}
+  // In collapsed sidebar: position picker to the right of the sidebar
+  const sb=document.getElementById('sidebar');
+  if(sb&&sb.classList.contains('collapsed')){
+    const btn=document.querySelector('.tb-active-btn');
+    const rect=btn?btn.getBoundingClientRect():{top:0};
+    p.style.position='fixed';
+    p.style.top=rect.top+'px';
+    p.style.left='68px';
+    p.style.right='auto';
+    p.style.width='180px';
+  } else {
+    p.style.position='absolute';
+    p.style.top='calc(100% + 6px)';
+    p.style.left='0';
+    p.style.right='0';
+    p.style.width='';
+  }
+  p.style.display='block';
 }
 
 async function switchTenant(id){
