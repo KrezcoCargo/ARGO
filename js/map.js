@@ -131,8 +131,11 @@ function renderMapMarkers(){
         canton,acc:accVal});
     });
 
-    _activeProvinces=new Set(Object.keys(provGroups));
-    buildMapLegend();
+    // Preserve user's province selection — only initialize on first render
+    const allProvs=new Set(Object.keys(provGroups));
+    if(_activeProvinces.size===0) _activeProvinces=new Set(allProvs);
+    else { allProvs.forEach(p=>{if(!_activeProvinces.has(p))allProvs.delete(p);}); }
+    buildMapLegend(allProvs);
 
     Object.keys(provGroups).forEach(prov=>{
       const pColor=provColor(prov);
@@ -159,13 +162,13 @@ function renderMapMarkers(){
         group.addLayer(marker);
       });
       _layerGroups[prov]=group;
-      _mapObj.addLayer(group);
+      if(_activeProvinces.has(prov)) _mapObj.addLayer(group);
     });
   } else {
     /* MODO ESTÁTICO: catálogo MAP_SCHOOLS sin datos de entrega */
     const estGrp2=document.getElementById('fil-estado-group');
     if(estGrp2)estGrp2.style.display='none';
-    _activeProvinces=new Set(MAP_PROVINCES);
+    if(_activeProvinces.size===0) _activeProvinces=new Set(MAP_PROVINCES);
     MAP_PROVINCES.forEach(prov=>{
       const color=provColor(prov);
       const group=L.markerClusterGroup({
@@ -187,9 +190,9 @@ function renderMapMarkers(){
         group.addLayer(marker);
       });
       _layerGroups[prov]=group;
-      _mapObj.addLayer(group);
+      if(_activeProvinces.has(prov)) _mapObj.addLayer(group);
     });
-    buildMapLegend();
+    buildMapLegend(new Set(MAP_PROVINCES));
   }
   updateMapCantonesSelect();
   updateMapCount();
@@ -198,7 +201,7 @@ function renderMapMarkers(){
 
 /* buildMapLegendEstado removed — counts now in filter panel */
 
-function buildMapLegend(){
+function buildMapLegend(allProvs){
   const el=document.getElementById('map-legend');
   if(!el)return;
   const counts={};
@@ -210,13 +213,14 @@ function buildMapLegend(){
   } else {
     MAP_PROVINCES.forEach(p=>counts[p]=MAP_SCHOOLS.filter(s=>s.prov===p).length);
   }
-  el.innerHTML=provs.map(prov=>`
-    <div class="map-legend-item" onclick="toggleMapProvince('${prov}')">
-      <input type="checkbox" id="chk-${prov}" checked onchange="toggleMapProvince('${prov}')" onclick="event.stopPropagation()">
+  el.innerHTML=provs.map(prov=>{
+    const isChecked=_activeProvinces.has(prov);
+    return`<div class="map-legend-item" onclick="toggleMapProvince('${prov}')">
+      <input type="checkbox" id="chk-${prov}" ${isChecked?'checked':''} onchange="toggleMapProvince('${prov}')" onclick="event.stopPropagation()">
       <span class="swatch" style="background:${provColor(prov)}"></span>
       <span class="map-legend-label">${prov.charAt(0)+prov.slice(1).toLowerCase()}</span>
       <span class="map-legend-count" style="font-size:10px;color:var(--gray-400);margin-left:auto">${counts[prov]||0}</span>
-    </div>`).join('');
+    </div>`;}).join('');
 }
 
 function toggleMapProvince(prov){
@@ -277,7 +281,7 @@ function applyMapFiltersRebuild(){
 }
 
 function resetMapFilters(){
-  _activeProvinces=new Set(MAP_PROVINCES);
+  _activeProvinces=new Set(SCHOOLS.length>0?[...new Set(SCHOOLS.map(s=>s.prov).filter(Boolean))]:MAP_PROVINCES);
   _activeCanton='';
   ['SIERRA','COSTA'].forEach(v=>{const el=document.getElementById('fil-reg-'+v);if(el)el.checked=true;});
   ['Terrestre','Fluvial','Aérea'].forEach(v=>{const el=document.getElementById('fil-acc-'+v);if(el)el.checked=true;});
