@@ -73,5 +73,16 @@
     "tenants": [
       "gloria"
     ]
+  },
+  {
+    "username": "azapata",
+    "name": "Alfonso Zapata",
+    "role": "viewer",
+    "pwdHash": "220908484cc694cbfc83aec7d4f579726182f659abb184478504503d16acabfc",
+    "created": "2026-05-12T22:09:55.182Z",
+    "locked": false,
+    "tenants": [
+      "krezco"
+    ]
   }
 ]
