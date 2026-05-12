@@ -50,9 +50,19 @@ function doLogin(){
 }
 
 function doLogout(){
+  const m=document.getElementById('logout-confirm-modal');
+  if(m){m.style.display='flex';}
+}
+function confirmLogout(){
+  const m=document.getElementById('logout-confirm-modal');
+  if(m)m.style.display='none';
   SESSION=null;sessionStorage.removeItem('kc_sess');
   document.getElementById('app').classList.remove('visible');
   document.getElementById('page-login').style.display='';
+}
+function cancelLogout(){
+  const m=document.getElementById('logout-confirm-modal');
+  if(m)m.style.display='none';
 }
 
 /* ── Al cargar la página: espera usuarios de GitHub ANTES de mostrar el login ── */
