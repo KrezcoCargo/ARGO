@@ -27,6 +27,8 @@ function loadFromStorage(){
     // Try current tenant key first, then legacy 'kc_data' for backward compat
     const raw=localStorage.getItem(getDataCacheKey())||localStorage.getItem('kc_data');
     if(raw){const o=JSON.parse(raw);SCHOOLS=o.schools||[];CFG=Object.assign(CFG,o.cfg||{});
+      // Recalculate diasTotal from diaFechasRev (reliable even if stored value was stale)
+      if(CFG.diaFechasRev&&Object.keys(CFG.diaFechasRev).length>0){const _dn=Object.keys(CFG.diaFechasRev).map(Number).filter(n=>n>0);if(_dn.length>0)CFG.diasTotal=Math.max(..._dn);}
       const saved=getSavedClientName();
       CFG.clienteNombre=saved||(ACTIVE_TENANT?ACTIVE_TENANT.name:'')||CFG.clienteNombre;
       if(SCHOOLS.length>0){
@@ -45,6 +47,8 @@ async function loadFromGitHubThenRender(){
   const remote=await fetchFromGitHub();
   if(remote&&remote.schools&&remote.schools.length>0){
     SCHOOLS=remote.schools;CFG=Object.assign(CFG,remote.cfg||{});
+    // Recalculate diasTotal from diaFechasRev (reliable even if stored value was stale)
+    if(CFG.diaFechasRev&&Object.keys(CFG.diaFechasRev).length>0){const _dn=Object.keys(CFG.diaFechasRev).map(Number).filter(n=>n>0);if(_dn.length>0)CFG.diasTotal=Math.max(..._dn);}
     // Nombre del cliente: (1) nombre guardado para este tenant, (2) nombre del tenant, (3) lo que venga en el archivo
     const saved=getSavedClientName();
     CFG.clienteNombre=saved||(ACTIVE_TENANT?ACTIVE_TENANT.name:'')||CFG.clienteNombre;
