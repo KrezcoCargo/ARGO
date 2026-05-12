@@ -66,6 +66,19 @@
     </div>
   </nav>
 
+  <!-- LOGOUT CONFIRM MODAL -->
+  <div id="logout-confirm-modal" class="logout-modal-overlay">
+    <div class="logout-modal-box">
+      <div class="logout-modal-icon">🚪</div>
+      <div class="logout-modal-title">¿Cerrar sesión?</div>
+      <div class="logout-modal-sub">Se cerrará tu sesión y tendrás que volver a ingresar tus credenciales.</div>
+      <div class="logout-modal-btns">
+        <button class="btn-cancel-logout" onclick="cancelLogout()">Cancelar</button>
+        <button class="btn-confirm-logout" onclick="confirmLogout()">Cerrar sesión</button>
+      </div>
+    </div>
+  </div>
+
   <!-- MAIN -->
   <div class="main" id="main-content">
 
@@ -542,14 +555,14 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-<script src="js/config.js?v=15"></script>
-<script src="js/github.js?v=15"></script>
-<script src="js/auth.js?v=15"></script>
-<script src="js/app.js?v=15"></script>
-<script src="js/data-loader.js?v=15"></script>
-<script src="js/dashboard.js?v=15"></script>
-<script src="js/map.js?v=15"></script>
-<script src="js/email.js?v=15"></script>
+<script src="js/config.js?v=16"></script>
+<script src="js/github.js?v=16"></script>
+<script src="js/auth.js?v=16"></script>
+<script src="js/app.js?v=16"></script>
+<script src="js/data-loader.js?v=16"></script>
+<script src="js/dashboard.js?v=16"></script>
+<script src="js/map.js?v=16"></script>
+<script src="js/email.js?v=16"></script>
 <script>window.addEventListener('DOMContentLoaded', initAuth);</script>
 </body>
 </html>
