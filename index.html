@@ -193,14 +193,18 @@
         <div id="map"></div>
         <div class="map-controls" id="map-controls">
           <div class="map-filter-group" style="border-top:none;padding-top:0;margin-top:0">
-            <label class="group-title">🏘 Cantón</label>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+              <label class="group-title" style="margin-bottom:0">🏘 Cantón</label>
+              <span id="canton-sel-count" style="font-size:9px;font-weight:700;color:var(--orange);background:#FFF3E0;border-radius:8px;padding:1px 6px"></span>
+            </div>
             <div class="canton-search-wrap">
               <span class="canton-search-icon">🔍</span>
-              <input type="text" id="canton-search" placeholder="Buscar cantón…" oninput="filterCantonOptions()" autocomplete="off">
+              <input type="text" id="canton-search" placeholder="Buscar…" oninput="filterCantonOptions()" autocomplete="off">
             </div>
-            <select id="cantones-select" size="5" onchange="applyMapFiltersFull()">
-              <option value="">— Todos —</option>
+            <select id="cantones-select" multiple size="4" onchange="applyMapFiltersFull()">
+              <option value="">— Todos los cantones —</option>
             </select>
+            <div style="font-size:9px;color:var(--gray-400);margin-top:3px;text-align:center">Ctrl+clic para seleccionar varios</div>
           </div>
 
           <div class="map-filter-group">
@@ -538,14 +542,14 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-<script src="js/config.js?v=13"></script>
-<script src="js/github.js?v=13"></script>
-<script src="js/auth.js?v=13"></script>
-<script src="js/app.js?v=13"></script>
-<script src="js/data-loader.js?v=13"></script>
-<script src="js/dashboard.js?v=13"></script>
-<script src="js/map.js?v=13"></script>
-<script src="js/email.js?v=13"></script>
+<script src="js/config.js?v=14"></script>
+<script src="js/github.js?v=14"></script>
+<script src="js/auth.js?v=14"></script>
+<script src="js/app.js?v=14"></script>
+<script src="js/data-loader.js?v=14"></script>
+<script src="js/dashboard.js?v=14"></script>
+<script src="js/map.js?v=14"></script>
+<script src="js/email.js?v=14"></script>
 <script>window.addEventListener('DOMContentLoaded', initAuth);</script>
 </body>
 </html>
