@@ -24,6 +24,7 @@ let _mapObj=null;
 let _layerGroups={};
 let _activeProvinces=new Set(MAP_PROVINCES);
 let _activeCanton='';
+let _allCantons=[];
 
 /* ── Colores por estado de entrega ── */
 const ESTADO_COLORS={entregada:'#1F9D55',en_ruta:'#F47C20',pendiente:'#9AA4B8',problema:'#EF4444'};
@@ -242,14 +243,36 @@ function toggleMapProvince(prov){
 function updateMapCantonesSelect(){
   const sel=document.getElementById('cantones-select');
   if(!sel)return;
-  const prev=sel.value;
-  const cantons=[...new Set(
-    [..._activeProvinces].flatMap(p=>MAP_CANTONES[p]||[])
-  )].sort();
-  sel.innerHTML='<option value="">Todos los cantones</option>'+
-    cantons.map(c=>`<option value="${c}">${c.charAt(0)+c.slice(1).toLowerCase()}</option>`).join('');
-  if(cantons.includes(prev)) sel.value=prev;
-  else { sel.value=''; _activeCanton=''; }
+  const prev=sel.value||_activeCanton;
+  // Excel mode: use actual uploaded data. Static mode: use MAP_CANTONES catalog
+  if(SCHOOLS.length>0){
+    _allCantons=[...new Set(
+      SCHOOLS.filter(s=>_activeProvinces.has(s.prov)&&s.canton).map(s=>s.canton)
+    )].sort();
+  } else {
+    _allCantons=[...new Set(
+      [..._activeProvinces].flatMap(p=>MAP_CANTONES[p]||[])
+    )].sort();
+  }
+  buildCantonOptions(prev);
+}
+
+function buildCantonOptions(selected){
+  const sel=document.getElementById('cantones-select');
+  const srch=document.getElementById('canton-search');
+  if(!sel)return;
+  const q=(srch?srch.value:'').toUpperCase().trim();
+  const filtered=_allCantons.filter(c=>!q||c.toUpperCase().includes(q));
+  const allOpt=`<option value="">— Todos —</option>`;
+  sel.innerHTML=allOpt+filtered.map(c=>{
+    const label=c.charAt(0)+c.slice(1).toLowerCase();
+    return`<option value="${c}"${c===selected?' selected':''}>${label}</option>`;
+  }).join('');
+  if(!filtered.includes(selected)&&selected){sel.value='';_activeCanton='';}
+}
+
+function filterCantonOptions(){
+  buildCantonOptions(document.getElementById('cantones-select')?.value||'');
 }
 
 function applyMapFilters(){
