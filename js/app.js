@@ -55,7 +55,8 @@ function startAutoRefresh(){
     if(newHash !== _lastDataHash && _lastDataHash !== ''){
       SCHOOLS = remote.schools;
       CFG = Object.assign(CFG, remote.cfg||{});
-      const _saved=getSavedClientName();if(_saved)CFG.clienteNombre=_saved;
+      const _saved=getSavedClientName();
+      CFG.clienteNombre=_saved||(ACTIVE_TENANT?ACTIVE_TENANT.name:'')||CFG.clienteNombre;
       localStorage.setItem(getDataCacheKey(), JSON.stringify(Object.assign({},remote,{updatedAt:remote.updatedAt||''})));
       _lastDataHash = newHash;
       initDashboard();
