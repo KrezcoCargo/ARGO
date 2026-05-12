@@ -27,7 +27,8 @@ function loadFromStorage(){
     // Try current tenant key first, then legacy 'kc_data' for backward compat
     const raw=localStorage.getItem(getDataCacheKey())||localStorage.getItem('kc_data');
     if(raw){const o=JSON.parse(raw);SCHOOLS=o.schools||[];CFG=Object.assign(CFG,o.cfg||{});
-      const saved=getSavedClientName();if(saved)CFG.clienteNombre=saved;
+      const saved=getSavedClientName();
+      CFG.clienteNombre=saved||(ACTIVE_TENANT?ACTIVE_TENANT.name:'')||CFG.clienteNombre;
       if(SCHOOLS.length>0){
         setField('cfg-cliente',CFG.clienteNombre);setField('cfg-programa',CFG.programa);
         setField('cfg-fecha',CFG.fechaInicioISO);setField('cfg-dias',CFG.diasTotal);
@@ -44,7 +45,9 @@ async function loadFromGitHubThenRender(){
   const remote=await fetchFromGitHub();
   if(remote&&remote.schools&&remote.schools.length>0){
     SCHOOLS=remote.schools;CFG=Object.assign(CFG,remote.cfg||{});
-    const saved=getSavedClientName();if(saved)CFG.clienteNombre=saved;
+    // Nombre del cliente: (1) nombre guardado para este tenant, (2) nombre del tenant, (3) lo que venga en el archivo
+    const saved=getSavedClientName();
+    CFG.clienteNombre=saved||(ACTIVE_TENANT?ACTIVE_TENANT.name:'')||CFG.clienteNombre;
     // Cache locally
     localStorage.setItem(getDataCacheKey(),JSON.stringify(Object.assign({},remote,{updatedAt:remote.updatedAt||new Date().toLocaleString('es-EC')})));
     setField('cfg-cliente',CFG.clienteNombre);setField('cfg-programa',CFG.programa);
