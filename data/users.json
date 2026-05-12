@@ -4,7 +4,13 @@
     "name": "Ana Guallpa",
     "role": "viewer",
     "pwdHash": "1d1ca29fcfb9ed3129e4aae6a69f5469ec40f0866d509bdd0e1ed23b450e1d74",
-    "created": "2026-01-01T00:00:00.000Z"
+    "created": "2026-01-01T00:00:00.000Z",
+    "tenants": [
+      "krezco",
+      "gloria",
+      "worldvision",
+      "pruebas"
+    ]
   },
   {
     "username": "jacurio",
