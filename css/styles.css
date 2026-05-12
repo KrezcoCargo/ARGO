@@ -80,8 +80,36 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .sidebar.collapsed .logout-btn{justify-content:center;}
 .main.collapsed{margin-left:var(--sidebar-collapsed-w);}
 .logout-btn{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.45);font-size:11px;font-weight:600;cursor:pointer;padding:7px 0;transition:color .15s;}
-.logout-btn:hover{color:#fff;}
+.logout-btn:hover{color:#ef4444;}
 .sidebar-data-info{font-size:9px;color:rgba(255,255,255,.3);margin-top:8px;line-height:1.5;}
+
+/* ── TENANT SWITCHER ── */
+.tb-wrap{padding:8px 14px 6px;border-top:1px solid rgba(255,255,255,.1);}
+.tb-section-label{font-size:9px;font-weight:700;color:rgba(255,255,255,.35);letter-spacing:.6px;text-transform:uppercase;margin-bottom:5px;}
+.tb-active-btn{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);border-radius:8px;padding:7px 10px;cursor:pointer;transition:background .15s;}
+.tb-active-btn:hover{background:rgba(255,255,255,.14);}
+.tb-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;display:inline-block;}
+.tb-name{font-size:11px;font-weight:700;color:#fff;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tb-chevron{color:rgba(255,255,255,.4);font-size:9px;flex-shrink:0;}
+.tb-picker-item{padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;color:#fff;transition:background .1s;}
+.tb-picker-item:hover{background:rgba(255,255,255,.1);}
+.tb-picker-active{background:rgba(255,255,255,.14);}
+/* Collapsed sidebar: compact tenant button */
+.sidebar.collapsed .tb-wrap{padding:8px 0 6px;display:flex;justify-content:center;}
+.sidebar.collapsed .tb-section-label,.sidebar.collapsed .tb-name,.sidebar.collapsed .tb-chevron{display:none;}
+.sidebar.collapsed .tb-active-btn{padding:7px;justify-content:center;border-radius:50%;width:32px;height:32px;}
+
+/* ── LOGOUT CONFIRM MODAL ── */
+.logout-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(3px);}
+.logout-modal-box{background:#fff;border-radius:16px;padding:28px 24px;max-width:280px;width:90%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.25);}
+.logout-modal-icon{font-size:32px;margin-bottom:12px;}
+.logout-modal-title{font-size:15px;font-weight:800;color:var(--navy);margin-bottom:6px;}
+.logout-modal-sub{font-size:12px;color:#666;margin-bottom:22px;line-height:1.5;}
+.logout-modal-btns{display:flex;gap:10px;}
+.logout-modal-btns button{flex:1;padding:10px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;transition:opacity .15s;}
+.logout-modal-btns button:hover{opacity:.85;}
+.btn-cancel-logout{border:1.5px solid var(--gray-200);background:#fff;color:var(--navy);}
+.btn-confirm-logout{border:none;background:#EF4444;color:#fff;}
 
 /* ── MAIN CONTENT ── */
 .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;}
