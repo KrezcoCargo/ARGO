@@ -55,6 +55,8 @@ function startAutoRefresh(){
     if(newHash !== _lastDataHash && _lastDataHash !== ''){
       SCHOOLS = remote.schools;
       CFG = Object.assign(CFG, remote.cfg||{});
+      // Recalculate diasTotal from diaFechasRev (reliable even if stored value was stale)
+      if(CFG.diaFechasRev&&Object.keys(CFG.diaFechasRev).length>0){const _dn=Object.keys(CFG.diaFechasRev).map(Number).filter(n=>n>0);if(_dn.length>0)CFG.diasTotal=Math.max(..._dn);}
       const _saved=getSavedClientName();
       CFG.clienteNombre=_saved||(ACTIVE_TENANT?ACTIVE_TENANT.name:'')||CFG.clienteNombre;
       localStorage.setItem(getDataCacheKey(), JSON.stringify(Object.assign({},remote,{updatedAt:remote.updatedAt||''})));
