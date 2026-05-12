@@ -192,9 +192,15 @@
       <div class="map-page">
         <div id="map"></div>
         <div class="map-controls" id="map-controls">
-          <div class="map-canton-group">
-            <label>Filtrar cantón</label>
-            <select id="cantones-select" onchange="applyMapFiltersFull()"><option value="">Todos los cantones</option></select>
+          <div class="map-filter-group" style="border-top:none;padding-top:0;margin-top:0">
+            <label class="group-title">🏘 Cantón</label>
+            <div class="canton-search-wrap">
+              <span class="canton-search-icon">🔍</span>
+              <input type="text" id="canton-search" placeholder="Buscar cantón…" oninput="filterCantonOptions()" autocomplete="off">
+            </div>
+            <select id="cantones-select" size="5" onchange="applyMapFiltersFull()">
+              <option value="">— Todos —</option>
+            </select>
           </div>
 
           <div class="map-filter-group">
@@ -532,14 +538,14 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-<script src="js/config.js?v=12"></script>
-<script src="js/github.js?v=12"></script>
-<script src="js/auth.js?v=12"></script>
-<script src="js/app.js?v=12"></script>
-<script src="js/data-loader.js?v=12"></script>
-<script src="js/dashboard.js?v=12"></script>
-<script src="js/map.js?v=12"></script>
-<script src="js/email.js?v=12"></script>
+<script src="js/config.js?v=13"></script>
+<script src="js/github.js?v=13"></script>
+<script src="js/auth.js?v=13"></script>
+<script src="js/app.js?v=13"></script>
+<script src="js/data-loader.js?v=13"></script>
+<script src="js/dashboard.js?v=13"></script>
+<script src="js/map.js?v=13"></script>
+<script src="js/email.js?v=13"></script>
 <script>window.addEventListener('DOMContentLoaded', initAuth);</script>
 </body>
 </html>
