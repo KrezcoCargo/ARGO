@@ -23,7 +23,7 @@ let _mapCreated=false;
 let _mapObj=null;
 let _layerGroups={};
 let _activeProvinces=new Set(MAP_PROVINCES);
-let _activeCanton='';
+let _activeCantons=new Set();
 let _allCantons=[];
 
 /* ── Colores por estado de entrega ── */
@@ -118,7 +118,7 @@ function renderMapMarkers(){
       const lon=(ref&&ref.lon)?ref.lon:(s.xlon||s.lon||null);
       if(!lat||!lon)return;
       const canton=s.canton||(ref&&ref.canton)||'';
-      if(_activeCanton&&canton!==_activeCanton)return;
+      if(_activeCantons.size>0&&!_activeCantons.has(canton))return;
       const schoolReg=(ref&&ref.reg)||s.reg||'';
       if(regs.length&&schoolReg&&!regs.includes(schoolReg))return;
       const accVal=s.acceso||(ref&&ref.acc)||'Terrestre';
@@ -179,7 +179,7 @@ function renderMapMarkers(){
       });
       const {regs:fr,accs:fa,zins:fz}=getActiveFilters();
       let staticFiltered=MAP_SCHOOLS.filter(s=>s.prov===prov);
-      if(_activeCanton)staticFiltered=staticFiltered.filter(s=>s.canton===_activeCanton);
+      if(_activeCantons.size>0)staticFiltered=staticFiltered.filter(s=>_activeCantons.has(s.canton));
       if(fr.length)staticFiltered=staticFiltered.filter(s=>fr.includes(s.reg));
       if(fa.length)staticFiltered=staticFiltered.filter(s=>fa.includes(s.acc));
       if(fz.length)staticFiltered=staticFiltered.filter(s=>fz.includes(s.zona));
@@ -243,7 +243,6 @@ function toggleMapProvince(prov){
 function updateMapCantonesSelect(){
   const sel=document.getElementById('cantones-select');
   if(!sel)return;
-  const prev=sel.value||_activeCanton;
   // Excel mode: use actual uploaded data. Static mode: use MAP_CANTONES catalog
   if(SCHOOLS.length>0){
     _allCantons=[...new Set(
@@ -254,30 +253,35 @@ function updateMapCantonesSelect(){
       [..._activeProvinces].flatMap(p=>MAP_CANTONES[p]||[])
     )].sort();
   }
-  buildCantonOptions(prev);
+  buildCantonOptions();
 }
 
-function buildCantonOptions(selected){
+function buildCantonOptions(){
   const sel=document.getElementById('cantones-select');
   const srch=document.getElementById('canton-search');
   if(!sel)return;
   const q=(srch?srch.value:'').toUpperCase().trim();
   const filtered=_allCantons.filter(c=>!q||c.toUpperCase().includes(q));
-  const allOpt=`<option value="">— Todos —</option>`;
-  sel.innerHTML=allOpt+filtered.map(c=>{
+  sel.innerHTML=`<option value="">— Todos los cantones —</option>`+filtered.map(c=>{
     const label=c.charAt(0)+c.slice(1).toLowerCase();
-    return`<option value="${c}"${c===selected?' selected':''}>${label}</option>`;
+    const sel2=_activeCantons.has(c)?'selected':'';
+    return`<option value="${c}" ${sel2}>${label}</option>`;
   }).join('');
-  if(!filtered.includes(selected)&&selected){sel.value='';_activeCanton='';}
+  updateCantonBadge();
 }
 
 function filterCantonOptions(){
-  buildCantonOptions(document.getElementById('cantones-select')?.value||'');
+  buildCantonOptions();
+}
+
+function updateCantonBadge(){
+  const badge=document.getElementById('canton-sel-count');
+  if(badge) badge.textContent=_activeCantons.size>0?`${_activeCantons.size} selec.`:'';
 }
 
 function applyMapFilters(){
   const sel=document.getElementById('cantones-select');
-  _activeCanton=sel?sel.value:'';
+  if(sel) _activeCantons=new Set([...sel.selectedOptions].map(o=>o.value).filter(Boolean));
   renderMapMarkers();
 }
 
@@ -294,7 +298,8 @@ function getActiveFilters(){
 function applyMapFiltersFull(){
   if(!_mapObj)return;
   const sel=document.getElementById('cantones-select');
-  _activeCanton=sel?sel.value:'';
+  if(sel) _activeCantons=new Set([...sel.selectedOptions].map(o=>o.value).filter(Boolean));
+  updateCantonBadge();
   renderMapMarkers();
 }
 
@@ -305,12 +310,15 @@ function applyMapFiltersRebuild(){
 
 function resetMapFilters(){
   _activeProvinces=new Set(SCHOOLS.length>0?[...new Set(SCHOOLS.map(s=>s.prov).filter(Boolean))]:MAP_PROVINCES);
-  _activeCanton='';
+  _activeCantons=new Set();
   ['SIERRA','COSTA'].forEach(v=>{const el=document.getElementById('fil-reg-'+v);if(el)el.checked=true;});
   ['Terrestre','Fluvial','Aérea'].forEach(v=>{const el=document.getElementById('fil-acc-'+v);if(el)el.checked=true;});
   ['Urbana','Rural'].forEach(v=>{const el=document.getElementById('fil-zin-'+v);if(el)el.checked=true;});
   ['entregada','en_ruta','pendiente','problema'].forEach(v=>{const el=document.getElementById('fil-est-'+v);if(el)el.checked=true;});
   MAP_PROVINCES.forEach(p=>{const chk=document.getElementById('chk-'+p);if(chk)chk.checked=true;});
+  const srch=document.getElementById('canton-search');if(srch)srch.value='';
+  buildCantonOptions();
+  updateCantonBadge();
   renderMapMarkers();
 }
 
