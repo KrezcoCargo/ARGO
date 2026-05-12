@@ -111,26 +111,50 @@ function buildTenantSwitcher(){
 function toggleTenantPicker(){
   const p=document.getElementById('tenant-picker');
   if(!p)return;
-  const isOpen=p.style.display!=='none';
-  if(isOpen){p.style.display='none';return;}
-  // In collapsed sidebar: position picker to the right of the sidebar
+  if(p.style.display!=='none'){p.style.display='none';return;}
+  const btn=document.querySelector('.tb-active-btn');
+  if(!btn)return;
+  const rect=btn.getBoundingClientRect();
   const sb=document.getElementById('sidebar');
-  if(sb&&sb.classList.contains('collapsed')){
-    const btn=document.querySelector('.tb-active-btn');
-    const rect=btn?btn.getBoundingClientRect():{top:0};
-    p.style.position='fixed';
-    p.style.top=rect.top+'px';
+  const collapsed=sb&&sb.classList.contains('collapsed');
+  // Max height so picker never overflows screen, with scroll for many tenants
+  const maxH=Math.min(320, window.innerHeight-16);
+  p.style.position='fixed';
+  p.style.width=(collapsed?'190px':'200px');
+  p.style.right='auto';
+  p.style.maxHeight=maxH+'px';
+  p.style.overflowY='auto';
+  if(collapsed){
     p.style.left='68px';
-    p.style.right='auto';
-    p.style.width='180px';
   } else {
-    p.style.position='absolute';
-    p.style.top='calc(100% + 6px)';
-    p.style.left='0';
-    p.style.right='0';
-    p.style.width='';
+    // Align with left edge of sidebar content
+    p.style.left=rect.left+'px';
+  }
+  // Decide: open downward or upward depending on available space
+  const pickerH=Math.min(maxH, p.scrollHeight||200);
+  const spaceBelow=window.innerHeight-rect.bottom-8;
+  const spaceAbove=rect.top-8;
+  if(spaceBelow>=pickerH||spaceBelow>=spaceAbove){
+    p.style.top=(rect.bottom+4)+'px';
+    p.style.bottom='auto';
+  } else {
+    p.style.bottom=(window.innerHeight-rect.top+4)+'px';
+    p.style.top='auto';
   }
   p.style.display='block';
+  // Re-check after render (real height may differ)
+  requestAnimationFrame(()=>{
+    const realH=p.offsetHeight;
+    const sb2=window.innerHeight-rect.bottom-8;
+    const sa2=rect.top-8;
+    if(realH>sb2&&sa2>=realH){
+      p.style.top='auto';
+      p.style.bottom=(window.innerHeight-rect.top+4)+'px';
+    } else {
+      p.style.bottom='auto';
+      p.style.top=(rect.bottom+4)+'px';
+    }
+  });
 }
 
 async function switchTenant(id){
