@@ -155,7 +155,7 @@ function renderMapMarkers(){
         marker._sicCanton=s.canton;
         const badge=s.acc==='Aérea'?'✈️ Aérea':s.acc==='Fluvial'?'🛶 Fluvial':'🚗 Terrestre';
         const elbl=ESTADO_LABELS[s.estado]||s.estado;
-        marker.bindPopup(`<div style="font-size:12px;min-width:210px"><div style="font-weight:800;color:#14213D;margin-bottom:6px;line-height:1.3">${esc(s.name)}</div><div style="color:#5C6478;font-size:11px;margin-bottom:2px">📍 ${esc(s.canton)}</div><div style="color:#5C6478;font-size:11px;margin-bottom:8px">${badge}</div><div><span style="background:${color};color:#fff;border-radius:4px;padding:2px 8px;font-size:11px;font-weight:700">${elbl}</span></div><div style="margin-top:6px;font-size:10px;color:#666">Día ${s.dia} · ${s.raciones.toLocaleString('es-EC')} raciones</div></div>`);
+        marker.bindPopup(`<div style="font-size:12px;min-width:210px"><div style="font-weight:800;color:#14213D;margin-bottom:6px;line-height:1.3">${esc(s.name)}</div><div style="color:#5C6478;font-size:11px;margin-bottom:2px">📍 ${esc(s.canton)}</div><div style="color:#5C6478;font-size:11px;margin-bottom:8px">${badge}</div><div><span style="background:${color};color:#fff;border-radius:4px;padding:2px 8px;font-size:11px;font-weight:700">${elbl}</span></div><div style="margin-top:6px;font-size:10px;color:#666">Día ${s.dia} · ${s.raciones.toLocaleString('es-EC')} raciones · ${(s.estudiantes||0).toLocaleString('es-EC')} estudiantes</div></div>`);
         group.addLayer(marker);
       });
       _layerGroups[prov]=group;
