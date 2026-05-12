@@ -69,10 +69,11 @@ const NAV_ITEMS = {
 
 let SCHOOLS=[], CFG={clienteNombre:'',programa:'Programa',fechaInicioISO:'',diasTotal:0,diaFechas:{}};
 
-/* Nombre del cliente — clave por tenant para que cada base de datos tenga el suyo */
+/* Nombre del cliente — clave por tenant. NO hay fallback a la clave global 'kc_client'
+   para evitar que un nombre de otro tenant contamine la vista actual. */
 function getSavedClientName(){
   const k='kc_client_'+(ACTIVE_TENANT?ACTIVE_TENANT.id:'');
-  return localStorage.getItem(k)||localStorage.getItem('kc_client')||'';
+  return localStorage.getItem(k)||'';
 }
 function saveClientName(name, tenantId){
   if(!name) return;
