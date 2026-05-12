@@ -221,6 +221,13 @@ function processRows(rows,fname){
   if(ls)ls.innerHTML=`<div class="status-alert alert-ok">✓ ${newSchools.length.toLocaleString('es-EC')} instituciones cargadas desde "${fname}"${tenantLabel} · Inicio: <strong>${CFG.fechaInicioISO||'—'}</strong> · <strong>${CFG.diasTotal} días</strong></div>${diasHtml}`;
   showToast(`✓ ${newSchools.length.toLocaleString('es-EC')} IE · ${CFG.diasTotal} días`+(isCurrentTenant?'':' → '+uploadTenant.name));
 
+  // Nombre del cliente = siempre el nombre del tenant de subida
+  if(uploadTenant){
+    CFG.clienteNombre=uploadTenant.name;
+    saveClientName(uploadTenant.name, uploadTenant.id);
+    if(isCurrentTenant) setField('cfg-cliente', uploadTenant.name);
+  }
+
   // Publish to GitHub using newSchools (never the stale global SCHOOLS)
   const dataPayload={schools:newSchools,cfg:CFG,updatedAt:new Date().toLocaleString('es-EC')};
   publishToGitHub(dataPayload,targetPath);
@@ -231,18 +238,36 @@ function buildUploadTenantSelect(){
   if(!wrap)return;
   if(!SESSION||SESSION.role==='viewer'){wrap.innerHTML='';return;}
   const accessible=getUserTenants();
-  if(accessible.length<=1){wrap.innerHTML='';return;}
+  if(accessible.length<=1){
+    wrap.innerHTML='';
+    // Even without selector, auto-fill client name from the single accessible tenant
+    const t=accessible[0]||ACTIVE_TENANT;
+    if(t){setField('cfg-cliente',t.name);}
+    return;
+  }
   const current=ACTIVE_TENANT?ACTIVE_TENANT.id:(accessible[0]?accessible[0].id:'');
   wrap.innerHTML=`
     <div style="margin-bottom:14px;padding:12px 16px;background:var(--gray-bg);border-radius:10px;display:flex;align-items:center;gap:12px">
       <span style="font-size:20px">🗄️</span>
       <div style="flex:1">
         <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:4px">¿A qué base de datos subir?</div>
-        <select id="upload-tenant-sel" style="border:1.5px solid var(--gray-200);border-radius:7px;padding:6px 10px;font-size:12px;font-weight:600;color:var(--navy);background:#fff;width:100%;cursor:pointer">
+        <select id="upload-tenant-sel" onchange="onUploadTenantChange()" style="border:1.5px solid var(--gray-200);border-radius:7px;padding:6px 10px;font-size:12px;font-weight:600;color:var(--navy);background:#fff;width:100%;cursor:pointer">
           ${accessible.map(t=>`<option value="${t.id}"${t.id===current?' selected':''}>${t.name}</option>`).join('')}
         </select>
       </div>
     </div>`;
+  onUploadTenantChange();
+}
+
+function onUploadTenantChange(){
+  const sel=document.getElementById('upload-tenant-sel');
+  if(!sel) return;
+  const allTenants=TENANTS.length>0?TENANTS:DEFAULT_TENANTS;
+  const t=allTenants.find(x=>x.id===sel.value);
+  if(t){
+    setField('cfg-cliente', t.name);
+    setField('cfg-programa', CFG.programa||'Programa Alimentación Escolar');
+  }
 }
 
 function mapRow(row){
