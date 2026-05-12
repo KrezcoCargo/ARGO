@@ -11,7 +11,12 @@
     "name": "Jorge Acurio",
     "role": "viewer",
     "pwdHash": "b52e8df76ba65f33eb0e77548fd9608d781b605708379514d95bbe3dd3e52ba5",
-    "created": "2026-01-01T00:00:00.000Z"
+    "created": "2026-01-01T00:00:00.000Z",
+    "tenants": [
+      "krezco",
+      "gloria",
+      "worldvision"
+    ]
   },
   {
     "username": "mvaldez",
