@@ -1,42 +1,78 @@
 /* ═══════════════════════════════════════════════════════════
-   BODEGA v2 — Power BI-inspired design
+   BODEGA v3 — Power BI style · sticky cols · charts · drag tabs
 ═══════════════════════════════════════════════════════════ */
 let _bodegaData = null;
 let _bodegaView = 'cobertura';
+let _bdgTabOrder = null;
+let _bdgFilter   = {};
+let _bdgDragTab  = null;
 
+const BDG_TABS = [
+  {id:'cobertura',     label:'Cobertura',         icon:'📊'},
+  {id:'abastecimiento',label:'Abastecimiento',     icon:'🔄'},
+  {id:'proveedores',   label:'Proveedores',        icon:'🏭'},
+  {id:'lotesFinales',  label:'Lotes Finales',      icon:'📋'},
+  {id:'reqDiario',     label:'Req. Diario',        icon:'📅'},
+  {id:'lastmile',      label:'Last Mile',          icon:'🚚'},
+  {id:'graficas',      label:'Gráficas',           icon:'📈'},
+  {id:'invSemanal',    label:'Inv. Semanal',       icon:'🗃️'},
+];
+
+/* ─── state persistence ─── */
+function _bdgLoad(){
+  try{_bdgTabOrder=JSON.parse(localStorage.getItem('kc_bdg_order')||'null');}catch{}
+  try{_bdgFilter=JSON.parse(localStorage.getItem('kc_bdg_filter')||'{}');}catch{}
+}
+function _bdgSaveOrder(){ localStorage.setItem('kc_bdg_order',JSON.stringify(_bdgTabOrder)); }
+function _bdgSaveFilter(){ localStorage.setItem('kc_bdg_filter',JSON.stringify(_bdgFilter)); }
+
+/* ─── visible tabs (role-aware + custom order) ─── */
+function _bdgGetTabs(){
+  const canInv = SESSION&&(SESSION.role==='editor'||SESSION.role==='superadmin');
+  let tabs = BDG_TABS.filter(t=> t.id==='invSemanal' ? canInv : true);
+  if(_bdgTabOrder&&_bdgTabOrder.length){
+    tabs=[...tabs].sort((a,b)=>{
+      const ai=_bdgTabOrder.indexOf(a.id),bi=_bdgTabOrder.indexOf(b.id);
+      if(ai<0&&bi<0)return 0;if(ai<0)return 1;if(bi<0)return -1;return ai-bi;
+    });
+  }
+  return tabs;
+}
+
+/* ─── load ─── */
 async function loadBodega(){
-  const wrap = document.getElementById('bodega-content');
-  if(!wrap) return;
-  wrap.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:240px;gap:10px;color:#94A3B8"><div style="font-size:20px">⏳</div><div style="font-size:13px;font-weight:600">Cargando datos de bodega…</div></div>`;
-  try{ _bodegaData = await fetchBodegaFromGitHub(); }catch(e){ _bodegaData=null; }
+  _bdgLoad();
+  const wrap=document.getElementById('bodega-content');
+  if(!wrap)return;
+  wrap.innerHTML=`<div style="display:flex;align-items:center;justify-content:center;height:240px;gap:10px;color:#94A3B8"><div style="font-size:20px">⏳</div><div style="font-size:13px;font-weight:600">Cargando datos…</div></div>`;
+  try{_bodegaData=await fetchBodegaFromGitHub();}catch(e){_bodegaData=null;}
   if(!_bodegaData){
-    wrap.innerHTML=`<div class="bdg-empty"><div class="bdg-empty-icon">📦</div><div class="bdg-empty-msg">Sin datos de bodega</div><div style="font-size:11px;color:#94A3B8;text-align:center">Ejecuta <strong>sync-bodega.bat</strong> en tu escritorio para sincronizar desde Excel.</div></div>`;
+    wrap.innerHTML=`<div class="bdg-empty"><div class="bdg-empty-icon">📦</div><div class="bdg-empty-msg">Sin datos de bodega</div><div style="font-size:11px;color:#94A3B8;text-align:center;max-width:280px">Ejecuta <strong>sync-bodega.bat</strong> en tu escritorio para sincronizar desde Excel.</div></div>`;
     return;
   }
   renderBodegaTabs();
   renderBodegaView(_bodegaView);
 }
 
+/* ─── tabs ─── */
+function renderBodegaTabs(){
+  const bar=document.getElementById('bodega-tabs');
+  if(!bar)return;
+  const isSA=SESSION&&SESSION.role==='superadmin';
+  const tabs=_bdgGetTabs();
+  bar.innerHTML=tabs.map(t=>{
+    const drag=isSA?`draggable="true" ondragstart="bdgDragStart(event,'${t.id}')" ondragover="bdgDragOver(event)" ondrop="bdgDrop(event,'${t.id}')" ondragleave="bdgDragLeave(event)"`:'' ;
+    return`<button class="bdg-tab${t.id===_bodegaView?' active':''}" data-view="${t.id}" onclick="switchBodegaView('${t.id}')" ${drag}>
+      ${isSA?'<span class="bdg-drag-handle">⠿</span>':''}
+      <span class="bdg-tab-icon">${t.icon}</span>${t.label}
+    </button>`;
+  }).join('');
+}
+
 function switchBodegaView(v){
   _bodegaView=v;
   document.querySelectorAll('.bdg-tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));
   renderBodegaView(v);
-}
-
-function renderBodegaTabs(){
-  const bar=document.getElementById('bodega-tabs');
-  if(!bar)return;
-  const tabs=[
-    {id:'cobertura',    label:'Cobertura'},
-    {id:'abastecimiento',label:'Abastecimiento'},
-    {id:'proveedores',  label:'Proveedores'},
-    {id:'lotesFinales', label:'Lotes Finales'},
-    {id:'reqDiario',    label:'Req. Diario'},
-    {id:'lastmile',     label:'Last Mile'},
-    {id:'inventario',   label:'Inventario'},
-    {id:'invSemanal',   label:'Inv. Semanal'},
-  ];
-  bar.innerHTML=tabs.map(t=>`<button class="bdg-tab${t.id===_bodegaView?' active':''}" data-view="${t.id}" onclick="switchBodegaView('${t.id}')">${t.label}</button>`).join('');
 }
 
 function renderBodegaView(v){
@@ -51,76 +87,188 @@ function renderBodegaView(v){
     case 'lotesFinales':  wrap.innerHTML=renderLotesFinales(d,ua);break;
     case 'reqDiario':     wrap.innerHTML=renderReqDiario(d,ua);break;
     case 'lastmile':      wrap.innerHTML=renderLastMile(d,ua);break;
-    case 'inventario':    wrap.innerHTML=renderInventario(d,ua);break;
+    case 'graficas':      wrap.innerHTML=renderGraficas(d,ua);break;
     case 'invSemanal':    wrap.innerHTML=renderInvSemanal(d,ua);break;
     default: wrap.innerHTML='<div class="bdg-empty"><div class="bdg-empty-msg">Vista no disponible</div></div>';
   }
 }
 
-/* ─────────────── HELPERS ─────────────── */
-function _N(n,d=0){
-  if(n==null||n===''||isNaN(Number(n)))return'—';
-  return Number(n).toLocaleString('es-EC',{minimumFractionDigits:d,maximumFractionDigits:d});
+/* ─── drag & drop (superadmin) ─── */
+function bdgDragStart(e,id){ _bdgDragTab=id; e.currentTarget.classList.add('bdg-tab--dragging'); e.dataTransfer.effectAllowed='move'; }
+function bdgDragOver(e){ e.preventDefault(); e.currentTarget.classList.add('bdg-tab--dragover'); e.dataTransfer.dropEffect='move'; }
+function bdgDragLeave(e){ e.currentTarget.classList.remove('bdg-tab--dragover'); }
+function bdgDrop(e,targetId){
+  e.preventDefault();
+  e.currentTarget.classList.remove('bdg-tab--dragover');
+  if(!_bdgDragTab||_bdgDragTab===targetId)return;
+  const tabs=_bdgGetTabs(), order=tabs.map(t=>t.id);
+  const fi=order.indexOf(_bdgDragTab), ti=order.indexOf(targetId);
+  if(fi<0||ti<0)return;
+  order.splice(fi,1); order.splice(ti,0,_bdgDragTab);
+  _bdgTabOrder=order; _bdgDragTab=null; _bdgSaveOrder(); renderBodegaTabs();
 }
-function _P(v){
-  if(v==null||isNaN(Number(v)))return'—';
-  return(Number(v)*100).toFixed(1)+'%';
-}
-function _C(v){
-  const p=Number(v)*100;
-  if(p>=95)return{bg:'#DCFCE7',fg:'#166534',bar:'#1F9D55'};
-  if(p>=70)return{bg:'#FEF3C7',fg:'#92400E',bar:'#D97706'};
-  return{bg:'#FEE2E2',fg:'#991B1B',bar:'#EF4444'};
-}
-function _badge(v){const c=_C(v);return`<span class="bdg-badge" style="background:${c.bg};color:${c.fg}">${_P(v)}</span>`;}
-function _bar(pct,color,h=6){
-  const w=Math.min(100,Math.max(0,Number(pct||0)*100));
-  const c=color||_C(pct).bar;
-  return`<div class="bdg-bar-track" style="height:${h}px"><div style="width:${w}%;background:${c};height:100%;border-radius:999px"></div></div>`;
-}
-function _spark(values){
-  if(!Array.isArray(values)||!values.length)return'<span style="color:#ccc;font-size:10px">—</span>';
-  const nums=values.map(v=>Number(v)||0);
-  const mx=Math.max(...nums.map(Math.abs),1);
-  const W=72,H=22,n=nums.length;
-  const bw=Math.max(2,Math.floor((W-n)/(n+1)));
-  const rects=nums.map((v,i)=>{
-    const neg=v<0,h=Math.max(1,Math.round(Math.abs(v)/mx*(H/2-1)));
-    const x=i*(bw+2),y=neg?H/2:H/2-h;
-    return`<rect x="${x}" y="${y.toFixed(0)}" width="${bw}" height="${h}" fill="${neg?'#F87171':'#34D399'}" rx="1"/>`;
-  }).join('');
-  return`<svg width="${W}" height="${H}" style="display:block">${rects}</svg>`;
-}
-function _td(val,cls=''){return`<td class="r ${cls}">${_N(val)}</td>`;}
-function _hdr(txt,right=false){return`<th${right?' class="r"':''}>${txt}</th>`;}
 
-/* ─────────────── 1. COBERTURA ─────────────── */
+/* ─── product filter ─── */
+function _bdgFilterBar(viewId, allProducts){
+  const isSA=SESSION&&SESSION.role==='superadmin';
+  if(!isSA||!allProducts.length) return '';
+  const hidden=new Set(_bdgFilter[viewId]||[]);
+  const visible=allProducts.length-hidden.size;
+  const chips=allProducts.map(p=>{
+    const h=hidden.has(p);
+    const safe=p.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+    return`<label class="bdg-fchip${h?' bdg-fchip--off':''}"><input type="checkbox" ${h?'':'checked'} onchange="bdgToggleProd('${viewId}','${safe}',this.checked)" style="display:none">${p}</label>`;
+  }).join('');
+  return`<details class="bdg-fpanel">
+    <summary class="bdg-fpanel-sum">🔽 Filtrar productos visibles <span class="bdg-fbadge">${visible}/${allProducts.length}</span></summary>
+    <div class="bdg-fchips">${chips}</div>
+  </details>`;
+}
+function bdgToggleProd(viewId, product, visible){
+  if(!_bdgFilter[viewId])_bdgFilter[viewId]=[];
+  _bdgFilter[viewId]=visible?_bdgFilter[viewId].filter(p=>p!==product):[..._bdgFilter[viewId].filter(p=>p!==product),product];
+  _bdgSaveFilter(); renderBodegaView(_bodegaView);
+}
+function _bdgRows(viewId, rows, key='producto'){
+  const hidden=_bdgFilter[viewId]||[];
+  return hidden.length ? rows.filter(r=>!hidden.includes(r[key])) : rows;
+}
+
+/* ─── row selection ─── */
+function bdgSelRow(tr){
+  document.querySelectorAll('#bodega-content .bdg-row-sel').forEach(r=>r.classList.remove('bdg-row-sel'));
+  tr.classList.add('bdg-row-sel');
+}
+
+/* ═══════════ HELPERS ═══════════ */
+function _N(n,d=0){if(n==null||n===''||isNaN(Number(n)))return'—';return Number(n).toLocaleString('es-EC',{minimumFractionDigits:d,maximumFractionDigits:d});}
+function _P(v){if(v==null||isNaN(Number(v)))return'—';return(Number(v)*100).toFixed(1)+'%';}
+function _C(v){const p=Number(v)*100;if(p>=95)return{bg:'#DCFCE7',fg:'#166534',bar:'#1F9D55'};if(p>=70)return{bg:'#FEF3C7',fg:'#92400E',bar:'#D97706'};return{bg:'#FEE2E2',fg:'#991B1B',bar:'#EF4444'};}
+function _badge(v){const c=_C(v);return`<span class="bdg-badge" style="background:${c.bg};color:${c.fg}">${_P(v)}</span>`;}
+function _bar(pct,col,h=5){const w=Math.min(100,Math.max(0,Number(pct||0)*100));const c=col||_C(pct).bar;return`<div class="bdg-bar-track" style="height:${h}px"><div style="width:${w}%;background:${c};height:100%;border-radius:999px"></div></div>`;}
+
+/* ── SVG Pie Chart ── */
+function _pie(received, total, title, dec=0){
+  if(!total||total<=0)return`<div class="bdg-chart-card"><div class="bdg-chart-title">${title}</div><div style="text-align:center;padding:30px 0;color:#94A3B8;font-size:11px">Sin datos</div></div>`;
+  const pct=Math.min(1,Math.max(0,received/total));
+  const pending=total-received;
+  const r=50,cx=60,cy=60;
+  let arcPath='',bgPath='';
+  if(pct>=1){
+    arcPath=`M ${cx},${cy-r} A ${r},${r} 0 1,1 ${cx-0.01},${cy-r} Z`;
+  } else if(pct<=0){
+    bgPath=`M ${cx},${cy-r} A ${r},${r} 0 1,1 ${cx-0.01},${cy-r} Z`;
+  } else {
+    const angle=pct*2*Math.PI;
+    const sx=(cx+r*Math.sin(0)).toFixed(2),sy=(cy-r*Math.cos(0)).toFixed(2);
+    const ex=(cx+r*Math.sin(angle)).toFixed(2),ey=(cy-r*Math.cos(angle)).toFixed(2);
+    const la=pct>0.5?1:0;
+    arcPath=`M ${cx},${cy} L ${sx},${sy} A ${r},${r} 0 ${la},1 ${ex},${ey} Z`;
+    bgPath=`M ${cx},${cy} L ${ex},${ey} A ${r},${r} 0 ${1-la},1 ${sx},${sy} Z`;
+  }
+  const v1=dec>0?Number(received).toFixed(dec):_N(received);
+  const v2=dec>0?Number(pending).toFixed(dec):_N(pending);
+  return`<div class="bdg-chart-card">
+    <div class="bdg-chart-title">${title}</div>
+    <svg width="120" height="120" viewBox="0 0 120 120" style="display:block;margin:0 auto">
+      ${bgPath?`<path d="${bgPath}" fill="#E8C9A0"/>`:''}
+      ${arcPath?`<path d="${arcPath}" fill="#1A3A6B"/>`:''}
+    </svg>
+    <div style="text-align:center;font-size:14px;font-weight:800;color:#1E293B;margin:-4px 0 6px">${(pct*100).toFixed(2)}%</div>
+    <div class="bdg-chart-legend"><span style="color:#1A3A6B">● ${v1}</span><span style="color:#D4A76A">● ${v2}</span></div>
+  </div>`;
+}
+
+/* ── SVG Bar Chart ── */
+function _barChart(data, title, dec=0, barColor='#1A3A6B'){
+  if(!data.length)return'';
+  const max=Math.max(...data.map(d=>d.value),1);
+  const maxH=110;
+  const bars=data.map(d=>{
+    const h=Math.max(2,Math.round((d.value/max)*maxH));
+    const val=dec>0?Number(d.value).toFixed(dec):_N(d.value);
+    return`<div class="bdg-bc-col">
+      <div class="bdg-bc-val">${val}</div>
+      <div class="bdg-bc-bar" style="height:${h}px;background:${barColor}"></div>
+      <div class="bdg-bc-lbl">${d.label}</div>
+    </div>`;
+  }).join('');
+  return`<div class="bdg-chart-card bdg-chart-wide">
+    <div class="bdg-chart-title">${title}</div>
+    <div class="bdg-bc-wrap">${bars}</div>
+  </div>`;
+}
+
+/* ── Horizontal Bar (Inventario) ── */
+function _hbarChart(rows){
+  if(!rows.length)return'';
+  const vals=rows.filter(r=>r.ajuste!=null&&!isNaN(Number(r.ajuste)));
+  if(!vals.length)return'';
+  const mx=Math.max(...vals.map(r=>Math.abs(Number(r.ajuste))),1);
+  const bh=20,gap=5,labelW=220,rightW=180,midX=labelW;
+  const svgW=labelW+rightW+20,svgH=vals.length*(bh+gap)+20;
+  const rects=vals.map((r,i)=>{
+    const v=Number(r.ajuste),neg=v<0;
+    const bw=Math.max(1,Math.round(Math.abs(v)/mx*rightW*0.85));
+    const y=10+i*(bh+gap);
+    const bx=neg?midX-bw:midX;
+    const col=neg?'#EF4444':'#1A3A6B';
+    const tx=neg?midX-bw-4:midX+bw+4;
+    const ta=neg?'end':'start';
+    return`<g>
+      <text x="${labelW-6}" y="${y+bh/2+4}" font-size="10" fill="#334155" text-anchor="end" font-family="Segoe UI,sans-serif">${r.producto}</text>
+      <rect x="${bx}" y="${y}" width="${bw}" height="${bh}" fill="${col}" rx="2"/>
+      <text x="${tx}" y="${y+bh/2+4}" font-size="9" fill="#64748B" text-anchor="${ta}" font-weight="700" font-family="Segoe UI,sans-serif">${_N(v)}</text>
+    </g>`;
+  }).join('');
+  return`<div class="bdg-tbl-wrap" style="background:#fff;padding:16px">
+    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:#0F1F3D;text-align:center;margin-bottom:10px">INVENTARIO</div>
+    <div style="overflow-x:auto"><svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}">
+      <line x1="${midX}" y1="5" x2="${midX}" y2="${svgH-5}" stroke="#E2E8F0" stroke-width="1"/>
+      ${rects}
+    </svg></div>
+  </div>`;
+}
+
+/* ─── section header (no subtitle) ─── */
+function _hdr2(title, ua=''){
+  return`<div class="bdg-hdr"><div class="bdg-hdr-title">${title}</div>${ua}</div>`;
+}
+
+/* ═══════════ VIEWS ═══════════ */
+
+/* ── 1. COBERTURA ── */
 function renderCobertura(d,ua){
-  const rows=d.cobertura||[];
-  if(!rows.length)return`<div class="bdg-empty"><div class="bdg-empty-icon">📊</div><div class="bdg-empty-msg">Sin datos de cobertura</div></div>`;
+  const all=d.cobertura||[];
+  if(!all.length)return`<div class="bdg-empty"><div class="bdg-empty-icon">📊</div><div class="bdg-empty-msg">Sin datos de cobertura</div></div>`;
+  const rows=_bdgRows('cobertura',all);
+  const allProds=all.map(r=>r.producto).filter(Boolean);
   const totIng=rows.reduce((a,r)=>a+(r.ingresos||0),0);
   const totReq=rows.reduce((a,r)=>a+(r.totalReq||0),0);
   const glob=totReq>0?totIng/totReq:0;
   const cg=_C(glob);
+  const nd=(rows.find(r=>Array.isArray(r.porDia)&&r.porDia.length)||{}).porDia?.length||0;
+  const dayTh=Array.from({length:nd},(_,i)=>`<th class="r bdg-day-th">D${i+1}</th>`).join('');
   const trs=rows.map(r=>{
     const c=_C(r.pct),neg=(r.saldo||0)<0,negR=(r.porRecibir||0)<0;
-    return`<tr>
-      <td style="font-weight:600;color:#1E293B;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.producto||'—'}</td>
-      ${_td(r.ingresos)}
-      ${_td(r.totalReq)}
-      <td class="r ${neg?'neg':''}">${_N(r.saldo)}</td>
-      <td style="min-width:72px">${_spark(r.porDia)}</td>
-      <td style="min-width:140px">
-        <div style="display:flex;align-items:center;gap:8px">
-          ${_badge(r.pct)}
-          ${_bar(r.pct,c.bar,5)}
-        </div>
-      </td>
-      <td class="r ${negR?'neg':''}">${_N(r.porRecibir)}</td>
+    const dias=Array.isArray(r.porDia)?r.porDia:[];
+    const dCells=Array.from({length:nd},(_,i)=>{
+      const v=dias[i];if(v==null)return`<td class="r" style="color:#CBD5E1">—</td>`;
+      const neg=Number(v)<0;
+      return`<td class="r${neg?' neg':''}">${_N(v)}</td>`;
+    }).join('');
+    return`<tr onclick="bdgSelRow(this)">
+      <td class="bdg-sticky-col" style="font-weight:600;white-space:nowrap">${r.producto||'—'}</td>
+      <td class="r">${_N(r.ingresos)}</td><td class="r">${_N(r.totalReq)}</td>
+      <td class="r${neg?' neg':''}">${_N(r.saldo)}</td>
+      ${dCells}
+      <td style="min-width:130px"><div style="display:flex;align-items:center;gap:6px">${_badge(r.pct)}<div style="flex:1">${_bar(r.pct,c.bar,4)}</div></div></td>
+      <td class="r${negR?' neg':''}">${_N(r.porRecibir)}</td>
     </tr>`;
   }).join('');
   return`<div class="bdg-section">
-    <div class="bdg-hdr"><div class="bdg-hdr-left"><div class="bdg-hdr-title">📊 Cobertura de productos</div><div class="bdg-hdr-sub">Ingresos vs requerimiento total · tendencia por día</div></div>${ua}</div>
+    ${_hdr2('📊 Cobertura de productos',ua)}
+    ${_bdgFilterBar('cobertura',allProds)}
     <div class="bdg-kpis">
       <div class="bdg-kpi bdg-kpi--blue"><div class="bdg-kpi-lbl">Total ingresos</div><div class="bdg-kpi-val">${_N(totIng)}</div></div>
       <div class="bdg-kpi"><div class="bdg-kpi-lbl">Total requerido</div><div class="bdg-kpi-val">${_N(totReq)}</div></div>
@@ -129,20 +277,26 @@ function renderCobertura(d,ua){
     </div>
     <div class="bdg-tbl-wrap">
       <table class="bdg-tbl">
-        <thead><tr>${_hdr('Producto')}${_hdr('Ingresos',true)}${_hdr('Total req.',true)}${_hdr('Saldo',true)}${_hdr('Tendencia')}${_hdr('Cobertura')}${_hdr('Por recibir',true)}</tr></thead>
+        <thead><tr>
+          <th class="bdg-sticky-col">Producto</th>
+          <th class="r">Ingresos</th><th class="r">Total req.</th><th class="r">Saldo</th>
+          ${dayTh}
+          <th style="min-width:130px">Cobertura</th>
+          <th class="r">Por recibir</th>
+        </tr></thead>
         <tbody>${trs}</tbody>
       </table>
     </div>
   </div>`;
 }
 
-/* ─────────────── 2. ABASTECIMIENTO ─────────────── */
+/* ── 2. ABASTECIMIENTO ── */
 function renderAbastecimiento(d,ua){
-  const rows=d.abastecimiento||[];
-  if(!rows.length)return`<div class="bdg-empty"><div class="bdg-empty-icon">🔄</div><div class="bdg-empty-msg">Sin datos de abastecimiento</div></div>`;
-  const ok=rows.filter(r=>(r.pct||0)>=1).length;
-  const med=rows.filter(r=>(r.pct||0)>=0.7&&(r.pct||0)<1).length;
-  const crit=rows.filter(r=>(r.pct||0)<0.7).length;
+  const all=d.abastecimiento||[];
+  if(!all.length)return`<div class="bdg-empty"><div class="bdg-empty-icon">🔄</div><div class="bdg-empty-msg">Sin datos de abastecimiento</div></div>`;
+  const rows=_bdgRows('abastecimiento',all);
+  const allProds=all.map(r=>r.producto).filter(Boolean);
+  const ok=rows.filter(r=>(r.pct||0)>=1).length, med=rows.filter(r=>(r.pct||0)>=0.7&&(r.pct||0)<1).length, crit=rows.filter(r=>(r.pct||0)<0.7).length;
   const cards=rows.map(r=>{
     const c=_C(r.pct),p=Math.min(100,Math.max(0,(r.pct||0)*100));
     return`<div class="bdg-card" style="border-left:4px solid ${c.bar}">
@@ -157,7 +311,8 @@ function renderAbastecimiento(d,ua){
     </div>`;
   }).join('');
   return`<div class="bdg-section">
-    <div class="bdg-hdr"><div class="bdg-hdr-left"><div class="bdg-hdr-title">🔄 Abastecimiento</div><div class="bdg-hdr-sub">% cumplimiento ingreso vs requerimiento por producto</div></div>${ua}</div>
+    ${_hdr2('🔄 Abastecimiento',ua)}
+    ${_bdgFilterBar('abastecimiento',allProds)}
     <div class="bdg-kpis">
       <div class="bdg-kpi bdg-kpi--green"><div class="bdg-kpi-lbl">Completados ≥100%</div><div class="bdg-kpi-val">${ok}</div></div>
       <div class="bdg-kpi bdg-kpi--orange"><div class="bdg-kpi-lbl">En proceso 70–99%</div><div class="bdg-kpi-val">${med}</div></div>
@@ -168,32 +323,30 @@ function renderAbastecimiento(d,ua){
   </div>`;
 }
 
-/* ─────────────── 3. PROVEEDORES ─────────────── */
+/* ── 3. PROVEEDORES ── */
 function renderProveedores(d,ua){
-  const rows=d.proveedores||[];
-  if(!rows.length)return`<div class="bdg-empty"><div class="bdg-empty-icon">🏭</div><div class="bdg-empty-msg">Sin datos de proveedores</div></div>`;
-  const totP=rows.reduce((a,r)=>a+(r.planificado||0),0);
-  const totI=rows.reduce((a,r)=>a+(r.ingresos||0),0);
+  const all=d.proveedores||[];
+  if(!all.length)return`<div class="bdg-empty"><div class="bdg-empty-icon">🏭</div><div class="bdg-empty-msg">Sin datos de proveedores</div></div>`;
+  const rows=_bdgRows('proveedores',all);
+  const allProds=all.map(r=>r.producto).filter(Boolean);
+  const totP=rows.reduce((a,r)=>a+(r.planificado||0),0),totI=rows.reduce((a,r)=>a+(r.ingresos||0),0);
   const glob=totP>0?totI/totP:0;
   const trs=rows.map(r=>{
     const c=_C(r.pct);
-    return`<tr>
-      <td style="font-weight:600;color:#1E293B">${r.producto||'—'}</td>
-      ${_td(r.planificado)}
-      ${_td(r.ingresos)}
-      <td style="min-width:170px">
+    return`<tr onclick="bdgSelRow(this)">
+      <td class="bdg-sticky-col" style="font-weight:600">${r.producto||'—'}</td>
+      <td class="r">${_N(r.planificado)}</td><td class="r">${_N(r.ingresos)}</td>
+      <td style="min-width:180px">
         <div style="display:flex;flex-direction:column;gap:3px">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            ${_badge(r.pct)}
-            <span style="font-size:10px;color:#64748B">${_N(r.ingresos)} / ${_N(r.planificado)}</span>
-          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">${_badge(r.pct)}<span style="font-size:10px;color:#64748B">${_N(r.ingresos)} / ${_N(r.planificado)}</span></div>
           ${_bar(r.pct,c.bar,6)}
         </div>
       </td>
     </tr>`;
   }).join('');
   return`<div class="bdg-section">
-    <div class="bdg-hdr"><div class="bdg-hdr-left"><div class="bdg-hdr-title">🏭 Proveedores</div><div class="bdg-hdr-sub">Planificado vs ingresos reales · % cumplimiento</div></div>${ua}</div>
+    ${_hdr2('🏭 Proveedores',ua)}
+    ${_bdgFilterBar('proveedores',allProds)}
     <div class="bdg-kpis">
       <div class="bdg-kpi bdg-kpi--blue"><div class="bdg-kpi-lbl">Total planificado</div><div class="bdg-kpi-val">${_N(totP)}</div></div>
       <div class="bdg-kpi bdg-kpi--green"><div class="bdg-kpi-lbl">Total ingresos</div><div class="bdg-kpi-val">${_N(totI)}</div></div>
@@ -202,144 +355,182 @@ function renderProveedores(d,ua){
     </div>
     <div class="bdg-tbl-wrap">
       <table class="bdg-tbl">
-        <thead><tr>${_hdr('Proveedor / Producto')}${_hdr('Planificado',true)}${_hdr('Ingresos',true)}${_hdr('Cumplimiento')}</tr></thead>
+        <thead><tr><th class="bdg-sticky-col">Proveedor / Producto</th><th class="r">Planificado</th><th class="r">Ingresos</th><th>Cumplimiento</th></tr></thead>
         <tbody>${trs}</tbody>
       </table>
     </div>
   </div>`;
 }
 
-/* ─────────────── 4. LOTES FINALES ─────────────── */
+/* ── 4. LOTES FINALES (tabla) ── */
 function renderLotesFinales(d,ua){
-  const rows=d.lotesFinales||[];
-  if(!rows.length)return`<div class="bdg-empty"><div class="bdg-empty-icon">📋</div><div class="bdg-empty-msg">Sin datos de lotes finales</div></div>`;
-  const ok=rows.filter(r=>(r.pct||0)>=1).length;
-  const crit=rows.filter(r=>(r.pct||0)<0.7).length;
-  const cards=rows.map(r=>{
-    const c=_C(r.pct),p=Math.min(100,Math.max(0,(r.pct||0)*100)),neg=(r.porRecibir||0)<0;
-    return`<div class="bdg-card" style="border-left:4px solid ${c.bar}">
-      <div class="bdg-card-name">${r.producto||'—'}</div>
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div class="bdg-card-pct" style="color:${c.fg}">${_P(r.pct)}</div>
-        ${r.lotes&&r.lotes!=='—'?`<span style="font-size:9px;background:#F1F5F9;border-radius:4px;padding:2px 6px;color:#64748B">${r.lotes}</span>`:''}
-      </div>
-      <div class="bdg-bar-track" style="height:7px"><div style="width:${p}%;background:${c.bar};height:100%;border-radius:999px"></div></div>
-      <div class="bdg-card-detail">
-        <span style="color:${neg?'#EF4444':'#64748B'}">Por recibir: <strong style="color:${neg?'#EF4444':'var(--navy)'}">${_N(r.porRecibir)}</strong></span>
-      </div>
-    </div>`;
+  const all=d.lotesFinales||[];
+  if(!all.length)return`<div class="bdg-empty"><div class="bdg-empty-icon">📋</div><div class="bdg-empty-msg">Sin datos de lotes finales</div></div>`;
+  const rows=_bdgRows('lotesFinales',all);
+  const allProds=all.map(r=>r.producto).filter(Boolean);
+  const ok=rows.filter(r=>(r.pct||0)>=1).length,crit=rows.filter(r=>(r.pct||0)<0.7).length;
+  const trs=rows.map(r=>{
+    const c=_C(r.pct),neg=(r.porRecibir||0)<0;
+    return`<tr onclick="bdgSelRow(this)">
+      <td class="bdg-sticky-col" style="font-weight:600">${r.producto||'—'}</td>
+      <td class="r${neg?' neg':''}">${_N(r.porRecibir)}</td>
+      <td style="min-width:160px"><div style="display:flex;align-items:center;gap:8px">${_badge(r.pct)}<div style="flex:1">${_bar(r.pct,c.bar,5)}</div></div></td>
+      <td style="font-size:11px;color:#64748B">${r.lotes&&r.lotes!=='—'&&r.lotes!=='-'?r.lotes:'—'}</td>
+    </tr>`;
   }).join('');
   return`<div class="bdg-section">
-    <div class="bdg-hdr"><div class="bdg-hdr-left"><div class="bdg-hdr-title">📋 Lotes Finales</div><div class="bdg-hdr-sub">Cobertura de lotes · saldo por recibir</div></div>${ua}</div>
+    ${_hdr2('📋 Lotes Finales',ua)}
+    ${_bdgFilterBar('lotesFinales',allProds)}
     <div class="bdg-kpis">
       <div class="bdg-kpi bdg-kpi--green"><div class="bdg-kpi-lbl">Completados ≥100%</div><div class="bdg-kpi-val">${ok}</div></div>
       <div class="bdg-kpi bdg-kpi--red"><div class="bdg-kpi-lbl">Críticos &lt;70%</div><div class="bdg-kpi-val">${crit}</div></div>
       <div class="bdg-kpi"><div class="bdg-kpi-lbl">Total productos</div><div class="bdg-kpi-val">${rows.length}</div></div>
     </div>
-    <div class="bdg-card-grid">${cards}</div>
+    <div class="bdg-tbl-wrap">
+      <table class="bdg-tbl">
+        <thead><tr><th class="bdg-sticky-col">Producto</th><th class="r">Por recibir</th><th>Cobertura</th><th>Lotes</th></tr></thead>
+        <tbody>${trs}</tbody>
+      </table>
+    </div>
   </div>`;
 }
 
-/* ─────────────── 5. REQUERIMIENTO DIARIO ─────────────── */
+/* ── 5. REQUERIMIENTO DIARIO (all days, sticky col) ── */
 function renderReqDiario(d,ua){
-  const rows=d.requerimientoDiario||[];
-  if(!rows.length)return`<div class="bdg-empty"><div class="bdg-empty-icon">📅</div><div class="bdg-empty-msg">Sin datos de requerimiento diario</div></div>`;
-  const maxD=Math.max(...rows.map(r=>(r.dias||[]).length));
+  const all=d.requerimientoDiario||[];
+  if(!all.length)return`<div class="bdg-empty"><div class="bdg-empty-icon">📅</div><div class="bdg-empty-msg">Sin datos de requerimiento diario</div></div>`;
+  const rows=_bdgRows('reqDiario',all);
+  const allProds=all.map(r=>r.producto).filter(Boolean);
+  const nd=Math.max(...rows.map(r=>(r.dias||[]).length),0);
+  const dayTh=Array.from({length:nd},(_,i)=>`<th class="r bdg-day-th">D${i+1}</th>`).join('');
   const trs=rows.map(r=>{
     const dias=Array.isArray(r.dias)?r.dias:[];
-    return`<tr>
-      <td style="font-weight:600;color:#1E293B;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.producto||'—'}</td>
-      <td style="min-width:72px">${_spark(dias)}</td>
+    const dCells=Array.from({length:nd},(_,i)=>{
+      const v=dias[i];if(v==null||v==='')return`<td class="r" style="color:#CBD5E1">—</td>`;
+      return`<td class="r">${_N(v)}</td>`;
+    }).join('');
+    return`<tr onclick="bdgSelRow(this)">
+      <td class="bdg-sticky-col" style="font-weight:600;white-space:nowrap">${r.producto||'—'}</td>
+      ${dCells}
       <td class="r" style="font-weight:700;color:var(--orange)">${_N(r.distributivo)}</td>
       <td class="r">${r.numDias||'—'}</td>
     </tr>`;
   }).join('');
   return`<div class="bdg-section">
-    <div class="bdg-hdr"><div class="bdg-hdr-left"><div class="bdg-hdr-title">📅 Requerimiento Diario</div><div class="bdg-hdr-sub">Distribución requerida por día · la barra muestra la tendencia</div></div>${ua}</div>
+    ${_hdr2('📅 Requerimiento Diario',ua)}
+    ${_bdgFilterBar('reqDiario',allProds)}
     <div class="bdg-tbl-wrap">
       <table class="bdg-tbl">
-        <thead><tr>${_hdr('Producto')}${_hdr('Tendencia diaria')}${_hdr('Distributivo',true)}${_hdr('Días',true)}</tr></thead>
+        <thead><tr>
+          <th class="bdg-sticky-col">Producto</th>
+          ${dayTh}
+          <th class="r">Distributivo</th><th class="r">Días</th>
+        </tr></thead>
         <tbody>${trs}</tbody>
       </table>
     </div>
   </div>`;
 }
 
-/* ─────────────── 6. LAST MILE ─────────────── */
+/* ── 6. LAST MILE ── */
 function renderLastMile(d,ua){
+  const errores=d.historialErrores||[];
   const lm=d.lastmile||{};
+
+  /* Errores table */
+  const errHtml=errores.length?`
+    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:#0F1F3D;margin-bottom:8px">ERRORES LASTMILE</div>
+    <div class="bdg-tbl-wrap">
+      <table class="bdg-tbl">
+        <thead><tr><th class="bdg-sticky-col">Transportista</th>${Object.keys(errores[0]).filter(k=>k!=='transportista').map(k=>`<th class="r">${k}</th>`).join('')}</tr></thead>
+        <tbody>${errores.map(r=>`<tr onclick="bdgSelRow(this)"><td class="bdg-sticky-col" style="font-weight:600;white-space:nowrap">${r.transportista||'—'}</td>${Object.keys(r).filter(k=>k!=='transportista').map(k=>{const v=Number(r[k]);const has=!isNaN(v)&&r[k]!=null&&r[k]!=='';return`<td class="r${has&&v>0?' neg':''}">` +(has?_N(v):'')+'</td>';}).join('')}</tr>`).join('')}</tbody>
+      </table>
+    </div>`:'';
+
+  /* Cumplimiento chart from resumen */
+  const res=Array.isArray(lm.resumen)?lm.resumen.filter(r=>r.etiqueta!=null):[];
+  const cumHtml=res.length?`
+    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:#0F1F3D;margin:16px 0 8px">CUMPLIMIENTO</div>
+    <div class="bdg-tbl-wrap" style="padding:16px">
+      <div style="display:flex;gap:12px;font-size:10px;color:#64748B;margin-bottom:12px">
+        <span><span style="color:#E8C9A0">●</span> META</span>
+        <span><span style="color:#1A3A6B">●</span> VALIDACIÓN</span>
+      </div>
+      <div style="display:flex;gap:20px;align-items:flex-end;overflow-x:auto;padding-bottom:8px">
+        ${res.map(r=>{
+          const meta=Number(r.cuentaTrans)||0,val=Number(r.cuentaVal)||0;
+          const maxV=Math.max(meta,val,1);
+          const hm=Math.max(2,Math.round(meta/maxV*100)),hv=Math.max(2,Math.round(val/maxV*100));
+          return`<div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:50px">
+            <div style="display:flex;gap:3px;align-items:flex-end;height:110px">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:2px"><span style="font-size:8px;font-weight:700;color:#1E293B">${meta}</span><div style="width:18px;height:${hm}px;background:#E8C9A0;border-radius:3px 3px 0 0"></div></div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:2px"><span style="font-size:8px;font-weight:700;color:#1E293B">${val}</span><div style="width:18px;height:${hv}px;background:#1A3A6B;border-radius:3px 3px 0 0"></div></div>
+            </div>
+            <span style="font-size:9px;font-weight:600;color:#64748B">${r.etiqueta}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`:'';
+
+  if(!errHtml&&!cumHtml)return`<div class="bdg-empty"><div class="bdg-empty-icon">🚚</div><div class="bdg-empty-msg">Sin datos de Last Mile</div></div>`;
+  return`<div class="bdg-section">${_hdr2('🚚 Last Mile',ua)}${errHtml}${cumHtml}</div>`;
+}
+
+/* ── 7. GRÁFICAS ── */
+function renderGraficas(d,ua){
   const notas=d.notasEntrega||{};
-  const hasNotas=notas.planificadas!=null;
-  const pctRec=hasNotas&&notas.planificadas>0?notas.recibidas/notas.planificadas:0;
-  const notasHtml=hasNotas?`
-    <div class="bdg-stat-strip">
-      <div class="bdg-stat bdg-kpi--blue"><div class="bdg-stat-lbl">Planificadas</div><div class="bdg-stat-val">${_N(notas.planificadas)}</div></div>
-      <div class="bdg-stat bdg-kpi--green"><div class="bdg-stat-lbl">Recibidas</div><div class="bdg-stat-val">${_N(notas.recibidas)}</div></div>
-      <div class="bdg-stat bdg-kpi--red"><div class="bdg-stat-lbl">Pendientes</div><div class="bdg-stat-val">${_N(notas.pendientes)}</div></div>
-      <div class="bdg-stat bdg-kpi--orange"><div class="bdg-stat-lbl">% Recibidas</div><div class="bdg-stat-val">${notas.pctRecibidas||_P(pctRec)}</div></div>
-    </div>
-    <div style="background:#fff;border-radius:10px;border:1px solid #E2E8F0;padding:12px 16px">
-      <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:600;color:#64748B;margin-bottom:6px"><span>Progreso de recepción</span><span style="color:${_C(pctRec).fg}">${_P(pctRec)}</span></div>
-      ${_bar(pctRec,_C(pctRec).bar,10)}
-    </div>`:''
-  const detalleHtml=Array.isArray(lm.detalle)&&lm.detalle.length?`
-    <div style="font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.3px;margin-top:4px">Detalle de entregas</div>
-    <div class="bdg-tbl-wrap">
-      <table class="bdg-tbl">
-        <thead><tr>${Object.keys(lm.detalle[0]).map(k=>`<th>${k}</th>`).join('')}</tr></thead>
-        <tbody>${lm.detalle.slice(0,80).map(r=>`<tr>${Object.values(r).map(v=>`<td style="font-size:11px">${v??'—'}</td>`).join('')}</tr>`).join('')}</tbody>
-      </table>
-    </div>
-    ${lm.detalle.length>80?`<div style="font-size:10px;color:#94A3B8;text-align:center;padding:6px">Mostrando 80 de ${lm.detalle.length} registros</div>`:''}`:''
-  if(!hasNotas&&!detalleHtml)return`<div class="bdg-empty"><div class="bdg-empty-icon">🚚</div><div class="bdg-empty-msg">Sin datos de Last Mile</div></div>`;
+  const sc=typeof SCHOOLS!=='undefined'?SCHOOLS:[];
+
+  /* Compute from SCHOOLS */
+  const totTon=sc.reduce((a,s)=>a+(s.peso_kg||0),0)/1000;
+  const despTon=sc.filter(s=>s.estado==='entregada').reduce((a,s)=>a+(s.peso_kg||0),0)/1000;
+  const totIE=sc.length, despIE=sc.filter(s=>s.estado==='entregada').length;
+
+  /* Day bars */
+  const byDia={};
+  sc.forEach(s=>{if(!byDia[s.dia])byDia[s.dia]={inst:0,ton:0};byDia[s.dia].inst++;byDia[s.dia].ton+=(s.peso_kg||0)/1000;});
+  const diasArr=Object.keys(byDia).map(Number).sort((a,b)=>a-b).map(k=>({label:`${k}`,inst:byDia[k].inst,ton:byDia[k].ton}));
+
+  const pie1=_pie(notas.recibidas||0,             notas.planificadas||0,            'NOTAS RECIBIDAS');
+  const pie2=_pie(notas.racionesRecibidas||0,      notas.racionesPlanificadas||0,    'RACIONES DESPACHADAS');
+  const pie3=_pie(despTon,                          totTon,                           'TONELADAS DESPACHADAS',2);
+  const pie4=_pie(despIE,                           totIE,                            'INSTITUCIONES DESPACHADAS');
+
+  const bar1=diasArr.length?_barChart(diasArr.map(x=>({label:x.label,value:x.inst})),'INSTITUCIONES POR DÍA',0,'#1A3A6B'):'';
+  const bar2=diasArr.length?_barChart(diasArr.map(x=>({label:x.label,value:x.ton})), 'TONELADAS POR DÍA',2,'#1A3A6B'):'';
+
   return`<div class="bdg-section">
-    <div class="bdg-hdr"><div class="bdg-hdr-left"><div class="bdg-hdr-title">🚚 Last Mile</div><div class="bdg-hdr-sub">Notas de entrega y estado de distribución</div></div>${ua}</div>
-    ${notasHtml}${detalleHtml}
+    ${_hdr2('📈 Gráficas',ua)}
+    <div class="bdg-pie-grid">${pie1}${pie2}${pie3}${pie4}</div>
+    <div class="bdg-bar-grid">${bar1}${bar2}</div>
   </div>`;
 }
 
-/* ─────────────── 7. INVENTARIO ─────────────── */
-function renderInventario(d,ua){
-  const rows=d.inventario||[];
-  if(!rows.length)return`<div class="bdg-empty"><div class="bdg-empty-icon">🗃️</div><div class="bdg-empty-msg">Sin datos de inventario</div></div>`;
-  const trs=rows.map(r=>{
-    const num=Number(r.ajuste),isNum=!isNaN(num)&&r.ajuste!=null&&r.ajuste!=='';
-    const neg=isNum&&num<0,pos=isNum&&num>0;
-    const cls=neg?'neg':pos?'pos':'nm';
-    const icon=neg?'▼ ':pos?'▲ ':'';
-    return`<tr>
-      <td style="font-weight:600;color:#1E293B">${r.producto||'—'}</td>
-      <td class="r ${cls}">${icon}${isNum?_N(num):(r.ajuste||'—')}</td>
-    </tr>`;
-  }).join('');
-  return`<div class="bdg-section">
-    <div class="bdg-hdr"><div class="bdg-hdr-left"><div class="bdg-hdr-title">🗃️ Inventario</div><div class="bdg-hdr-sub">Ajustes y saldos de inventario por producto</div></div>${ua}</div>
-    <div class="bdg-tbl-wrap" style="max-width:540px">
-      <table class="bdg-tbl">
-        <thead><tr>${_hdr('Producto')}${_hdr('Ajuste / Saldo',true)}</tr></thead>
-        <tbody>${trs}</tbody>
-      </table>
-    </div>
-  </div>`;
-}
-
-/* ─────────────── 8. INVENTARIO SEMANAL ─────────────── */
+/* ── 8. INV. SEMANAL + INVENTARIO (solo editor/superadmin) ── */
 function renderInvSemanal(d,ua){
-  const rows=d.inventarioSemanal||[];
-  if(!rows.length)return`<div class="bdg-empty"><div class="bdg-empty-icon">📆</div><div class="bdg-empty-msg">Sin datos de inventario semanal</div></div>`;
-  const keys=Object.keys(rows[0]||{}).filter(k=>k!=='dia');
-  const colsHtml=keys.map(k=>`<th style="text-transform:capitalize">${k}</th>`).join('');
-  const trs=rows.map(r=>{
-    const cells=keys.map(k=>`<td style="font-size:11px">${r[k]||'—'}</td>`).join('');
-    return`<tr><td style="font-weight:700;color:var(--orange);text-transform:uppercase;white-space:nowrap">${r.dia||'—'}</td>${cells}</tr>`;
-  }).join('');
-  return`<div class="bdg-section">
-    <div class="bdg-hdr"><div class="bdg-hdr-left"><div class="bdg-hdr-title">📆 Inventario Semanal</div><div class="bdg-hdr-sub">Distribución de productos por día de la semana</div></div>${ua}</div>
+  const semRows=d.inventarioSemanal||[];
+  const invRows=d.inventario||[];
+  const all=(d.inventario||[]).map(r=>r.producto).filter(Boolean);
+
+  /* Weekly schedule table */
+  const keys=Object.keys(semRows[0]||{}).filter(k=>k!=='dia'&&k!=='__rowNum');
+  const semHtml=semRows.length?`
+    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:#0F1F3D;margin-bottom:8px">INVENTARIO SEMANAL</div>
     <div class="bdg-tbl-wrap">
       <table class="bdg-tbl">
-        <thead><tr><th>Día</th>${colsHtml}</tr></thead>
-        <tbody>${trs}</tbody>
+        <thead><tr><th>Día</th>${keys.map(k=>`<th style="text-transform:capitalize">${k}</th>`).join('')}</tr></thead>
+        <tbody>${semRows.map(r=>`<tr><td style="font-weight:700;color:var(--orange);white-space:nowrap">${r.dia||'—'}</td>${keys.map(k=>`<td style="font-size:11px">${r[k]||'—'}</td>`).join('')}</tr>`).join('')}</tbody>
       </table>
-    </div>
+    </div>`:'';
+
+  /* Inventory bar chart */
+  const filtInv=_bdgRows('invSemanal',invRows);
+  const invHtml=filtInv.length?`<div style="margin-top:20px">${_hbarChart(filtInv)}</div>`:'';
+
+  return`<div class="bdg-section">
+    ${_hdr2('🗃️ Inventario Semanal',ua)}
+    ${_bdgFilterBar('invSemanal',all)}
+    ${semHtml}
+    ${invHtml}
   </div>`;
 }
