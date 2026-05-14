@@ -358,7 +358,8 @@ tr:hover td{background:#FBFBFD;}
 /* ═══════════════════════════════════════════════════════════
    BODEGA
 ═══════════════════════════════════════════════════════════ */
-#pg-bodega{padding:0;display:flex;flex-direction:column;gap:0;height:100%;}
+#pg-bodega{padding:0;gap:0;height:100%;}
+#pg-bodega.active{display:flex;flex-direction:column;}
 .bdg-tabs-bar{display:flex;gap:4px;padding:16px 20px 0;background:#F4F6FB;flex-wrap:wrap;border-bottom:1px solid var(--gray-200);overflow-x:auto;scrollbar-width:none;flex-shrink:0;}
 .bdg-tabs-bar::-webkit-scrollbar{display:none;}
 .bdg-tab{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px 8px 0 0;border:1px solid transparent;background:transparent;font-size:12px;font-weight:600;color:var(--gray-600);cursor:pointer;white-space:nowrap;transition:all .15s;font-family:inherit;border-bottom:none;}
