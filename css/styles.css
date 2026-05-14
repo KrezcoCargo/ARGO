@@ -401,13 +401,22 @@ tr:hover td{background:#FBFBFD;}
 /* ── Body (overflow hidden → no outer scrollbar) ── */
 .bdg-body{flex:1;min-height:0;overflow:hidden;background:#EEF1F6;}
 
-/* ── Section base (fills body, flex-col, no section-level scroll) ── */
+/* ── Section base (fills body, flex-col, NO section-level scroll) ── */
 .bdg-section{height:100%;box-sizing:border-box;padding:5px 6px;display:flex;flex-direction:column;gap:5px;overflow:hidden;}
-/* Sections that can have more content than screen height → allow scroll */
+/* bdg-section--scroll kept only as fallback, no longer used in new layout */
 .bdg-section--scroll{overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:#E2E8F0 transparent;}
 .bdg-section--scroll::-webkit-scrollbar{width:4px;}
 .bdg-section--scroll::-webkit-scrollbar-track{background:transparent;}
 .bdg-section--scroll::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:4px;}
+
+/* ── Scroll panel: bounded white box, scroll is INSIDE it (Last Mile, Gráficas, Inv. Semanal) ── */
+.bdg-scroll-panel{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;gap:8px;background:#fff;border-radius:10px;border:1px solid #E8ECF0;padding:10px 12px;box-shadow:0 1px 3px rgba(15,31,61,.03);scrollbar-width:none;}
+.bdg-scroll-panel:hover{scrollbar-width:thin;scrollbar-color:#CBD5E1 transparent;}
+.bdg-scroll-panel:hover::-webkit-scrollbar{display:block;width:4px;}
+.bdg-scroll-panel:hover::-webkit-scrollbar-track{background:transparent;}
+.bdg-scroll-panel:hover::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:4px;}
+/* nested tbl-wraps inside scroll-panel sit at natural height (outer panel scrolls) */
+.bdg-scroll-panel .bdg-tbl-wrap{flex:none;min-height:unset;background:transparent;border:none;box-shadow:none;border-radius:0;padding:0;}
 
 /* ── Empty state ── */
 .bdg-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;}
