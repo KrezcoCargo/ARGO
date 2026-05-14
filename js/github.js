@@ -178,6 +178,19 @@ async function saveTenantsToGitHub(tenants){
   }catch{return false;}
 }
 
+/* ── Bodega: leer/escribir data/bodega.json ── */
+async function fetchBodegaFromGitHub(){
+  const owner=GH_REPO_CFG.owner||'';const repo=GH_REPO_CFG.repo||'';const branch=GH_REPO_CFG.branch||'main';
+  const path=(typeof GH_BODEGA_PATH!=='undefined'?GH_BODEGA_PATH:'data/bodega.json');
+  if(!owner||!repo)return null;
+  try{
+    const url=`https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}?_=${Date.now()}`;
+    const r=await fetch(url,{cache:'no-store'});
+    if(r.ok)return await r.json();
+  }catch{}
+  return null;
+}
+
 function loadConfig2GH(){
   const cfg=JSON.parse(localStorage.getItem('kc_gh_cfg')||'{}');
   setField('gh-owner',cfg.owner||'');
