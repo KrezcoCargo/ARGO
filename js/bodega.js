@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   BODEGA v5 — fit-to-screen · shared realtime filter · SVG charts
+   BODEGA v6 — compact layout · PBI colors · invSemanal for all
 ═══════════════════════════════════════════════════════════ */
 let _bodegaData = null;
 let _bodegaView = 'cobertura';
@@ -93,7 +93,7 @@ function _bdgStartPolling(){
 
 /* ─── visible tabs ─── */
 function _bdgGetTabs(){
-  const canInv=SESSION&&(SESSION.role==='editor'||SESSION.role==='superadmin');
+  const canInv=!!SESSION; // visible to all authenticated users
   let tabs=BDG_TABS.filter(t=>t.id==='invSemanal'?canInv:true);
   if(_bdgTabOrder&&_bdgTabOrder.length){
     tabs=[...tabs].sort((a,b)=>{
@@ -306,17 +306,17 @@ function _pie(received,total,title,dec=0){
   const v2=dec>0?Number(pending).toFixed(dec):_N(pending);
   return`<div class="bdg-chart-card">
     <div class="bdg-chart-title">${title}</div>
-    <svg viewBox="0 0 120 116" width="100%" style="display:block;max-width:120px;margin:0 auto">
-      ${bp?`<path d="${bp}" fill="#E8C9A0"/>`:''}
-      ${ap?`<path d="${ap}" fill="#1A3A6B"/>`:''}
+    <svg viewBox="0 0 120 116" width="100%" style="display:block;max-width:110px;margin:0 auto">
+      ${bp?`<path d="${bp}" fill="#C8DCF0"/>`:''}
+      ${ap?`<path d="${ap}" fill="#2574A9"/>`:''}
     </svg>
-    <div style="text-align:center;font-size:16px;font-weight:800;color:#1E293B;margin:2px 0 4px">${(pct*100).toFixed(2)}%</div>
-    <div class="bdg-chart-legend"><span style="color:#1A3A6B">● ${v1}</span><span style="color:#D4A76A">● ${v2}</span></div>
+    <div style="text-align:center;font-size:15px;font-weight:800;color:#1E293B;margin:1px 0 2px">${(pct*100).toFixed(2)}%</div>
+    <div class="bdg-chart-legend"><span style="color:#2574A9">● ${v1}</span><span style="color:#7BAACC">● ${v2}</span></div>
   </div>`;
 }
 
 /* ── SVG Bar Chart (responsive, no scrollbar) ── */
-function _barChart(data,title,dec=0,barColor='#1A3A6B'){
+function _barChart(data,title,dec=0,barColor='#2574A9'){
   if(!data.length)return'';
   const max=Math.max(...data.map(d=>d.value),1);
   const n=data.length,bW=28,gap=8,topH=16,botH=18,barMax=80;
@@ -343,23 +343,23 @@ function _hbarChart(rows){
   const vals=rows.filter(r=>r.ajuste!=null&&!isNaN(Number(r.ajuste)));
   if(!vals.length)return'';
   const mx=Math.max(...vals.map(r=>Math.abs(Number(r.ajuste))),1);
-  const bh=20,gap=5,lW=200,rW=180;
-  const svgW=lW+rW+20,svgH=vals.length*(bh+gap)+20;
+  const bh=22,gap=6,lW=220,rW=200,valW=52;
+  const svgW=lW+rW+valW,svgH=vals.length*(bh+gap)+14;
   const rs=vals.map((r,i)=>{
     const v=Number(r.ajuste),neg=v<0;
-    const bw=Math.max(1,Math.round(Math.abs(v)/mx*rW*0.85));
-    const y=10+i*(bh+gap),bx=neg?lW-bw:lW,col=neg?'#EF4444':'#1A3A6B';
-    const tx=neg?lW-bw-4:lW+bw+4,ta=neg?'end':'start';
+    const bw=Math.max(2,Math.round(Math.abs(v)/mx*(rW-8)));
+    const y=7+i*(bh+gap),bx=neg?lW-bw:lW,col=neg?'#D84040':'#2574A9';
+    const valX=lW+rW+valW-4,label=r.producto||'—';
     return`<g>
-      <text x="${lW-6}" y="${y+bh/2+4}" font-size="10" fill="#334155" text-anchor="end" font-family="Segoe UI,sans-serif">${r.producto}</text>
-      <rect x="${bx}" y="${y}" width="${bw}" height="${bh}" fill="${col}" rx="2"/>
-      <text x="${tx}" y="${y+bh/2+4}" font-size="9" fill="#64748B" text-anchor="${ta}" font-weight="700" font-family="Segoe UI,sans-serif">${_N(v)}</text>
+      <text x="${lW-8}" y="${y+bh/2+4}" font-size="11" fill="#1E293B" text-anchor="end" font-family="Segoe UI,sans-serif" font-weight="600">${label}</text>
+      <rect x="${lW}" y="${y}" width="${rW}" height="${bh}" fill="#EFF4FB" rx="3"/>
+      <rect x="${bx}" y="${y}" width="${bw}" height="${bh}" fill="${col}" rx="3"/>
+      <text x="${valX}" y="${y+bh/2+4}" font-size="10" fill="${col}" text-anchor="end" font-weight="700" font-family="Segoe UI,sans-serif">${_N(v)}</text>
     </g>`;
   }).join('');
-  return`<div class="bdg-tbl-wrap" style="padding:16px">
-    <div class="bdg-chart-title" style="margin-bottom:12px">INVENTARIO</div>
-    <svg viewBox="0 0 ${svgW} ${svgH}" width="100%" style="display:block" preserveAspectRatio="xMidYMid meet">
-      <line x1="${lW}" y1="5" x2="${lW}" y2="${svgH-5}" stroke="#E2E8F0" stroke-width="1"/>
+  return`<div class="bdg-tbl-wrap" style="padding:14px 18px">
+    <div class="bdg-chart-title" style="margin-bottom:10px;text-align:left">AJUSTE DE INVENTARIO</div>
+    <svg viewBox="0 0 ${svgW} ${svgH}" width="100%" style="display:block" preserveAspectRatio="xMinYMin meet">
       ${rs}
     </svg>
   </div>`;
@@ -587,8 +587,8 @@ function renderGraficas(d){
   const pie2=_pie(notas.racionesRecibidas||0,notas.racionesPlanificadas||0,'RACIONES DESPACHADAS');
   const pie3=_pie(despTon,totTon,'TONELADAS DESPACHADAS',2);
   const pie4=_pie(despIE,totIE,'INSTITUCIONES DESPACHADAS');
-  const bar1=dias.length?_barChart(dias.map(x=>({label:x.label,value:x.inst})),'INSTITUCIONES POR DÍA',0,'#1A3A6B'):'';
-  const bar2=dias.length?_barChart(dias.map(x=>({label:x.label,value:x.ton})),'TONELADAS POR DÍA',2,'#1A3A6B'):'';
+  const bar1=dias.length?_barChart(dias.map(x=>({label:x.label,value:x.inst})),'INSTITUCIONES POR DÍA',0,'#2574A9'):'';
+  const bar2=dias.length?_barChart(dias.map(x=>({label:x.label,value:x.ton})),'TONELADAS POR DÍA',2,'#3D8EB9'):'';
   return`<div class="bdg-section bdg-section--scroll">
     <div class="bdg-pie-grid">${pie1}${pie2}${pie3}${pie4}</div>
     <div class="bdg-bar-grid">${bar1}${bar2}</div>
@@ -603,13 +603,19 @@ function renderInvSemanal(d){
   const keys=Object.keys(semRows[0]||{}).filter(k=>k!=='dia'&&k!=='__rowNum');
   const semHtml=semRows.length?`
     ${_subLabel('INVENTARIO SEMANAL')}
-    <div class="bdg-tbl-wrap"><table class="bdg-tbl">
-      <thead><tr><th>Día</th>${keys.map(k=>`<th style="text-transform:capitalize">${k}</th>`).join('')}</tr></thead>
+    <div class="bdg-tbl-wrap" style="flex:none;max-height:220px"><table class="bdg-tbl">
+      <thead><tr>
+        <th style="min-width:80px">Día</th>
+        ${keys.map(k=>`<th class="r" style="text-transform:capitalize;min-width:90px">${k}</th>`).join('')}
+      </tr></thead>
       <tbody>${semRows.map(r=>`<tr>
-        <td style="font-weight:700;color:var(--orange);white-space:nowrap">${r.dia||'—'}</td>
-        ${keys.map(k=>`<td style="font-size:11px">${r[k]||'—'}</td>`).join('')}
+        <td style="font-weight:700;color:var(--orange);white-space:nowrap;font-size:12px">${r.dia||'—'}</td>
+        ${keys.map(k=>`<td class="r" style="font-size:12px">${r[k]!=null?r[k]:'—'}</td>`).join('')}
       </tr>`).join('')}</tbody>
     </table></div>`:'';
-  const invHtml=filtInv.length?`<div style="margin-top:12px">${_hbarChart(filtInv)}</div>`:'';
+  const invHtml=filtInv.length?`
+    ${_subLabel('AJUSTE DE INVENTARIO')}
+    <div style="flex:1;min-height:0;overflow:auto">${_hbarChart(filtInv)}</div>`:'';
+  if(!semRows.length&&!filtInv.length)return`<div class="bdg-empty"><div class="bdg-empty-icon">🗃️</div><div class="bdg-empty-msg">Sin datos de inventario</div></div>`;
   return`<div class="bdg-section bdg-section--scroll">${semHtml}${invHtml}</div>`;
 }
