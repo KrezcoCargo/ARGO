@@ -181,9 +181,16 @@ async function saveTenantsToGitHub(tenants){
 /* ── Bodega: leer/escribir data/bodega.json ── */
 async function fetchBodegaFromGitHub(){
   const owner=GH_REPO_CFG.owner||'';const repo=GH_REPO_CFG.repo||'';const branch=GH_REPO_CFG.branch||'main';
-  // Use the active tenant's bodegaPath, fallback to global constant
-  const path=(ACTIVE_TENANT&&ACTIVE_TENANT.bodegaPath)?ACTIVE_TENANT.bodegaPath:(typeof GH_BODEGA_PATH!=='undefined'?GH_BODEGA_PATH:'data/bodega.json');
-  if(!owner||!repo)return null;
+  // Resolve bodegaPath: ACTIVE_TENANT.bodegaPath (may be missing if tenants.json was saved before this field existed)
+  // → fallback to DEFAULT_TENANTS entry for this tenant → fallback to global constant (only for krezco)
+  let path=ACTIVE_TENANT&&ACTIVE_TENANT.bodegaPath?ACTIVE_TENANT.bodegaPath:null;
+  if(!path&&ACTIVE_TENANT){
+    const def=(typeof DEFAULT_TENANTS!=='undefined'?DEFAULT_TENANTS:[]).find(t=>t.id===ACTIVE_TENANT.id);
+    path=def&&def.bodegaPath?def.bodegaPath:null;
+  }
+  // Only fall back to global GH_BODEGA_PATH when no tenant is active (no tenant context)
+  if(!path&&!ACTIVE_TENANT) path=typeof GH_BODEGA_PATH!=='undefined'?GH_BODEGA_PATH:'data/bodega.json';
+  if(!owner||!repo||!path)return null;
   try{
     const url=`https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}?_=${Date.now()}`;
     const r=await fetch(url,{cache:'no-store'});
