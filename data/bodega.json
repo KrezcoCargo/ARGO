@@ -535,8 +535,8 @@
                         {
                             "producto":  "NÉCTAR PERA-MANGO",
                             "planificado":  373204,
-                            "ingresos":  329382,
-                            "pct":  0.8825789648556821
+                            "ingresos":  363030,
+                            "pct":  0.97273877021682509
                         },
                         {
                             "producto":  "NÉCTAR MANGO-BANANA",
@@ -553,20 +553,20 @@
                         {
                             "producto":  "LECHE CEREAL CHOCOLATE",
                             "planificado":  746408,
-                            "ingresos":  682469,
-                            "pct":  0.91433773485814729
+                            "ingresos":  725429,
+                            "pct":  0.97189338806658021
                         },
                         {
                             "producto":  "LECHE CEREAL FRESA",
                             "planificado":  373204,
-                            "ingresos":  356623,
-                            "pct":  0.95557121574259651
+                            "ingresos":  362983,
+                            "pct":  0.97261283373168561
                         },
                         {
                             "producto":  "LECHE SABORIZADA CHOCOLATE",
                             "planificado":  746408,
-                            "ingresos":  707984,
-                            "pct":  0.9485214520744687
+                            "ingresos":  725816,
+                            "pct":  0.97241187125539919
                         },
                         {
                             "producto":  "LECHE SABORIZADA FRESA",
@@ -5801,9 +5801,9 @@
                                      }
                                  ]
                  },
-    "updatedAt":  "14/05/2026 11:42",
+    "updatedAt":  "14/05/2026 14:41",
     "_meta":  {
-                  "generado":  "14/05/2026 11:42",
+                  "generado":  "14/05/2026 14:41",
                   "fuente":  "POWER BI.xlsx",
                   "tenant":  "KrezcoCargo",
                   "script":  "sync-bodega.ps1"
