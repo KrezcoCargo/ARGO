@@ -181,7 +181,8 @@ async function saveTenantsToGitHub(tenants){
 /* ── Bodega: leer/escribir data/bodega.json ── */
 async function fetchBodegaFromGitHub(){
   const owner=GH_REPO_CFG.owner||'';const repo=GH_REPO_CFG.repo||'';const branch=GH_REPO_CFG.branch||'main';
-  const path=(typeof GH_BODEGA_PATH!=='undefined'?GH_BODEGA_PATH:'data/bodega.json');
+  // Use the active tenant's bodegaPath, fallback to global constant
+  const path=(ACTIVE_TENANT&&ACTIVE_TENANT.bodegaPath)?ACTIVE_TENANT.bodegaPath:(typeof GH_BODEGA_PATH!=='undefined'?GH_BODEGA_PATH:'data/bodega.json');
   if(!owner||!repo)return null;
   try{
     const url=`https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}?_=${Date.now()}`;
