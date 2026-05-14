@@ -570,7 +570,7 @@ function renderLastMile(d){
       </div>
     </div>`:'';
   if(!errHtml&&!cumHtml)return`<div class="bdg-empty"><div class="bdg-empty-icon">🚚</div><div class="bdg-empty-msg">Sin datos de Last Mile</div></div>`;
-  return`<div class="bdg-section bdg-section--scroll">${errHtml}${cumHtml}</div>`;
+  return`<div class="bdg-section"><div class="bdg-scroll-panel">${errHtml}${cumHtml}</div></div>`;
 }
 
 /* ── 7. GRÁFICAS ── */
@@ -589,10 +589,10 @@ function renderGraficas(d){
   const pie4=_pie(despIE,totIE,'INSTITUCIONES DESPACHADAS');
   const bar1=dias.length?_barChart(dias.map(x=>({label:x.label,value:x.inst})),'INSTITUCIONES POR DÍA',0,'#2574A9'):'';
   const bar2=dias.length?_barChart(dias.map(x=>({label:x.label,value:x.ton})),'TONELADAS POR DÍA',2,'#3D8EB9'):'';
-  return`<div class="bdg-section bdg-section--scroll">
+  return`<div class="bdg-section"><div class="bdg-scroll-panel">
     <div class="bdg-pie-grid">${pie1}${pie2}${pie3}${pie4}</div>
     <div class="bdg-bar-grid">${bar1}${bar2}</div>
-  </div>`;
+  </div></div>`;
 }
 
 /* ── 8. INV. SEMANAL ── */
@@ -617,5 +617,5 @@ function renderInvSemanal(d){
     ${_subLabel('AJUSTE DE INVENTARIO')}
     <div style="flex:1;min-height:0;overflow:auto">${_hbarChart(filtInv)}</div>`:'';
   if(!semRows.length&&!filtInv.length)return`<div class="bdg-empty"><div class="bdg-empty-icon">🗃️</div><div class="bdg-empty-msg">Sin datos de inventario</div></div>`;
-  return`<div class="bdg-section bdg-section--scroll">${semHtml}${invHtml}</div>`;
+  return`<div class="bdg-section"><div class="bdg-scroll-panel">${semHtml}${invHtml}</div></div>`;
 }
