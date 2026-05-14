@@ -431,3 +431,64 @@ tr:hover td{background:#FBFBFD;}
 .bdg-week-row{background:#fff;border-radius:10px;border:1px solid #E2E8F0;padding:10px 14px;display:grid;gap:8px;align-items:center;}
 .bdg-week-day{font-size:11px;font-weight:800;color:var(--orange);text-transform:uppercase;min-width:70px;}
 .bdg-week-item{font-size:11px;color:var(--navy);background:#F8FAFC;border-radius:6px;padding:4px 8px;}
+
+/* ═══════════════════════════════════════════════════════════
+   BODEGA v3 additions — sticky cols · drag · charts · filter
+═══════════════════════════════════════════════════════════ */
+
+/* ── Table scrolling ── */
+.bdg-tbl-wrap{overflow-x:auto;}
+
+/* ── Vertical cell borders ── */
+.bdg-tbl td,.bdg-tbl th{border-right:1px solid rgba(226,232,240,.6);}
+.bdg-tbl td:last-child,.bdg-tbl th:last-child{border-right:none;}
+
+/* ── Compact day-column headers ── */
+.bdg-day-th{min-width:48px !important;padding:9px 6px !important;text-align:right;}
+
+/* ── Sticky first column ── */
+.bdg-sticky-col{position:sticky;left:0;z-index:2;background:#fff;border-right:2px solid #D1D5DB !important;}
+.bdg-tbl thead th.bdg-sticky-col{background:#0F1F3D;z-index:3;}
+.bdg-tbl tbody tr:nth-child(even) td.bdg-sticky-col{background:#F8FAFC;}
+.bdg-tbl tbody tr:hover td.bdg-sticky-col{background:#EEF2FF;}
+.bdg-tbl tbody tr.bdg-row-sel td.bdg-sticky-col{background:#E0E7FF;}
+
+/* ── Row selection ── */
+.bdg-row-sel td{background:#EEF2FF !important;cursor:pointer;}
+.bdg-tbl tbody tr{cursor:pointer;}
+
+/* ── Drag & drop tabs ── */
+.bdg-drag-handle{font-size:12px;color:#CBD5E1;cursor:grab;user-select:none;line-height:1;padding-right:2px;}
+.bdg-drag-handle:active{cursor:grabbing;}
+.bdg-tab--dragging{opacity:.4;}
+.bdg-tab--dragover{background:#FFF7ED;border-bottom-color:var(--orange) !important;color:var(--orange);}
+
+/* ── Pie chart grid ── */
+.bdg-pie-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
+
+/* ── Bar chart grid (2-col for wide charts) ── */
+.bdg-bar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+
+/* ── Chart cards ── */
+.bdg-chart-card{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:16px 14px;display:flex;flex-direction:column;gap:8px;min-width:0;}
+.bdg-chart-wide{grid-column:auto;}
+.bdg-chart-title{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#0F1F3D;text-align:center;}
+.bdg-chart-legend{display:flex;justify-content:center;gap:12px;font-size:10px;font-weight:600;color:#64748B;}
+
+/* ── Vertical bar chart internals ── */
+.bdg-bc-wrap{display:flex;gap:6px;align-items:flex-end;overflow-x:auto;padding:4px 0 6px;min-height:130px;}
+.bdg-bc-col{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:34px;flex-shrink:0;}
+.bdg-bc-val{font-size:8px;font-weight:700;color:#1E293B;white-space:nowrap;}
+.bdg-bc-bar{border-radius:3px 3px 0 0;width:22px;}
+.bdg-bc-lbl{font-size:8px;font-weight:600;color:#94A3B8;white-space:nowrap;}
+
+/* ── Product filter panel ── */
+.bdg-fpanel{background:#fff;border:1px solid #E2E8F0;border-radius:10px;padding:2px 0;font-size:11px;}
+.bdg-fpanel-sum{padding:8px 14px;font-size:11px;font-weight:700;color:#475569;cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;user-select:none;}
+.bdg-fpanel-sum::-webkit-details-marker{display:none;}
+.bdg-fpanel[open] .bdg-fpanel-sum{border-bottom:1px solid #F1F5F9;margin-bottom:4px;}
+.bdg-fchips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px 10px;}
+.bdg-fchip{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;background:#EEF2FF;color:#3730A3;cursor:pointer;transition:all .15s;}
+.bdg-fchip:hover{background:#C7D2FE;}
+.bdg-fchip--off{background:#F1F5F9;color:#94A3B8;text-decoration:line-through;}
+.bdg-fbadge{display:inline-block;background:var(--orange);color:#fff;font-size:9px;font-weight:700;border-radius:10px;padding:1px 7px;margin-left:auto;}
