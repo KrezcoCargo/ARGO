@@ -95,10 +95,10 @@ const GH_TENANTS_PATH='data/tenants.json';
 let TENANTS=[];
 let ACTIVE_TENANT=null;
 const DEFAULT_TENANTS=[
-  {id:'krezco',  name:'KrezcoCargo',           dataPath:'data.json',              color:'#F47C20'},
-  {id:'gloria',  name:'Grupo Gloria',           dataPath:'data/gloria.json',       color:'#1565C0'},
-  {id:'worldvision',name:'World Vision Ecuador',dataPath:'data/worldvision.json',  color:'#2E7D32'},
-  {id:'pruebas', name:'Pruebas',                dataPath:'data/pruebas.json',      color:'#888'}
+  {id:'krezco',       name:'KrezcoCargo',            dataPath:'data.json',              bodegaPath:'data/bodega.json',              color:'#F47C20'},
+  {id:'gloria',       name:'Grupo Gloria',            dataPath:'data/gloria.json',       bodegaPath:'data/gloria-bodega.json',       color:'#1565C0'},
+  {id:'worldvision',  name:'World Vision Ecuador',    dataPath:'data/worldvision.json',  bodegaPath:'data/worldvision-bodega.json',  color:'#2E7D32'},
+  {id:'pruebas',      name:'Pruebas',                 dataPath:'data/pruebas.json',      bodegaPath:'data/pruebas-bodega.json',      color:'#888'}
 ];
 function getDataPath(){return(ACTIVE_TENANT&&ACTIVE_TENANT.dataPath)||GH_REPO_CFG.path;}
 function getDataCacheKey(){return'kc_data_'+(ACTIVE_TENANT?ACTIVE_TENANT.id:'default');}
