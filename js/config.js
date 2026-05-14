@@ -16,6 +16,7 @@ const GH_REPO_CFG = {
 
 // Ruta del archivo de usuarios dentro del mismo repo
 const GH_USERS_PATH = 'data/users.json';
+const GH_BODEGA_PATH = 'data/bodega.json';
 
 /* ── PURE-JS SHA-256 (sin crypto.subtle — funciona en file://, http://, https://) ── */
 function sha256(msg) {
@@ -52,6 +53,7 @@ const NAV_ITEMS = {
   superadmin:[
     {id:'dashboard',icon:'📊',label:'Dashboard'},
     {id:'map',icon:'🗺️',label:'Mapa'},
+    {id:'bodega',icon:'📦',label:'Bodega'},
     {id:'upload',icon:'📂',label:'Cargar Planificación'},
     {id:'config',icon:'⚙️',label:'Configuración'},
     {id:'users',icon:'👥',label:'Crear Usuarios'},
@@ -59,11 +61,13 @@ const NAV_ITEMS = {
   editor:[
     {id:'dashboard',icon:'📊',label:'Dashboard'},
     {id:'map',icon:'🗺️',label:'Mapa'},
+    {id:'bodega',icon:'📦',label:'Bodega'},
     {id:'upload',icon:'📂',label:'Cargar Planificación'},
   ],
   viewer:[
     {id:'dashboard',icon:'📊',label:'Dashboard'},
     {id:'map',icon:'🗺️',label:'Mapa'},
+    {id:'bodega',icon:'📦',label:'Bodega'},
   ]
 };
 
