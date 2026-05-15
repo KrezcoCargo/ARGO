@@ -486,15 +486,15 @@ tr:hover td{background:#FBFBFD;}
 .bdg-tbl tbody tr:last-child td:last-child{border-radius:0 0 11px 0;}
 .bdg-tbl tbody tr:last-child td{border-bottom:none;}
 
-/* ── Day columns — width set dynamically in JS via min-width on table ── */
-.bdg-day-th{text-align:center;}
-.bdg-day-td{text-align:center;padding:5px 4px !important;}
+/* ── Day columns ── */
+.bdg-day-th{width:46px;text-align:center;}
+.bdg-day-td{text-align:center;padding:5px 3px !important;}
 
 /* ── Sticky first column ── */
 .bdg-sticky-col{position:sticky;left:0;z-index:2;background:#fff;border-right:2px solid #CBD5E1 !important;box-shadow:2px 0 6px rgba(10,48,96,.06);}
-.bdg-tbl thead th.bdg-sticky-col{background:linear-gradient(135deg,#0A3060 0%,#1565C0 100%);z-index:5;position:sticky;left:0;width:175px;}
-/* truncate long product names with ellipsis; full name visible on hover (title attr) */
-.bdg-tbl tbody td.bdg-sticky-col{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:175px;}
+.bdg-tbl thead th.bdg-sticky-col{background:linear-gradient(135deg,#0A3060 0%,#1565C0 100%);z-index:5;position:sticky;left:0;width:210px;}
+/* product col: text wraps, never truncated */
+.bdg-tbl tbody td.bdg-sticky-col{white-space:normal;word-break:break-word;line-height:1.35;}
 .bdg-tbl tbody tr:nth-child(even) td.bdg-sticky-col{background:#F2F7FD;}
 .bdg-tbl tbody tr:hover td.bdg-sticky-col{background:#E6F0FB;}
 .bdg-tbl tbody tr.bdg-row-sel td{background:#DBEAFE !important;}
