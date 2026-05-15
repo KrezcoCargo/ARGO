@@ -664,27 +664,28 @@ function renderReqDiario(d){
 function renderLastMile(d){
   const lm=d.lastmile||{};
 
-  /* ── Tabla 1: Errores por transportista (lm_pivot, columnas 1-15 de LASTMILE) ── */
+  /* ── Tabla 1: Errores por transportista ── */
   const pivot=(Array.isArray(lm.pivot)?lm.pivot:[])
-    .filter(r=>Object.values(r).some(v=>v!=null&&v!==''));
+    .filter(r=>r.transportista||Object.entries(r).some(([k,v])=>k!=='transportista'&&v!=null&&Number(v)>0));
   let errHtml='';
   if(pivot.length){
-    const keys=Object.keys(pivot[0]);
-    const labelKey=keys[0];          // primera columna = nombre/ruta del transportista
-    const valKeys=keys.slice(1).filter(k=>k); // resto = conteos de errores
+    const valKeys=Object.keys(pivot[0]).filter(k=>k!=='transportista');
     errHtml=`
     ${_subLabel('ERRORES POR TRANSPORTISTA')}
-    <div class="bdg-tbl-wrap"><table class="bdg-tbl">
+    <div class="bdg-tbl-wrap"><table class="bdg-tbl bdg-tbl--compact">
       <thead><tr>
-        <th class="bdg-sticky-col">${labelKey||'Transportista'}</th>
+        <th class="bdg-sticky-col">Transportista</th>
         ${valKeys.map(k=>`<th class="r">${k}</th>`).join('')}
       </tr></thead>
       <tbody>${pivot.map((r,ri)=>{
         const delay=`animation-delay:${Math.min(ri,14)*40}ms`;
         return`<tr onclick="bdgSelRow(this)" style="${delay}">
-          <td class="bdg-sticky-col" style="font-weight:600;white-space:nowrap">${r[labelKey]||'—'}</td>
-          ${valKeys.map(k=>{const v=Number(r[k]);const ok=!isNaN(v)&&r[k]!=null&&r[k]!=='';
-            return`<td class="r${ok&&v>0?' neg':''}">${ok?_N(v):'—'}</td>`;}).join('')}
+          <td class="bdg-sticky-col" style="font-weight:600;white-space:nowrap">${r.transportista||''}</td>
+          ${valKeys.map(k=>{
+            const v=Number(r[k]);
+            if(r[k]==null||r[k]===''||isNaN(v)||v===0) return`<td class="r"></td>`;
+            return`<td class="r neg">${_N(v)}</td>`;
+          }).join('')}
         </tr>`;
       }).join('')}</tbody>
     </table></div>`;
@@ -725,7 +726,7 @@ function renderLastMile(d){
   }
 
   if(!errHtml&&!diaHtml)return`<div class="bdg-empty"><div class="bdg-empty-icon">🚚</div><div class="bdg-empty-msg">Sin datos de Last Mile</div></div>`;
-  return`<div class="bdg-section"><div class="bdg-scroll-panel">${errHtml}${diaHtml}</div></div>`;
+  return`<div class="bdg-section bdg-section--fullh"><div class="bdg-scroll-panel">${errHtml}${diaHtml}</div></div>`;
 }
 
 /* ── 7. GRÁFICAS ── */
