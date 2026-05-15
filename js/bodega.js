@@ -107,6 +107,9 @@ function _bdgGetTabs(){
 /* ─── MAIN LOAD ─── */
 async function loadBodega(){
   _bdgLoad();
+  // Restore last active sub-tab (survives F5)
+  const _savedTab = sessionStorage.getItem('kc_last_bdg_tab');
+  if(_savedTab) _bodegaView = _savedTab;
   const wrap=document.getElementById('bodega-content');
   if(!wrap)return;
   wrap.innerHTML=`<div style="display:flex;align-items:center;justify-content:center;height:100%;gap:14px;color:#94A3B8">
@@ -224,6 +227,7 @@ function _applyZoom(){
 /* ─── switch view ─── */
 function switchBodegaView(v){
   _bodegaView=v;
+  sessionStorage.setItem('kc_last_bdg_tab', v);  // remember sub-tab for F5
   document.querySelectorAll('.bdg-tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));
   _updateFilterPanel(v);
   renderBodegaView(v);
