@@ -4,7 +4,7 @@
       "producto": "LECHE ENTERA",
       "ingresos": 2139121,
       "totalReq": 2526643,
-      "saldo": 385999,
+      "saldo": 294600,
       "porDia": [
         1880373,
         1629829,
@@ -25,7 +25,7 @@
       "producto": "NÉCTAR PERA",
       "ingresos": 363023,
       "totalReq": 360949,
-      "saldo": 112577,
+      "saldo": 99520,
       "porDia": [
         326059,
         290267,
@@ -46,7 +46,7 @@
       "producto": "NÉCTAR PERA-BANANO O MANGO-BANANA",
       "ingresos": 370755,
       "totalReq": 360949,
-      "saldo": 120309,
+      "saldo": 107252,
       "porDia": [
         333791,
         297999,
@@ -67,7 +67,7 @@
       "producto": "NÉCTAR PERA-MANGO",
       "ingresos": 363030,
       "totalReq": 360949,
-      "saldo": 112584,
+      "saldo": 99527,
       "porDia": [
         326066,
         290274,
@@ -109,7 +109,7 @@
       "producto": "PURÉ MANGO-PERA",
       "ingresos": 1410141,
       "totalReq": 1443796,
-      "saldo": 408357,
+      "saldo": 356129,
       "porDia": [
         1262285,
         1119117,
@@ -130,7 +130,7 @@
       "producto": "LECHE CEREAL CHOCOLATE",
       "ingresos": 725429,
       "totalReq": 721898,
-      "saldo": 224537,
+      "saldo": 198423,
       "porDia": [
         651501,
         579917,
@@ -151,7 +151,7 @@
       "producto": "LECHE CEREAL FRESA",
       "ingresos": 362983,
       "totalReq": 360949,
-      "saldo": 112537,
+      "saldo": 99480,
       "porDia": [
         326019,
         290227,
@@ -172,7 +172,7 @@
       "producto": "LECHE SABORIZADA CHOCOLATE",
       "ingresos": 725816,
       "totalReq": 721898,
-      "saldo": 224924,
+      "saldo": 198810,
       "porDia": [
         651888,
         580304,
@@ -193,7 +193,7 @@
       "producto": "LECHE SABORIZADA FRESA",
       "ingresos": 363168,
       "totalReq": 360949,
-      "saldo": 112722,
+      "saldo": 99665,
       "porDia": [
         326204,
         290412,
@@ -214,7 +214,7 @@
       "producto": "EXTRUIDO JAMÓN SERRANO",
       "ingresos": 722456,
       "totalReq": 721898,
-      "saldo": 221564,
+      "saldo": 195450,
       "porDia": [
         648528,
         576944,
@@ -235,7 +235,7 @@
       "producto": "EXTRUIDO POLLO A LA BRASA",
       "ingresos": 361372,
       "totalReq": 360949,
-      "saldo": 110926,
+      "saldo": 97869,
       "porDia": [
         324408,
         288616,
@@ -256,7 +256,7 @@
       "producto": "GALLETA RELLENA FRESA O FRUTOS ROJOS",
       "ingresos": 1444787,
       "totalReq": 1443796,
-      "saldo": 443003,
+      "saldo": 390775,
       "porDia": [
         1296931,
         1153763,
@@ -277,7 +277,7 @@
       "producto": "GALLETA RELLENA CHOCOLATE O FRUTOS AMARILLOS",
       "ingresos": 1105218,
       "totalReq": 1082847,
-      "saldo": 353880,
+      "saldo": 314709,
       "porDia": [
         994326,
         886950,
@@ -298,7 +298,7 @@
       "producto": "GRANOLA",
       "ingresos": 1444731,
       "totalReq": 1443796,
-      "saldo": 442947,
+      "saldo": 390719,
       "porDia": [
         1296875,
         1153707,
@@ -319,7 +319,7 @@
       "producto": "GALLETA SAL",
       "ingresos": 802376,
       "totalReq": 1082847,
-      "saldo": 51038,
+      "saldo": 11867,
       "porDia": [
         691484,
         584108,
@@ -340,7 +340,7 @@
       "producto": "GALLETA DULCE",
       "ingresos": 961584,
       "totalReq": 1082847,
-      "saldo": 210246,
+      "saldo": 171075,
       "porDia": [
         850692,
         743316,
@@ -1342,6 +1342,7 @@
   "lastmile": {
     "pivot": [
       {
+        "transportista": "ALEXIS COBA",
         "B1": "ALEXANDER CAMPAÑA",
         "1": null,
         "2": null,
@@ -1359,6 +1360,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTIAN REA",
         "B1": "ALEXIS COBA",
         "1": null,
         "2": 1,
@@ -1376,6 +1378,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTOBAL COBA",
         "B1": "CRISTIAN REA",
         "1": null,
         "2": null,
@@ -1393,6 +1396,7 @@
         "B15": null
       },
       {
+        "transportista": "DELIA COBA",
         "B1": "CRISTOBAL COBA",
         "1": null,
         "2": null,
@@ -1410,6 +1414,7 @@
         "B15": null
       },
       {
+        "transportista": "EDISON QUINATOA",
         "B1": "EDISON QUINATOA",
         "1": null,
         "2": null,
@@ -1427,6 +1432,7 @@
         "B15": null
       },
       {
+        "transportista": "IVAN NICOLALDE",
         "B1": "IVAN NICOLALDE",
         "1": null,
         "2": null,
@@ -1444,6 +1450,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME PULLAS",
         "B1": "JAIME PULLAS",
         "1": null,
         "2": null,
@@ -1461,6 +1468,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME RODRIGUEZ",
         "B1": "JAIME RODRIGUEZ",
         "1": null,
         "2": null,
@@ -1478,6 +1486,7 @@
         "B15": null
       },
       {
+        "transportista": "JONATHAN FARINANGO",
         "B1": "JONATHAN FARINANGO",
         "1": null,
         "2": null,
@@ -1495,6 +1504,7 @@
         "B15": null
       },
       {
+        "transportista": "JORGE RODRIGUEZ",
         "B1": "JORGE RODRIGUEZ",
         "1": null,
         "2": null,
@@ -1512,6 +1522,7 @@
         "B15": null
       },
       {
+        "transportista": "JUAN RAMIREZ",
         "B1": "JUAN RAMIREZ",
         "1": null,
         "2": null,
@@ -1529,6 +1540,7 @@
         "B15": null
       },
       {
+        "transportista": "LIBORIO RODRIGUEZ",
         "B1": "LIBORIO RODRIGUEZ",
         "1": 1,
         "2": 2,
@@ -1546,6 +1558,7 @@
         "B15": null
       },
       {
+        "transportista": "LIZBETH SALTOS",
         "B1": "LIZBETH SALTOS",
         "1": null,
         "2": null,
@@ -1563,6 +1576,7 @@
         "B15": null
       },
       {
+        "transportista": "LUIS RODRIGUEZ",
         "B1": "LUIS RODRIGUEZ",
         "1": null,
         "2": null,
@@ -1580,6 +1594,7 @@
         "B15": null
       },
       {
+        "transportista": "MIGUEL ORTIZ",
         "B1": "MIGUEL ORTIZ",
         "1": null,
         "2": null,
@@ -1597,6 +1612,7 @@
         "B15": null
       },
       {
+        "transportista": "NELLY VASCO",
         "B1": "NELLY VASCO",
         "1": null,
         "2": null,
@@ -1614,6 +1630,7 @@
         "B15": null
       },
       {
+        "transportista": "SANTIAGO LLUGSI",
         "B1": "SANTIAGO LLUGSI",
         "1": null,
         "2": null,
@@ -1631,6 +1648,7 @@
         "B15": null
       },
       {
+        "transportista": "VICENTE PULLAS",
         "B1": "VICENTE PULLAS",
         "1": null,
         "2": null,
@@ -1648,6 +1666,7 @@
         "B15": null
       },
       {
+        "transportista": "WILSON QUINATOA",
         "B1": "WILSON QUINATOA",
         "1": null,
         "2": null,
@@ -1665,6 +1684,7 @@
         "B15": null
       },
       {
+        "transportista": "ALEXANDER CAMPAÑA",
         "B1": "DELIA COBA",
         "1": null,
         "2": null,
@@ -1682,6 +1702,7 @@
         "B15": null
       },
       {
+        "transportista": "ALEXIS COBA",
         "B1": "Total general",
         "1": 1,
         "2": 3,
@@ -1699,6 +1720,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTIAN REA",
         "B1": null,
         "1": null,
         "2": null,
@@ -1716,6 +1738,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTOBAL COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -1733,6 +1756,7 @@
         "B15": null
       },
       {
+        "transportista": "DELIA COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -1750,6 +1774,7 @@
         "B15": null
       },
       {
+        "transportista": "EDISON QUINATOA",
         "B1": null,
         "1": null,
         "2": null,
@@ -1767,6 +1792,7 @@
         "B15": null
       },
       {
+        "transportista": "IVAN NICOLALDE",
         "B1": null,
         "1": null,
         "2": null,
@@ -1784,6 +1810,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME PULLAS",
         "B1": null,
         "1": null,
         "2": null,
@@ -1801,6 +1828,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -1818,6 +1846,7 @@
         "B15": null
       },
       {
+        "transportista": "JONATHAN FARINANGO",
         "B1": null,
         "1": null,
         "2": null,
@@ -1835,6 +1864,7 @@
         "B15": null
       },
       {
+        "transportista": "JORGE RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -1852,6 +1882,7 @@
         "B15": null
       },
       {
+        "transportista": "JUAN RAMIREZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -1869,6 +1900,7 @@
         "B15": null
       },
       {
+        "transportista": "LIBORIO RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -1886,6 +1918,7 @@
         "B15": null
       },
       {
+        "transportista": "LIZBETH SALTOS",
         "B1": null,
         "1": null,
         "2": null,
@@ -1903,6 +1936,7 @@
         "B15": null
       },
       {
+        "transportista": "LUIS RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -1920,6 +1954,7 @@
         "B15": null
       },
       {
+        "transportista": "MIGUEL ORTIZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -1937,6 +1972,7 @@
         "B15": null
       },
       {
+        "transportista": "NELLY VASCO",
         "B1": null,
         "1": null,
         "2": null,
@@ -1954,6 +1990,7 @@
         "B15": null
       },
       {
+        "transportista": "SANTIAGO LLUGSI",
         "B1": null,
         "1": null,
         "2": null,
@@ -1971,6 +2008,7 @@
         "B15": null
       },
       {
+        "transportista": "VICENTE PULLAS",
         "B1": null,
         "1": null,
         "2": null,
@@ -1988,6 +2026,7 @@
         "B15": null
       },
       {
+        "transportista": "WILSON QUINATOA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2005,6 +2044,7 @@
         "B15": null
       },
       {
+        "transportista": "ALEXANDER CAMPAÑA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2022,6 +2062,7 @@
         "B15": null
       },
       {
+        "transportista": "ALEXIS COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2039,6 +2080,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTIAN REA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2056,6 +2098,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTOBAL COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2073,6 +2116,7 @@
         "B15": null
       },
       {
+        "transportista": "DELIA COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2090,6 +2134,7 @@
         "B15": null
       },
       {
+        "transportista": "EDISON QUINATOA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2107,6 +2152,7 @@
         "B15": null
       },
       {
+        "transportista": "IVAN NICOLALDE",
         "B1": null,
         "1": null,
         "2": null,
@@ -2124,6 +2170,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME PULLAS",
         "B1": null,
         "1": null,
         "2": null,
@@ -2141,6 +2188,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -2158,6 +2206,7 @@
         "B15": null
       },
       {
+        "transportista": "JONATHAN FARINANGO",
         "B1": null,
         "1": null,
         "2": null,
@@ -2175,6 +2224,7 @@
         "B15": null
       },
       {
+        "transportista": "JORGE RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -2192,6 +2242,7 @@
         "B15": null
       },
       {
+        "transportista": "JUAN RAMIREZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -2209,6 +2260,7 @@
         "B15": null
       },
       {
+        "transportista": "LIBORIO RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -2226,6 +2278,7 @@
         "B15": null
       },
       {
+        "transportista": "LIZBETH SALTOS",
         "B1": null,
         "1": null,
         "2": null,
@@ -2243,6 +2296,7 @@
         "B15": null
       },
       {
+        "transportista": "LUIS RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -2260,6 +2314,7 @@
         "B15": null
       },
       {
+        "transportista": "MIGUEL ORTIZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -2277,6 +2332,7 @@
         "B15": null
       },
       {
+        "transportista": "NELLY VASCO",
         "B1": null,
         "1": null,
         "2": null,
@@ -2294,6 +2350,7 @@
         "B15": null
       },
       {
+        "transportista": "SANTIAGO LLUGSI",
         "B1": null,
         "1": null,
         "2": null,
@@ -2311,6 +2368,7 @@
         "B15": null
       },
       {
+        "transportista": "VICENTE PULLAS",
         "B1": null,
         "1": null,
         "2": null,
@@ -2328,6 +2386,7 @@
         "B15": null
       },
       {
+        "transportista": "WILSON QUINATOA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2345,6 +2404,7 @@
         "B15": null
       },
       {
+        "transportista": "ALEXANDER CAMPAÑA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2362,6 +2422,7 @@
         "B15": null
       },
       {
+        "transportista": "ALEXIS COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2379,6 +2440,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTIAN REA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2396,6 +2458,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTOBAL COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2413,6 +2476,7 @@
         "B15": null
       },
       {
+        "transportista": "DELIA COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2430,6 +2494,7 @@
         "B15": null
       },
       {
+        "transportista": "EDISON QUINATOA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2447,6 +2512,7 @@
         "B15": null
       },
       {
+        "transportista": "IVAN NICOLALDE",
         "B1": null,
         "1": null,
         "2": null,
@@ -2464,6 +2530,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME PULLAS",
         "B1": null,
         "1": null,
         "2": null,
@@ -2481,6 +2548,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -2498,6 +2566,7 @@
         "B15": null
       },
       {
+        "transportista": "JONATHAN FARINANGO",
         "B1": null,
         "1": null,
         "2": null,
@@ -2515,6 +2584,7 @@
         "B15": null
       },
       {
+        "transportista": "JORGE RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -2532,6 +2602,7 @@
         "B15": null
       },
       {
+        "transportista": "JUAN RAMIREZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -2549,6 +2620,7 @@
         "B15": null
       },
       {
+        "transportista": "LIBORIO RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -2566,6 +2638,7 @@
         "B15": null
       },
       {
+        "transportista": "LIZBETH SALTOS",
         "B1": null,
         "1": null,
         "2": null,
@@ -2583,6 +2656,7 @@
         "B15": null
       },
       {
+        "transportista": "LUIS RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -2600,6 +2674,7 @@
         "B15": null
       },
       {
+        "transportista": "MIGUEL ORTIZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -2617,6 +2692,7 @@
         "B15": null
       },
       {
+        "transportista": "NELLY VASCO",
         "B1": null,
         "1": null,
         "2": null,
@@ -2634,6 +2710,7 @@
         "B15": null
       },
       {
+        "transportista": "SANTIAGO LLUGSI",
         "B1": null,
         "1": null,
         "2": null,
@@ -2651,6 +2728,7 @@
         "B15": null
       },
       {
+        "transportista": "VICENTE PULLAS",
         "B1": null,
         "1": null,
         "2": null,
@@ -2668,6 +2746,7 @@
         "B15": null
       },
       {
+        "transportista": "WILSON QUINATOA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2685,6 +2764,7 @@
         "B15": null
       },
       {
+        "transportista": "ALEXANDER CAMPAÑA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2702,6 +2782,7 @@
         "B15": null
       },
       {
+        "transportista": "ALEXIS COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2719,6 +2800,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTIAN REA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2736,6 +2818,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTOBAL COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2753,6 +2836,7 @@
         "B15": null
       },
       {
+        "transportista": "DELIA COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2770,6 +2854,7 @@
         "B15": null
       },
       {
+        "transportista": "EDISON QUINATOA",
         "B1": null,
         "1": null,
         "2": null,
@@ -2787,6 +2872,7 @@
         "B15": null
       },
       {
+        "transportista": "IVAN NICOLALDE",
         "B1": null,
         "1": null,
         "2": null,
@@ -2804,6 +2890,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME PULLAS",
         "B1": null,
         "1": null,
         "2": null,
@@ -2821,6 +2908,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -2838,6 +2926,7 @@
         "B15": null
       },
       {
+        "transportista": "JONATHAN FARINANGO",
         "B1": null,
         "1": null,
         "2": null,
@@ -2855,6 +2944,7 @@
         "B15": null
       },
       {
+        "transportista": "JORGE RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -2872,6 +2962,7 @@
         "B15": null
       },
       {
+        "transportista": "JUAN RAMIREZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -2889,6 +2980,7 @@
         "B15": null
       },
       {
+        "transportista": "LIBORIO RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -2906,6 +2998,7 @@
         "B15": null
       },
       {
+        "transportista": "LIZBETH SALTOS",
         "B1": null,
         "1": null,
         "2": null,
@@ -2923,6 +3016,7 @@
         "B15": null
       },
       {
+        "transportista": "LUIS RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -2940,6 +3034,7 @@
         "B15": null
       },
       {
+        "transportista": "MIGUEL ORTIZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -2957,6 +3052,7 @@
         "B15": null
       },
       {
+        "transportista": "NELLY VASCO",
         "B1": null,
         "1": null,
         "2": null,
@@ -2974,6 +3070,7 @@
         "B15": null
       },
       {
+        "transportista": "SANTIAGO LLUGSI",
         "B1": null,
         "1": null,
         "2": null,
@@ -2991,6 +3088,7 @@
         "B15": null
       },
       {
+        "transportista": "VICENTE PULLAS",
         "B1": null,
         "1": null,
         "2": null,
@@ -3008,6 +3106,7 @@
         "B15": null
       },
       {
+        "transportista": "WILSON QUINATOA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3025,6 +3124,7 @@
         "B15": null
       },
       {
+        "transportista": "ALEXANDER CAMPAÑA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3042,6 +3142,7 @@
         "B15": null
       },
       {
+        "transportista": "ALEXIS COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3059,6 +3160,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTIAN REA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3076,6 +3178,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTOBAL COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3093,6 +3196,7 @@
         "B15": null
       },
       {
+        "transportista": "DELIA COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3110,6 +3214,7 @@
         "B15": null
       },
       {
+        "transportista": "EDISON QUINATOA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3127,6 +3232,7 @@
         "B15": null
       },
       {
+        "transportista": "IVAN NICOLALDE",
         "B1": null,
         "1": null,
         "2": null,
@@ -3144,6 +3250,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME PULLAS",
         "B1": null,
         "1": null,
         "2": null,
@@ -3161,6 +3268,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -3178,6 +3286,7 @@
         "B15": null
       },
       {
+        "transportista": "JONATHAN FARINANGO",
         "B1": null,
         "1": null,
         "2": null,
@@ -3195,6 +3304,7 @@
         "B15": null
       },
       {
+        "transportista": "JORGE RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -3212,6 +3322,7 @@
         "B15": null
       },
       {
+        "transportista": "JUAN RAMIREZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -3229,6 +3340,7 @@
         "B15": null
       },
       {
+        "transportista": "LIBORIO RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -3246,6 +3358,7 @@
         "B15": null
       },
       {
+        "transportista": "LIZBETH SALTOS",
         "B1": null,
         "1": null,
         "2": null,
@@ -3263,6 +3376,7 @@
         "B15": null
       },
       {
+        "transportista": "LUIS RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -3280,6 +3394,7 @@
         "B15": null
       },
       {
+        "transportista": "MIGUEL ORTIZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -3297,6 +3412,7 @@
         "B15": null
       },
       {
+        "transportista": "NELLY VASCO",
         "B1": null,
         "1": null,
         "2": null,
@@ -3314,6 +3430,7 @@
         "B15": null
       },
       {
+        "transportista": "SANTIAGO LLUGSI",
         "B1": null,
         "1": null,
         "2": null,
@@ -3331,6 +3448,7 @@
         "B15": null
       },
       {
+        "transportista": "VICENTE PULLAS",
         "B1": null,
         "1": null,
         "2": null,
@@ -3348,6 +3466,7 @@
         "B15": null
       },
       {
+        "transportista": "WILSON QUINATOA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3365,6 +3484,7 @@
         "B15": null
       },
       {
+        "transportista": "ALEXANDER CAMPAÑA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3382,6 +3502,7 @@
         "B15": null
       },
       {
+        "transportista": "ALEXIS COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3399,6 +3520,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTIAN REA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3416,6 +3538,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTOBAL COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3433,6 +3556,7 @@
         "B15": null
       },
       {
+        "transportista": "DELIA COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3450,6 +3574,7 @@
         "B15": null
       },
       {
+        "transportista": "EDISON QUINATOA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3467,6 +3592,7 @@
         "B15": null
       },
       {
+        "transportista": "IVAN NICOLALDE",
         "B1": null,
         "1": null,
         "2": null,
@@ -3484,6 +3610,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME PULLAS",
         "B1": null,
         "1": null,
         "2": null,
@@ -3501,6 +3628,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -3518,6 +3646,7 @@
         "B15": null
       },
       {
+        "transportista": "JONATHAN FARINANGO",
         "B1": null,
         "1": null,
         "2": null,
@@ -3535,6 +3664,7 @@
         "B15": null
       },
       {
+        "transportista": "JORGE RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -3552,6 +3682,7 @@
         "B15": null
       },
       {
+        "transportista": "JUAN RAMIREZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -3569,6 +3700,7 @@
         "B15": null
       },
       {
+        "transportista": "LIBORIO RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -3586,6 +3718,7 @@
         "B15": null
       },
       {
+        "transportista": "LIZBETH SALTOS",
         "B1": null,
         "1": null,
         "2": null,
@@ -3603,6 +3736,7 @@
         "B15": null
       },
       {
+        "transportista": "LUIS RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -3620,6 +3754,7 @@
         "B15": null
       },
       {
+        "transportista": "MIGUEL ORTIZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -3637,6 +3772,7 @@
         "B15": null
       },
       {
+        "transportista": "NELLY VASCO",
         "B1": null,
         "1": null,
         "2": null,
@@ -3654,6 +3790,7 @@
         "B15": null
       },
       {
+        "transportista": "SANTIAGO LLUGSI",
         "B1": null,
         "1": null,
         "2": null,
@@ -3671,6 +3808,7 @@
         "B15": null
       },
       {
+        "transportista": "VICENTE PULLAS",
         "B1": null,
         "1": null,
         "2": null,
@@ -3688,6 +3826,7 @@
         "B15": null
       },
       {
+        "transportista": "WILSON QUINATOA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3705,6 +3844,7 @@
         "B15": null
       },
       {
+        "transportista": "ALEXANDER CAMPAÑA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3722,6 +3862,7 @@
         "B15": null
       },
       {
+        "transportista": "ALEXIS COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3739,6 +3880,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTIAN REA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3756,6 +3898,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTOBAL COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3773,6 +3916,7 @@
         "B15": null
       },
       {
+        "transportista": "DELIA COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3790,6 +3934,7 @@
         "B15": null
       },
       {
+        "transportista": "EDISON QUINATOA",
         "B1": null,
         "1": null,
         "2": null,
@@ -3807,6 +3952,7 @@
         "B15": null
       },
       {
+        "transportista": "IVAN NICOLALDE",
         "B1": null,
         "1": null,
         "2": null,
@@ -3824,6 +3970,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME PULLAS",
         "B1": null,
         "1": null,
         "2": null,
@@ -3841,6 +3988,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -3858,6 +4006,7 @@
         "B15": null
       },
       {
+        "transportista": "JONATHAN FARINANGO",
         "B1": null,
         "1": null,
         "2": null,
@@ -3875,6 +4024,7 @@
         "B15": null
       },
       {
+        "transportista": "JORGE RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -3892,6 +4042,7 @@
         "B15": null
       },
       {
+        "transportista": "JUAN RAMIREZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -3909,6 +4060,7 @@
         "B15": null
       },
       {
+        "transportista": "LIBORIO RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -3926,6 +4078,7 @@
         "B15": null
       },
       {
+        "transportista": "LIZBETH SALTOS",
         "B1": null,
         "1": null,
         "2": null,
@@ -3943,6 +4096,7 @@
         "B15": null
       },
       {
+        "transportista": "LUIS RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -3960,6 +4114,7 @@
         "B15": null
       },
       {
+        "transportista": "MIGUEL ORTIZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -3977,6 +4132,7 @@
         "B15": null
       },
       {
+        "transportista": "NELLY VASCO",
         "B1": null,
         "1": null,
         "2": null,
@@ -3994,6 +4150,7 @@
         "B15": null
       },
       {
+        "transportista": "SANTIAGO LLUGSI",
         "B1": null,
         "1": null,
         "2": null,
@@ -4011,6 +4168,7 @@
         "B15": null
       },
       {
+        "transportista": "VICENTE PULLAS",
         "B1": null,
         "1": null,
         "2": null,
@@ -4028,6 +4186,7 @@
         "B15": null
       },
       {
+        "transportista": "WILSON QUINATOA",
         "B1": null,
         "1": null,
         "2": null,
@@ -4045,6 +4204,7 @@
         "B15": null
       },
       {
+        "transportista": "ALEXANDER CAMPAÑA",
         "B1": null,
         "1": null,
         "2": null,
@@ -4062,6 +4222,7 @@
         "B15": null
       },
       {
+        "transportista": "ALEXIS COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -4079,6 +4240,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTIAN REA",
         "B1": null,
         "1": null,
         "2": null,
@@ -4096,6 +4258,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTOBAL COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -4113,6 +4276,7 @@
         "B15": null
       },
       {
+        "transportista": "DELIA COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -4130,6 +4294,7 @@
         "B15": null
       },
       {
+        "transportista": "EDISON QUINATOA",
         "B1": null,
         "1": null,
         "2": null,
@@ -4147,6 +4312,7 @@
         "B15": null
       },
       {
+        "transportista": "IVAN NICOLALDE",
         "B1": null,
         "1": null,
         "2": null,
@@ -4164,6 +4330,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME PULLAS",
         "B1": null,
         "1": null,
         "2": null,
@@ -4181,6 +4348,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -4198,6 +4366,7 @@
         "B15": null
       },
       {
+        "transportista": "JONATHAN FARINANGO",
         "B1": null,
         "1": null,
         "2": null,
@@ -4215,6 +4384,7 @@
         "B15": null
       },
       {
+        "transportista": "JORGE RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -4232,6 +4402,7 @@
         "B15": null
       },
       {
+        "transportista": "JUAN RAMIREZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -4249,6 +4420,7 @@
         "B15": null
       },
       {
+        "transportista": "LIBORIO RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -4266,6 +4438,7 @@
         "B15": null
       },
       {
+        "transportista": "LIZBETH SALTOS",
         "B1": null,
         "1": null,
         "2": null,
@@ -4283,6 +4456,7 @@
         "B15": null
       },
       {
+        "transportista": "LUIS RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -4300,6 +4474,7 @@
         "B15": null
       },
       {
+        "transportista": "MIGUEL ORTIZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -4317,6 +4492,7 @@
         "B15": null
       },
       {
+        "transportista": "NELLY VASCO",
         "B1": null,
         "1": null,
         "2": null,
@@ -4334,6 +4510,7 @@
         "B15": null
       },
       {
+        "transportista": "SANTIAGO LLUGSI",
         "B1": null,
         "1": null,
         "2": null,
@@ -4351,6 +4528,7 @@
         "B15": null
       },
       {
+        "transportista": "VICENTE PULLAS",
         "B1": null,
         "1": null,
         "2": null,
@@ -4368,6 +4546,7 @@
         "B15": null
       },
       {
+        "transportista": "WILSON QUINATOA",
         "B1": null,
         "1": null,
         "2": null,
@@ -4385,6 +4564,7 @@
         "B15": null
       },
       {
+        "transportista": "ALEXANDER CAMPAÑA",
         "B1": null,
         "1": null,
         "2": null,
@@ -4402,6 +4582,7 @@
         "B15": null
       },
       {
+        "transportista": "ALEXIS COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -4419,6 +4600,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTIAN REA",
         "B1": null,
         "1": null,
         "2": null,
@@ -4436,6 +4618,7 @@
         "B15": null
       },
       {
+        "transportista": "CRISTOBAL COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -4453,6 +4636,7 @@
         "B15": null
       },
       {
+        "transportista": "DELIA COBA",
         "B1": null,
         "1": null,
         "2": null,
@@ -4470,6 +4654,7 @@
         "B15": null
       },
       {
+        "transportista": "EDISON QUINATOA",
         "B1": null,
         "1": null,
         "2": null,
@@ -4487,6 +4672,7 @@
         "B15": null
       },
       {
+        "transportista": "IVAN NICOLALDE",
         "B1": null,
         "1": null,
         "2": null,
@@ -4504,6 +4690,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME PULLAS",
         "B1": null,
         "1": null,
         "2": null,
@@ -4521,6 +4708,7 @@
         "B15": null
       },
       {
+        "transportista": "JAIME RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -4538,6 +4726,7 @@
         "B15": null
       },
       {
+        "transportista": "JONATHAN FARINANGO",
         "B1": null,
         "1": null,
         "2": null,
@@ -4555,6 +4744,7 @@
         "B15": null
       },
       {
+        "transportista": "JORGE RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -4572,6 +4762,7 @@
         "B15": null
       },
       {
+        "transportista": "JUAN RAMIREZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -4589,6 +4780,7 @@
         "B15": null
       },
       {
+        "transportista": "LIBORIO RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -4606,6 +4798,7 @@
         "B15": null
       },
       {
+        "transportista": "LIZBETH SALTOS",
         "B1": null,
         "1": null,
         "2": null,
@@ -4623,6 +4816,7 @@
         "B15": null
       },
       {
+        "transportista": "LUIS RODRIGUEZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -4640,6 +4834,7 @@
         "B15": null
       },
       {
+        "transportista": "MIGUEL ORTIZ",
         "B1": null,
         "1": null,
         "2": null,
@@ -4657,6 +4852,7 @@
         "B15": null
       },
       {
+        "transportista": "NELLY VASCO",
         "B1": null,
         "1": null,
         "2": null,
@@ -4674,6 +4870,7 @@
         "B15": null
       },
       {
+        "transportista": "SANTIAGO LLUGSI",
         "B1": null,
         "1": null,
         "2": null,
@@ -4691,6 +4888,7 @@
         "B15": null
       },
       {
+        "transportista": "VICENTE PULLAS",
         "B1": null,
         "1": null,
         "2": null,
@@ -4708,6 +4906,7 @@
         "B15": null
       },
       {
+        "transportista": "WILSON QUINATOA",
         "B1": null,
         "1": null,
         "2": null,
@@ -5785,9 +5984,9 @@
       }
     ]
   },
-  "updatedAt": "15/05/2026 13:20",
+  "updatedAt": "15/05/2026 13:32",
   "_meta": {
-    "generado": "15/05/2026 13:20",
+    "generado": "15/05/2026 13:32",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
