@@ -665,13 +665,16 @@ function renderLastMile(d){
   const lm=d.lastmile||{};
 
   /* ── Tabla 1: Errores por transportista ── */
+  // Exclude fallback bucket names (B1, B2 … B15) — empty Excel header cells
+  const _lmValKeys = r => Object.keys(r).filter(k=>k!=='transportista'&&!/^B\d+$/.test(k));
+  const _lmHasData = r => _lmValKeys(r).some(k=>{const v=Number(r[k]);return r[k]!=null&&r[k]!==''&&!isNaN(v)&&v!==0;});
+
   const pivot=(Array.isArray(lm.pivot)?lm.pivot:[])
-    .filter(r=>r.transportista&&!/^total/i.test(r.transportista.trim()));
+    .filter(r=>r.transportista&&!/^total/i.test(r.transportista.trim()))
+    .filter(_lmHasData);   // ← ocultar filas completamente vacías
   let errHtml='';
   if(pivot.length){
-    // Exclude fallback bucket names (B1, B2 … B15) — empty Excel header cells
-    const valKeys=Object.keys(pivot[0])
-      .filter(k=>k!=='transportista'&&!/^B\d+$/.test(k));
+    const valKeys=_lmValKeys(pivot[0]);
     errHtml=`
     ${_subLabel('ERRORES POR TRANSPORTISTA')}
     <div class="bdg-tbl-wrap"><table class="bdg-tbl bdg-tbl--compact">
@@ -748,8 +751,8 @@ function renderGraficas(d){
   const pie2=_pie(notas.racionesRecibidas||0,notas.racionesPlanificadas||0,'RACIONES DESPACHADAS');
   const pie3=_pie(despTon,totTon,'TONELADAS DESPACHADAS',2);
   const pie4=_pie(despIE,totIE,'INSTITUCIONES DESPACHADAS');
-  const bar1=dias.length?_barChart(dias.map(x=>({label:x.label,value:x.inst})),'INSTITUCIONES POR DÍA',0,'#2574A9'):'';
-  const bar2=dias.length?_barChart(dias.map(x=>({label:x.label,value:x.ton})),'TONELADAS POR DÍA',2,'#3D8EB9'):'';
+  const bar1=dias.length?_barChart(dias.map(x=>({label:x.label,value:x.inst})),'INSTITUCIONES POR DÍA',0,'#3D8EB9'):'';
+  const bar2=dias.length?_barChart(dias.map(x=>({label:x.label,value:x.ton})),'TONELADAS POR DÍA',2,'#F47C20'):'';
   return`<div class="bdg-section"><div class="bdg-scroll-panel">
     <div class="bdg-pie-grid">${pie1}${pie2}${pie3}${pie4}</div>
     <div class="bdg-bar-grid">${bar1}${bar2}</div>
