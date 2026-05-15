@@ -358,6 +358,19 @@
       "pct": 0.8880146502691516
     }
   ],
+  "diaLabels": [
+    "D1_Mi6",
+    "D2_J7",
+    "D3_D10",
+    "D4_L11",
+    "D5_Ma12",
+    "D6_Mi13",
+    "D7_J14",
+    "D8_D17",
+    "D9_L18",
+    "D10_Ma19",
+    "D11_Mi20"
+  ],
   "abastecimiento": [
     {
       "producto": "LECHE ENTERA",
@@ -1070,10 +1083,10 @@
   ],
   "notasEntrega": {
     "planificadas": 801,
-    "recibidas": 313,
-    "pendientes": 488,
-    "pctRecibidas": "39%",
-    "pctPendientes": "61%",
+    "recibidas": 383,
+    "pendientes": 418,
+    "pctRecibidas": "48%",
+    "pctPendientes": "52%",
     "racionesPlanificadas": 7054240,
     "racionesRecibidas": 4997080,
     "racionesPendientes": 2057160,
@@ -5772,9 +5785,9 @@
       }
     ]
   },
-  "updatedAt": "15/05/2026 09:50",
+  "updatedAt": "15/05/2026 10:57",
   "_meta": {
-    "generado": "15/05/2026 09:50",
+    "generado": "15/05/2026 10:57",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
