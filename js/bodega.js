@@ -506,7 +506,7 @@ function renderCobertura(d){
     }).join('');
     const delay=`animation-delay:${Math.min(ri,14)*45}ms`;
     return`<tr onclick="bdgSelRow(this)" style="${delay}">
-      <td class="bdg-sticky-col" style="font-weight:600;white-space:nowrap">${r.producto||'—'}</td>
+      <td class="bdg-sticky-col" title="${r.producto||''}" style="font-weight:600">${r.producto||'—'}</td>
       <td class="r" data-col="ingresos">${_N(r.ingresos)}</td>
       <td class="r" data-col="req">${_N(r.totalReq)}</td>
       <td class="r${neg?' neg':''}" data-col="saldo">${_N(r.saldo)}</td>${dCells}
@@ -576,7 +576,7 @@ function renderProveedores(d){
   const trs=rows.map(r=>{
     const c=_C(r.pct);
     return`<tr onclick="bdgSelRow(this)">
-      <td class="bdg-sticky-col" style="font-weight:600">${r.producto||'—'}</td>
+      <td class="bdg-sticky-col" title="${r.producto||''}" style="font-weight:600">${r.producto||'—'}</td>
       <td class="r">${_N(r.planificado)}</td><td class="r">${_N(r.ingresos)}</td>
       <td style="min-width:160px"><div style="display:flex;flex-direction:column;gap:3px">
         <div style="display:flex;align-items:center;justify-content:space-between">${_badge(r.pct)}<span style="font-size:10px;color:#64748B">${_N(r.ingresos)} / ${_N(r.planificado)}</span></div>
@@ -607,7 +607,7 @@ function renderLotesFinales(d){
   const trs=rows.map(r=>{
     const c=_C(r.pct),neg=(r.porRecibir||0)<0;
     return`<tr onclick="bdgSelRow(this)">
-      <td class="bdg-sticky-col" style="font-weight:600">${r.producto||'—'}</td>
+      <td class="bdg-sticky-col" title="${r.producto||''}" style="font-weight:600">${r.producto||'—'}</td>
       <td class="r${neg?' neg':''}">${_N(r.porRecibir)}</td>
       <td style="min-width:150px"><div style="display:flex;align-items:center;gap:7px">${_badge(r.pct)}<div style="flex:1">${_bar(r.pct,c.bar,5)}</div></div></td>
       <td style="font-size:11px;color:#64748B">${r.lotes&&r.lotes!=='—'&&r.lotes!=='-'?r.lotes:'—'}</td>
@@ -642,7 +642,7 @@ function renderReqDiario(d){
     }).join('');
     const delay=`animation-delay:${Math.min(ri,14)*45}ms`;
     return`<tr onclick="bdgSelRow(this)" style="${delay}">
-      <td class="bdg-sticky-col" style="font-weight:600;white-space:nowrap">${r.producto||'—'}</td>
+      <td class="bdg-sticky-col" title="${r.producto||''}" style="font-weight:600">${r.producto||'—'}</td>
       ${dCells}
       <td class="r" data-col="distributivo" style="font-weight:700;color:var(--orange)">${_N(r.distributivo)}</td>
       <td class="r" data-col="numDias">${r.numDias||'—'}</td>
@@ -685,7 +685,7 @@ function renderLastMile(d){
       <tbody>${pivot.map((r,ri)=>{
         const delay=`animation-delay:${Math.min(ri,14)*40}ms`;
         return`<tr onclick="bdgSelRow(this)" style="${delay}">
-          <td class="bdg-sticky-col" style="font-weight:600;white-space:nowrap">${r.transportista||''}</td>
+          <td class="bdg-sticky-col" title="${r.transportista||''}" style="font-weight:600">${r.transportista||''}</td>
           ${valKeys.map(k=>{
             const v=Number(r[k]);
             if(r[k]==null||r[k]===''||isNaN(v)||v===0) return`<td class="r"></td>`;
