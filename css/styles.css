@@ -486,9 +486,9 @@ tr:hover td{background:#FBFBFD;}
 .bdg-tbl tbody tr:last-child td:last-child{border-radius:0 0 11px 0;}
 .bdg-tbl tbody tr:last-child td{border-bottom:none;}
 
-/* ── Day columns (ultra-compact to fit D1-D10 without horizontal scroll) ── */
-.bdg-day-th{width:46px !important;min-width:42px !important;max-width:52px !important;text-align:center;}
-.bdg-day-td{width:46px;padding:5px 2px !important;text-align:center;}
+/* ── Day columns — width set dynamically in JS via min-width on table ── */
+.bdg-day-th{text-align:center;}
+.bdg-day-td{text-align:center;padding:5px 4px !important;}
 
 /* ── Sticky first column ── */
 .bdg-sticky-col{position:sticky;left:0;z-index:2;background:#fff;border-right:2px solid #CBD5E1 !important;box-shadow:2px 0 6px rgba(10,48,96,.06);}
