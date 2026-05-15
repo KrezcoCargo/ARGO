@@ -11,15 +11,13 @@ function _diaThHtml(labels, i){
   if(!raw) return `D${i+1}`;
   // Formato esperado: D{n}_{abbr}{fecha}  ej: D1_Mi6 / D3_J10
   const m = raw.match(/^D\d+_([A-Za-zÁÉÍÓÚáéíóúÜü]+)(\d+)$/);
-  if(m) return `<span style="display:flex;flex-direction:column;align-items:center;gap:0">`
-    +`<span style="font-size:7px;font-weight:600;line-height:1.1;color:rgba(255,255,255,.65)">D${i+1}</span>`
-    +`<span style="font-size:8px;font-weight:800;text-transform:uppercase;line-height:1.2">${m[1]}</span>`
-    +`<span style="font-size:10px;font-weight:700;line-height:1.2;color:rgba(255,255,255,.95)">${m[2]}</span>`
+  if(m) return `<span style="display:flex;flex-direction:column;align-items:center;gap:0;text-transform:none">`
+    +`<span style="font-size:7px;font-weight:600;line-height:1.15;color:rgba(255,255,255,.65)">D${i+1}</span>`
+    +`<span style="font-size:9.5px;font-weight:700;line-height:1.2;color:rgba(255,255,255,.95)">${m[1]}${m[2]}</span>`
     +`</span>`;
-  // label no coincide con patrón → mostrar igual con D{i+1}
-  return `<span style="display:flex;flex-direction:column;align-items:center;gap:0">`
+  return `<span style="display:flex;flex-direction:column;align-items:center;gap:0;text-transform:none">`
     +`<span style="font-size:7px;color:rgba(255,255,255,.65)">D${i+1}</span>`
-    +`<span style="font-size:8.5px">${raw}</span>`
+    +`<span style="font-size:9px">${raw}</span>`
     +`</span>`;
 }
 let _bodegaView = 'cobertura';
