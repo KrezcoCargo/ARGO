@@ -463,7 +463,7 @@ tr:hover td{background:#FBFBFD;}
 /* ── Tables ── */
 /* No own scroll — parent .bdg-body handles it; table expands freely */
 .bdg-tbl-wrap{background:#fff;border-radius:12px;border:1px solid #DDE4EE;overflow:visible;width:100%;min-width:0;flex:none;box-shadow:0 4px 18px rgba(10,48,96,.07);}
-.bdg-tbl{width:100%;border-collapse:collapse;font-size:11.5px;table-layout:fixed;}
+.bdg-tbl{width:100%;border-collapse:collapse;font-size:11.5px;}
 /* thead is the sticky layer — whole row freezes as a unit */
 .bdg-tbl thead{position:sticky;top:0;z-index:3;background:linear-gradient(135deg,#0A3060 0%,#1565C0 100%);box-shadow:0 3px 8px rgba(10,48,96,.25);}
 .bdg-tbl thead tr{background:transparent;}
@@ -487,14 +487,13 @@ tr:hover td{background:#FBFBFD;}
 .bdg-tbl tbody tr:last-child td{border-bottom:none;}
 
 /* ── Day columns ── */
-.bdg-day-th{width:46px;text-align:center;}
-.bdg-day-td{text-align:center;padding:5px 3px !important;}
+.bdg-day-th{width:46px;min-width:46px;text-align:center;}
+.bdg-day-td{min-width:46px;text-align:center;padding:5px 3px !important;}
 
 /* ── Sticky first column ── */
 .bdg-sticky-col{position:sticky;left:0;z-index:2;background:#fff;border-right:2px solid #CBD5E1 !important;box-shadow:2px 0 6px rgba(10,48,96,.06);}
-.bdg-tbl thead th.bdg-sticky-col{background:linear-gradient(135deg,#0A3060 0%,#1565C0 100%);z-index:5;position:sticky;left:0;width:210px;}
-/* product col: text wraps, never truncated */
-.bdg-tbl tbody td.bdg-sticky-col{white-space:normal;word-break:break-word;line-height:1.35;}
+.bdg-tbl thead th.bdg-sticky-col{background:linear-gradient(135deg,#0A3060 0%,#1565C0 100%);z-index:5;position:sticky;left:0;}
+.bdg-tbl tbody td.bdg-sticky-col{white-space:nowrap;}
 .bdg-tbl tbody tr:nth-child(even) td.bdg-sticky-col{background:#F2F7FD;}
 .bdg-tbl tbody tr:hover td.bdg-sticky-col{background:#E6F0FB;}
 .bdg-tbl tbody tr.bdg-row-sel td{background:#DBEAFE !important;}
