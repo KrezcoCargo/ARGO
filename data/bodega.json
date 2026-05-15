@@ -317,45 +317,45 @@
     },
     {
       "producto": "GALLETA SAL",
-      "ingresos": 802376,
+      "ingresos": 905876,
       "totalReq": 1082847,
-      "saldo": 11867,
+      "saldo": 115367,
       "porDia": [
-        691484,
-        584108,
-        459881,
-        369977,
-        261122,
-        147902,
-        52430,
-        -86854,
-        -197308,
-        -248725,
-        -280471
+        794984,
+        687608,
+        563381,
+        473477,
+        364622,
+        251402,
+        155930,
+        16646,
+        -93808,
+        -145225,
+        -176971
       ],
-      "porRecibir": -280471,
-      "pct": 0.7409874155813333
+      "porRecibir": -176971,
+      "pct": 0.8365687858026111
     },
     {
       "producto": "GALLETA DULCE",
-      "ingresos": 961584,
+      "ingresos": 1085409,
       "totalReq": 1082847,
-      "saldo": 171075,
+      "saldo": 294900,
       "porDia": [
-        850692,
-        743316,
-        619089,
-        529185,
-        420330,
-        307110,
-        211638,
-        72354,
-        -38100,
-        -89517,
-        -121263
+        974517,
+        867141,
+        742914,
+        653010,
+        544155,
+        430935,
+        335463,
+        196179,
+        85725,
+        34308,
+        2562
       ],
-      "porRecibir": -121263,
-      "pct": 0.8880146502691516
+      "porRecibir": 2562,
+      "pct": 1.002365985222289
     }
   ],
   "diaLabels": [
@@ -479,24 +479,24 @@
     },
     {
       "producto": "GALLETA SAL",
-      "ingresos": 802376,
+      "ingresos": 905876,
       "totalReq": 1082847,
-      "porRecibir": -280471,
-      "pct": 0.7409874155813333
+      "porRecibir": -176971,
+      "pct": 0.8365687858026111
     },
     {
       "producto": "GALLETA DULCE",
-      "ingresos": 961584,
+      "ingresos": 1085409,
       "totalReq": 1082847,
-      "porRecibir": -121263,
-      "pct": 0.8880146502691516
+      "porRecibir": 2562,
+      "pct": 1.002365985222289
     },
     {
       "producto": "TOTAL GALLETA",
-      "ingresos": 1763960,
+      "ingresos": 1991285,
       "totalReq": 2165694,
-      "porRecibir": -401734,
-      "pct": 0.8145010329252425
+      "porRecibir": -174409,
+      "pct": 0.91946738551245
     }
   ],
   "proveedores": [
@@ -623,8 +623,8 @@
     {
       "producto": "GALLETA SAL TOMATE Y QUESO",
       "planificado": 1119420,
-      "ingresos": 802376,
-      "pct": 0.7167783316360258
+      "ingresos": 905876,
+      "pct": 0.8092369262653875
     },
     {
       "producto": "GALLETA DULCE CHOCOCHIPS",
@@ -635,14 +635,14 @@
     {
       "producto": "GALLETA DULCE NARANJA Y MIEL",
       "planificado": 283920,
-      "ingresos": 143434,
-      "pct": 0.5051916032685263
+      "ingresos": 267259,
+      "pct": 0.9413179768948999
     },
     {
       "producto": "TOTAL GALLETA",
       "planificado": 2239260,
-      "ingresos": 1763960,
-      "pct": 0.7877423791788358
+      "ingresos": 1991285,
+      "pct": 0.8892602913462483
     }
   ],
   "lotesFinales": [
@@ -738,20 +738,20 @@
     },
     {
       "producto": "GALLETA SAL",
-      "porRecibir": -280471,
-      "pct": 0.7409874155813333,
+      "porRecibir": -176971,
+      "pct": 0.8365687858026111,
       "lotes": "-"
     },
     {
       "producto": "GALLETA DULCE",
-      "porRecibir": -121263,
-      "pct": 0.8880146502691516,
+      "porRecibir": 2562,
+      "pct": 1.002365985222289,
       "lotes": "-"
     },
     {
       "producto": "TOTAL GALLETA",
-      "porRecibir": -401734,
-      "pct": 0.8145010329252425,
+      "porRecibir": -174409,
+      "pct": 0.91946738551245,
       "lotes": "-"
     }
   ],
@@ -5984,9 +5984,9 @@
       }
     ]
   },
-  "updatedAt": "15/05/2026 13:32",
+  "updatedAt": "15/05/2026 14:33",
   "_meta": {
-    "generado": "15/05/2026 13:32",
+    "generado": "15/05/2026 14:33",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
