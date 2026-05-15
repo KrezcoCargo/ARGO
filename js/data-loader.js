@@ -1,5 +1,6 @@
 ﻿function navTo(page){
   currentPage=page;
+  sessionStorage.setItem('kc_last_page', page);  // remember for F5 restore
   document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
   const ni=document.getElementById('nav-'+page);
   if(ni)ni.classList.add('active');
