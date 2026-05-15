@@ -2,30 +2,30 @@
   "cobertura": [
     {
       "producto": "LECHE ENTERA",
-      "ingresos": 2139121,
+      "ingresos": 2187505,
       "totalReq": 2526643,
-      "saldo": 205917,
+      "saldo": 216396,
       "porDia": [
-        1880373,
-        1629829,
-        1339966,
-        1130190,
-        876195,
-        612015,
-        389247,
-        64251,
-        -193475,
-        -313448,
-        -387522
+        1928757,
+        1678213,
+        1388350,
+        1178574,
+        924579,
+        660399,
+        437631,
+        112635,
+        -145091,
+        -265064,
+        -339138
       ],
-      "porRecibir": -387522,
-      "pct": 0.8466257401619461
+      "porRecibir": -339138,
+      "pct": 0.8657752599001917
     },
     {
       "producto": "NÉCTAR PERA",
       "ingresos": 363023,
       "totalReq": 360949,
-      "saldo": 86851,
+      "saldo": 81436,
       "porDia": [
         326059,
         290267,
@@ -46,7 +46,7 @@
       "producto": "NÉCTAR PERA-BANANO O MANGO-BANANA",
       "ingresos": 370755,
       "totalReq": 360949,
-      "saldo": 94583,
+      "saldo": 89168,
       "porDia": [
         333791,
         297999,
@@ -67,7 +67,7 @@
       "producto": "NÉCTAR PERA-MANGO",
       "ingresos": 363030,
       "totalReq": 360949,
-      "saldo": 86858,
+      "saldo": 81443,
       "porDia": [
         326066,
         290274,
@@ -109,7 +109,7 @@
       "producto": "PURÉ MANGO-PERA",
       "ingresos": 1410141,
       "totalReq": 1443796,
-      "saldo": 305453,
+      "saldo": 283793,
       "porDia": [
         1262285,
         1119117,
@@ -130,7 +130,7 @@
       "producto": "LECHE CEREAL CHOCOLATE",
       "ingresos": 725429,
       "totalReq": 721898,
-      "saldo": 173085,
+      "saldo": 162255,
       "porDia": [
         651501,
         579917,
@@ -151,7 +151,7 @@
       "producto": "LECHE CEREAL FRESA",
       "ingresos": 362983,
       "totalReq": 360949,
-      "saldo": 86811,
+      "saldo": 81396,
       "porDia": [
         326019,
         290227,
@@ -172,7 +172,7 @@
       "producto": "LECHE SABORIZADA CHOCOLATE",
       "ingresos": 725816,
       "totalReq": 721898,
-      "saldo": 173472,
+      "saldo": 162642,
       "porDia": [
         651888,
         580304,
@@ -193,7 +193,7 @@
       "producto": "LECHE SABORIZADA FRESA",
       "ingresos": 363168,
       "totalReq": 360949,
-      "saldo": 86996,
+      "saldo": 81581,
       "porDia": [
         326204,
         290412,
@@ -214,7 +214,7 @@
       "producto": "EXTRUIDO JAMÓN SERRANO",
       "ingresos": 722456,
       "totalReq": 721898,
-      "saldo": 170112,
+      "saldo": 159282,
       "porDia": [
         648528,
         576944,
@@ -235,7 +235,7 @@
       "producto": "EXTRUIDO POLLO A LA BRASA",
       "ingresos": 361372,
       "totalReq": 360949,
-      "saldo": 85200,
+      "saldo": 79785,
       "porDia": [
         324408,
         288616,
@@ -256,7 +256,7 @@
       "producto": "GALLETA RELLENA FRESA O FRUTOS ROJOS",
       "ingresos": 1444787,
       "totalReq": 1443796,
-      "saldo": 340099,
+      "saldo": 318439,
       "porDia": [
         1296931,
         1153763,
@@ -277,7 +277,7 @@
       "producto": "GALLETA RELLENA CHOCOLATE O FRUTOS AMARILLOS",
       "ingresos": 1105218,
       "totalReq": 1082847,
-      "saldo": 276702,
+      "saldo": 260457,
       "porDia": [
         994326,
         886950,
@@ -298,7 +298,7 @@
       "producto": "GRANOLA",
       "ingresos": 1444731,
       "totalReq": 1443796,
-      "saldo": 340043,
+      "saldo": 318383,
       "porDia": [
         1296875,
         1153707,
@@ -319,7 +319,7 @@
       "producto": "GALLETA SAL",
       "ingresos": 1110716,
       "totalReq": 1082847,
-      "saldo": 282200,
+      "saldo": 265955,
       "porDia": [
         999824,
         892448,
@@ -340,7 +340,7 @@
       "producto": "GALLETA DULCE",
       "ingresos": 1085409,
       "totalReq": 1082847,
-      "saldo": 256893,
+      "saldo": 240648,
       "porDia": [
         974517,
         867141,
@@ -374,10 +374,10 @@
   "abastecimiento": [
     {
       "producto": "LECHE ENTERA",
-      "ingresos": 2139121,
+      "ingresos": 2187505,
       "totalReq": 2526643,
-      "porRecibir": -387522,
-      "pct": 0.8466257401619461
+      "porRecibir": -339138,
+      "pct": 0.8657752599001917
     },
     {
       "producto": "NÉCTAR PERA",
@@ -509,8 +509,8 @@
     {
       "producto": "LECHE ENTERA (VITA)",
       "planificado": 2133552,
-      "ingresos": 1611511,
-      "pct": 0.7553183611179854
+      "ingresos": 1659895,
+      "pct": 0.7779960366562427
     },
     {
       "producto": "NÉCTAR PERA",
@@ -648,8 +648,8 @@
   "lotesFinales": [
     {
       "producto": "LECHE ENTERA",
-      "porRecibir": -387522,
-      "pct": 0.8466257401619461,
+      "porRecibir": -339138,
+      "pct": 0.8657752599001917,
       "lotes": "-"
     },
     {
@@ -1449,13 +1449,13 @@
         "2": null,
         "3": null,
         "4": null,
-        "5": null,
+        "5": 1,
         "6": null,
-        "7": null,
+        "7": 2,
         "8": null,
         "9": null,
         "10": null,
-        "Total general": null,
+        "Total general": 3,
         "B13": null,
         "B14": null,
         "B15": null
@@ -1569,12 +1569,12 @@
         "3": null,
         "4": null,
         "5": null,
-        "6": null,
+        "6": 1,
         "7": null,
         "8": null,
         "9": null,
         "10": null,
-        "Total general": null,
+        "Total general": 1,
         "B13": null,
         "B14": null,
         "B15": null
@@ -1586,12 +1586,12 @@
         "3": null,
         "4": 2,
         "5": null,
-        "6": null,
+        "6": 2,
         "7": null,
         "8": null,
         "9": null,
         "10": null,
-        "Total general": 2,
+        "Total general": 4,
         "B13": null,
         "B14": null,
         "B15": null
@@ -1650,8 +1650,8 @@
       {
         "transportista": "VICENTE PULLAS",
         "1": null,
-        "2": null,
-        "3": 1,
+        "2": 1,
+        "3": null,
         "4": null,
         "5": null,
         "6": null,
@@ -1684,16 +1684,16 @@
       {
         "transportista": "Total general",
         "1": 1,
-        "2": 3,
-        "3": 1,
+        "2": 4,
+        "3": null,
         "4": 5,
-        "5": null,
-        "6": null,
-        "7": null,
+        "5": 1,
+        "6": 3,
+        "7": 2,
         "8": null,
         "9": null,
         "10": null,
-        "Total general": 10,
+        "Total general": 16,
         "B13": null,
         "B14": null,
         "B15": null
@@ -5785,9 +5785,9 @@
       }
     ]
   },
-  "updatedAt": "15/05/2026 15:50",
+  "updatedAt": "15/05/2026 15:57",
   "_meta": {
-    "generado": "15/05/2026 15:50",
+    "generado": "15/05/2026 15:57",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
