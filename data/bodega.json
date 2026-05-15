@@ -1096,51 +1096,51 @@
   "inventario": [
     {
       "producto": "EXTRUIDO JAMÓN SERRANO",
-      "ajuste": 14
+      "ajuste": 924
     },
     {
       "producto": "EXTRUIDO POLLO A LA BRASA",
-      "ajuste": 7
+      "ajuste": 762
     },
     {
       "producto": "GALLETA DULCE",
-      "ajuste": -441687
+      "ajuste": 946
     },
     {
       "producto": "GALLETA RELLENA CHOCOLATE O FRUTOS AMARILLOS",
-      "ajuste": 347
+      "ajuste": 686
     },
     {
       "producto": "GALLETA RELLENA FRESA O FRUTOS ROJOS",
-      "ajuste": -2604
+      "ajuste": -4692
     },
     {
       "producto": "GALLETA SAL",
-      "ajuste": -345777
+      "ajuste": -474
     },
     {
       "producto": "GRANOLA",
-      "ajuste": -934156
+      "ajuste": 1008
     },
     {
       "producto": "LECHE CEREAL CHOCOLATE",
-      "ajuste": -202
+      "ajuste": -2476
     },
     {
       "producto": "LECHE CEREAL FRESA",
-      "ajuste": -185
+      "ajuste": 298
     },
     {
       "producto": "LECHE ENTERA",
-      "ajuste": -863621
+      "ajuste": -2270
     },
     {
       "producto": "LECHE SABORIZADA CHOCOLATE",
-      "ajuste": -254
+      "ajuste": -292
     },
     {
       "producto": "LECHE SABORIZADA FRESA",
-      "ajuste": -31
+      "ajuste": 2386
     },
     {
       "producto": "NÉCTAR MANGO-BANANA",
@@ -1148,23 +1148,23 @@
     },
     {
       "producto": "NÉCTAR PERA",
-      "ajuste": 57
+      "ajuste": -182
     },
     {
       "producto": "NÉCTAR PERA-BANANO O MANGO-BANANA",
-      "ajuste": 36
+      "ajuste": 202
     },
     {
       "producto": "NÉCTAR PERA-MANGO",
-      "ajuste": -127
+      "ajuste": 466
     },
     {
       "producto": "PURÉ MANGO-PERA",
-      "ajuste": -445596
+      "ajuste": -352
     },
     {
       "producto": "TOTAL GALLETA",
-      "ajuste": -787464
+      "ajuste": 472
     }
   ],
   "inventarioSemanal": [
@@ -5785,9 +5785,9 @@
       }
     ]
   },
-  "updatedAt": "15/05/2026 11:21",
+  "updatedAt": "15/05/2026 11:50",
   "_meta": {
-    "generado": "15/05/2026 11:21",
+    "generado": "15/05/2026 11:50",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
