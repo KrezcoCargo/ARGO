@@ -673,13 +673,13 @@
                              "producto":  "LECHE CEREAL CHOCOLATE",
                              "porRecibir":  3531,
                              "pct":  1.0048912727282802,
-                             "lotes":  "-"
+                             "lotes":  "L6127H (12110)"
                          },
                          {
                              "producto":  "LECHE CEREAL FRESA",
                              "porRecibir":  2034,
                              "pct":  1.0056351451313066,
-                             "lotes":  "-"
+                             "lotes":  "L6109E (6360); L6109B (1567)"
                          },
                          {
                              "producto":  "LECHE SABORIZADA CHOCOLATE",
@@ -5772,9 +5772,9 @@
                                      }
                                  ]
                  },
-    "updatedAt":  "15/05/2026 08:27",
+    "updatedAt":  "15/05/2026 08:41",
     "_meta":  {
-                  "generado":  "15/05/2026 08:27",
+                  "generado":  "15/05/2026 08:41",
                   "fuente":  "POWER BI.xlsx",
                   "tenant":  "KrezcoCargo",
                   "script":  "sync-bodega.ps1 v3"
