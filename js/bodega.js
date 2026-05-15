@@ -690,29 +690,38 @@ function renderLastMile(d){
     </table></div>`;
   }
 
-  /* ── Tabla 2: Cantidad de transportistas por día (lm_resumen) ── */
+  /* ── Gráfico: Transportistas por día (lm_resumen — META vs VALIDACIÓN) ── */
   const res=(Array.isArray(lm.resumen)?lm.resumen:[]).filter(r=>r.etiqueta!=null);
   let diaHtml='';
   if(res.length){
+    const mx=Math.max(...res.map(r=>Math.max(Number(r.cuentaTrans)||0,Number(r.cuentaVal)||0)),1);
     diaHtml=`
     ${_subLabel('TRANSPORTISTAS POR DÍA')}
-    <div class="bdg-tbl-wrap"><table class="bdg-tbl">
-      <thead><tr>
-        <th class="bdg-sticky-col">Día</th>
-        <th class="r">Validaciones</th>
-        <th class="r">Transportistas</th>
-      </tr></thead>
-      <tbody>${res.map((r,ri)=>{
-        const delay=`animation-delay:${Math.min(ri,14)*40}ms`;
-        const cv=r.cuentaVal!=null?Number(r.cuentaVal):null;
-        const ct=r.cuentaTrans!=null?Number(r.cuentaTrans):null;
-        return`<tr onclick="bdgSelRow(this)" style="${delay}">
-          <td class="bdg-sticky-col" style="font-weight:700;color:var(--orange)">${r.etiqueta||'—'}</td>
-          <td class="r">${cv!=null?_N(cv):'—'}</td>
-          <td class="r" style="font-weight:600">${ct!=null?_N(ct):'—'}</td>
-        </tr>`;
-      }).join('')}</tbody>
-    </table></div>`;
+    <div class="bdg-tbl-wrap" style="padding:16px">
+      <div style="display:flex;gap:14px;font-size:10px;color:#64748B;margin-bottom:12px">
+        <span><span style="color:#E8C9A0;font-size:13px">●</span> META</span>
+        <span><span style="color:#1A3A6B;font-size:13px">●</span> VALIDACIÓN</span>
+      </div>
+      <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;padding-bottom:4px">
+        ${res.map(r=>{
+          const meta=Number(r.cuentaTrans)||0,val=Number(r.cuentaVal)||0;
+          const hm=Math.max(2,Math.round(meta/mx*110)),hv=Math.max(2,Math.round(val/mx*110));
+          return`<div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:48px">
+            <div style="display:flex;gap:3px;align-items:flex-end;height:120px">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+                <span style="font-size:8px;font-weight:700;color:#1E293B">${meta}</span>
+                <div style="width:20px;height:${hm}px;background:#E8C9A0;border-radius:3px 3px 0 0"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+                <span style="font-size:8px;font-weight:700;color:#1E293B">${val}</span>
+                <div style="width:20px;height:${hv}px;background:#1A3A6B;border-radius:3px 3px 0 0"></div>
+              </div>
+            </div>
+            <span style="font-size:9px;font-weight:600;color:#64748B;text-align:center">${r.etiqueta}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
   }
 
   if(!errHtml&&!diaHtml)return`<div class="bdg-empty"><div class="bdg-empty-icon">🚚</div><div class="bdg-empty-msg">Sin datos de Last Mile</div></div>`;
