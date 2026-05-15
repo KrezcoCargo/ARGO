@@ -11,9 +11,9 @@ function _diaThHtml(labels, i){
   if(!raw) return `D${i+1}`;
   // Formato esperado: D{n}_{abbr}{fecha}  ej: D1_Mi6 / D3_J10
   const m = raw.match(/^D\d+_([A-Za-zÁÉÍÓÚáéíóúÜü]+)(\d+)$/);
-  if(m) return `<span style="display:flex;flex-direction:column;align-items:center;gap:1px;text-transform:uppercase">`
-    +`<span style="font-size:8.5px;font-weight:700;letter-spacing:.3px">${m[1]}</span>`
-    +`<span style="font-size:9px;opacity:.7;font-weight:400;letter-spacing:0">${m[2]}</span>`
+  if(m) return `<span style="display:flex;flex-direction:column;align-items:center;gap:0px">`
+    +`<span style="font-size:8px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;line-height:1.2">${m[1]}</span>`
+    +`<span style="font-size:10px;font-weight:700;line-height:1.2;color:rgba(255,255,255,.95)">${m[2]}</span>`
     +`</span>`;
   return raw;
 }
@@ -398,7 +398,7 @@ function renderCobertura(d){
   const glob=totReq>0?totIng/totReq:0,cg=_C(glob);
   const nd=(rows.find(r=>Array.isArray(r.porDia)&&r.porDia.length)||{}).porDia?.length||0;
   const _lbls=d.diaLabels||[];
-  const dayTh=Array.from({length:nd},(_,i)=>`<th class="r bdg-day-th" title="${_lbls[i]||'D'+(i+1)}">${_diaThHtml(_lbls,i)}</th>`).join('');
+  const dayTh=Array.from({length:nd},(_,i)=>`<th class="bdg-day-th" title="${_lbls[i]||'D'+(i+1)}">${_diaThHtml(_lbls,i)}</th>`).join('');
   const trs=rows.map((r,ri)=>{
     const c=_C(r.pct),neg=(r.saldo||0)<0,negR=(r.porRecibir||0)<0;
     const dias=Array.isArray(r.porDia)?r.porDia:[];
@@ -531,7 +531,7 @@ function renderReqDiario(d){
   const rows=_bdgRows('reqDiario',all);
   const nd=rows.length?Math.max(...rows.map(r=>(r.dias||[]).length),0):0;
   const _lbls2=d.diaLabels||[];
-  const dayTh=Array.from({length:nd},(_,i)=>`<th class="r bdg-day-th" title="${_lbls2[i]||'D'+(i+1)}">${_diaThHtml(_lbls2,i)}</th>`).join('');
+  const dayTh=Array.from({length:nd},(_,i)=>`<th class="bdg-day-th" title="${_lbls2[i]||'D'+(i+1)}">${_diaThHtml(_lbls2,i)}</th>`).join('');
   const trs=rows.map((r,ri)=>{
     const dias=Array.isArray(r.dias)?r.dias:[];
     const dCells=Array.from({length:nd},(_,i)=>{
