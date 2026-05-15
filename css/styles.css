@@ -463,7 +463,7 @@ tr:hover td{background:#FBFBFD;}
 .bdg-tbl thead{position:sticky;top:0;z-index:3;background:#094780;box-shadow:0 2px 5px rgba(0,0,0,.20);}
 .bdg-tbl thead tr{background:#094780;}
 .bdg-tbl thead th{padding:6px 7px;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:rgba(255,255,255,.85);text-align:left;white-space:nowrap;background:#094780;}
-.bdg-tbl thead th.bdg-day-th{white-space:normal;vertical-align:middle;padding:4px 2px !important;}
+.bdg-tbl thead th.bdg-day-th{white-space:normal;vertical-align:middle;padding:3px 2px !important;line-height:1;}
 .bdg-tbl thead th.r{text-align:right;}
 .bdg-tbl td,.bdg-tbl th{border-right:1px solid #C8D3E0;}
 .bdg-tbl td:last-child,.bdg-tbl th:last-child{border-right:none;}
@@ -475,8 +475,8 @@ tr:hover td{background:#FBFBFD;}
 .bdg-tbl tbody td.neg{color:#EF4444;font-weight:600;}
 
 /* ── Day columns (ultra-compact to fit D1-D10 without horizontal scroll) ── */
-.bdg-day-th{width:44px !important;min-width:40px !important;max-width:50px !important;text-align:center;}
-.bdg-day-td{width:44px;padding:5px 2px !important;text-align:center;}
+.bdg-day-th{width:46px !important;min-width:42px !important;max-width:52px !important;text-align:center;}
+.bdg-day-td{width:46px;padding:5px 2px !important;text-align:center;}
 
 /* ── Sticky first column ── */
 .bdg-sticky-col{position:sticky;left:0;z-index:2;background:#fff;border-right:2px solid #D1D5DB !important;}
