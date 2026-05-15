@@ -472,7 +472,7 @@ tr:hover td{background:#FBFBFD;}
 .bdg-tbl thead th:last-child{border-radius:0 11px 0 0;}
 .bdg-tbl thead th.bdg-day-th{white-space:normal;vertical-align:middle;padding:3px 2px !important;line-height:1;}
 .bdg-tbl thead th.r{text-align:right;}
-.bdg-tbl td,.bdg-tbl th{border-right:1px solid rgba(200,211,224,.6);}
+.bdg-tbl td,.bdg-tbl th{border-right:1.5px solid #A8BECC;}
 .bdg-tbl td:last-child,.bdg-tbl th:last-child{border-right:none;}
 .bdg-tbl tbody tr:nth-child(odd){background:#fff;}
 .bdg-tbl tbody tr:nth-child(even){background:#F2F7FD;}
