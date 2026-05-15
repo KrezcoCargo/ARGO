@@ -1,7 +1,19 @@
 /* ═══════════════════════════════════════════════════════════
-   BODEGA v6 — compact layout · PBI colors · invSemanal for all
+   BODEGA v7 — compact layout · PBI colors · invSemanal for all
+             · diaLabels desde Excel (D1_Mi6 → Mi<br>6)
 ═══════════════════════════════════════════════════════════ */
 let _bodegaData = null;
+
+/* Convierte "D1_Mi6" → "<span>Mi</span><span>6</span>" para el encabezado de día.
+   Si no hay label usa "D{i+1}" como fallback. */
+function _diaThHtml(labels, i){
+  const raw = labels && labels[i] ? labels[i] : null;
+  if(!raw) return `D${i+1}`;
+  // Formato esperado: D{n}_{abbr}{fecha}  ej: D1_Mi6 / D3_D10
+  const m = raw.match(/^D\d+_([A-Za-zÁÉÍÓÚáéíóúÜü]+)(\d+)$/);
+  if(m) return `<span style="display:block;line-height:1.1">${m[1]}</span><span style="display:block;font-size:9px;opacity:.8;line-height:1">${m[2]}</span>`;
+  return raw;
+}
 let _bodegaView = 'cobertura';
 let _bdgTabOrder = null;
 let _bdgFilter   = {};
@@ -382,7 +394,8 @@ function renderCobertura(d){
   const totIng=rows.reduce((a,r)=>a+(r.ingresos||0),0),totReq=rows.reduce((a,r)=>a+(r.totalReq||0),0);
   const glob=totReq>0?totIng/totReq:0,cg=_C(glob);
   const nd=(rows.find(r=>Array.isArray(r.porDia)&&r.porDia.length)||{}).porDia?.length||0;
-  const dayTh=Array.from({length:nd},(_,i)=>`<th class="r bdg-day-th">D${i+1}</th>`).join('');
+  const _lbls=d.diaLabels||[];
+  const dayTh=Array.from({length:nd},(_,i)=>`<th class="r bdg-day-th" title="${_lbls[i]||'D'+(i+1)}">${_diaThHtml(_lbls,i)}</th>`).join('');
   const trs=rows.map(r=>{
     const c=_C(r.pct),neg=(r.saldo||0)<0,negR=(r.porRecibir||0)<0;
     const dias=Array.isArray(r.porDia)?r.porDia:[];
@@ -513,7 +526,8 @@ function renderReqDiario(d){
   if(!all.length)return`<div class="bdg-empty"><div class="bdg-empty-icon">📅</div><div class="bdg-empty-msg">Sin datos de requerimiento diario</div></div>`;
   const rows=_bdgRows('reqDiario',all);
   const nd=rows.length?Math.max(...rows.map(r=>(r.dias||[]).length),0):0;
-  const dayTh=Array.from({length:nd},(_,i)=>`<th class="r bdg-day-th">D${i+1}</th>`).join('');
+  const _lbls2=d.diaLabels||[];
+  const dayTh=Array.from({length:nd},(_,i)=>`<th class="r bdg-day-th" title="${_lbls2[i]||'D'+(i+1)}">${_diaThHtml(_lbls2,i)}</th>`).join('');
   const trs=rows.map(r=>{
     const dias=Array.isArray(r.dias)?r.dias:[];
     const dCells=Array.from({length:nd},(_,i)=>{
