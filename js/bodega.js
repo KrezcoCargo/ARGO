@@ -506,7 +506,7 @@ function renderCobertura(d){
     }).join('');
     const delay=`animation-delay:${Math.min(ri,14)*45}ms`;
     return`<tr onclick="bdgSelRow(this)" style="${delay}">
-      <td class="bdg-sticky-col" title="${r.producto||''}" style="font-weight:600">${r.producto||'—'}</td>
+      <td class="bdg-sticky-col" style="font-weight:600">${r.producto||'—'}</td>
       <td class="r" data-col="ingresos">${_N(r.ingresos)}</td>
       <td class="r" data-col="req">${_N(r.totalReq)}</td>
       <td class="r${neg?' neg':''}" data-col="saldo">${_N(r.saldo)}</td>${dCells}
@@ -514,8 +514,6 @@ function renderCobertura(d){
       <td class="r${negR?' neg':''}" data-col="porrecibir">${_N(r.porRecibir)}</td>
     </tr>`;
   }).join('');
-  // min-width: product(175) + 3 numeric cols + nd day cols + cobertura(130) + porrecibir = all non-product cols × 82px
-  const _cobW = 175 + (nd + 4) * 82 + 130;
   return`<div class="bdg-section">
     <div class="bdg-kpis">
       <div class="bdg-kpi bdg-kpi--blue"><div class="bdg-kpi-lbl">Total ingresos</div><div class="bdg-kpi-val">${_N(totIng)}</div></div>
@@ -523,7 +521,7 @@ function renderCobertura(d){
       <div class="bdg-kpi bdg-kpi--orange"><div class="bdg-kpi-lbl">Cobertura global</div><div class="bdg-kpi-val" style="color:${cg.fg}">${_P(glob)}</div></div>
       <div class="bdg-kpi"><div class="bdg-kpi-lbl">Productos</div><div class="bdg-kpi-val">${rows.length}</div></div>
     </div>
-    <div class="bdg-tbl-wrap"><table class="bdg-tbl" style="min-width:${_cobW}px">
+    <div class="bdg-tbl-wrap"><table class="bdg-tbl">
       <thead><tr>
         <th class="bdg-sticky-col">Producto</th>
         <th class="r" data-col="ingresos">Ingresos</th>
@@ -578,7 +576,7 @@ function renderProveedores(d){
   const trs=rows.map(r=>{
     const c=_C(r.pct);
     return`<tr onclick="bdgSelRow(this)">
-      <td class="bdg-sticky-col" title="${r.producto||''}" style="font-weight:600">${r.producto||'—'}</td>
+      <td class="bdg-sticky-col" style="font-weight:600">${r.producto||'—'}</td>
       <td class="r">${_N(r.planificado)}</td><td class="r">${_N(r.ingresos)}</td>
       <td style="min-width:160px"><div style="display:flex;flex-direction:column;gap:3px">
         <div style="display:flex;align-items:center;justify-content:space-between">${_badge(r.pct)}<span style="font-size:10px;color:#64748B">${_N(r.ingresos)} / ${_N(r.planificado)}</span></div>
@@ -593,7 +591,7 @@ function renderProveedores(d){
       <div class="bdg-kpi bdg-kpi--orange"><div class="bdg-kpi-lbl">Cumplimiento global</div><div class="bdg-kpi-val" style="color:${_C(glob).fg}">${_P(glob)}</div></div>
       <div class="bdg-kpi"><div class="bdg-kpi-lbl">Proveedores</div><div class="bdg-kpi-val">${rows.length}</div></div>
     </div>
-    <div class="bdg-tbl-wrap"><table class="bdg-tbl" style="min-width:700px">
+    <div class="bdg-tbl-wrap"><table class="bdg-tbl">
       <thead><tr><th class="bdg-sticky-col">Proveedor / Producto</th><th class="r">Planificado</th><th class="r">Ingresos</th><th>Cumplimiento</th></tr></thead>
       <tbody>${trs}</tbody>
     </table></div>
@@ -609,7 +607,7 @@ function renderLotesFinales(d){
   const trs=rows.map(r=>{
     const c=_C(r.pct),neg=(r.porRecibir||0)<0;
     return`<tr onclick="bdgSelRow(this)">
-      <td class="bdg-sticky-col" title="${r.producto||''}" style="font-weight:600">${r.producto||'—'}</td>
+      <td class="bdg-sticky-col" style="font-weight:600">${r.producto||'—'}</td>
       <td class="r${neg?' neg':''}">${_N(r.porRecibir)}</td>
       <td style="min-width:150px"><div style="display:flex;align-items:center;gap:7px">${_badge(r.pct)}<div style="flex:1">${_bar(r.pct,c.bar,5)}</div></div></td>
       <td style="font-size:11px;color:#64748B">${r.lotes&&r.lotes!=='—'&&r.lotes!=='-'?r.lotes:'—'}</td>
@@ -621,7 +619,7 @@ function renderLotesFinales(d){
       <div class="bdg-kpi bdg-kpi--red"><div class="bdg-kpi-lbl">Críticos &lt;70%</div><div class="bdg-kpi-val">${crit}</div></div>
       <div class="bdg-kpi"><div class="bdg-kpi-lbl">Total productos</div><div class="bdg-kpi-val">${rows.length}</div></div>
     </div>
-    <div class="bdg-tbl-wrap"><table class="bdg-tbl" style="min-width:700px">
+    <div class="bdg-tbl-wrap"><table class="bdg-tbl">
       <thead><tr><th class="bdg-sticky-col">Producto</th><th class="r">Por recibir</th><th>Cobertura</th><th>Lotes</th></tr></thead>
       <tbody>${trs}</tbody>
     </table></div>
@@ -644,15 +642,14 @@ function renderReqDiario(d){
     }).join('');
     const delay=`animation-delay:${Math.min(ri,14)*45}ms`;
     return`<tr onclick="bdgSelRow(this)" style="${delay}">
-      <td class="bdg-sticky-col" title="${r.producto||''}" style="font-weight:600">${r.producto||'—'}</td>
+      <td class="bdg-sticky-col" style="font-weight:600">${r.producto||'—'}</td>
       ${dCells}
       <td class="r" data-col="distributivo" style="font-weight:700;color:var(--orange)">${_N(r.distributivo)}</td>
       <td class="r" data-col="numDias">${r.numDias||'—'}</td>
     </tr>`;
   }).join('');
-  const _reqW = 175 + (nd + 2) * 82;
   return`<div class="bdg-section">
-    <div class="bdg-tbl-wrap"><table class="bdg-tbl" style="min-width:${_reqW}px">
+    <div class="bdg-tbl-wrap"><table class="bdg-tbl">
       <thead><tr>
         <th class="bdg-sticky-col">Producto</th>${dayTh}
         <th class="r" data-col="distributivo">Distributivo</th>
@@ -688,7 +685,7 @@ function renderLastMile(d){
       <tbody>${pivot.map((r,ri)=>{
         const delay=`animation-delay:${Math.min(ri,14)*40}ms`;
         return`<tr onclick="bdgSelRow(this)" style="${delay}">
-          <td class="bdg-sticky-col" title="${r.transportista||''}" style="font-weight:600">${r.transportista||''}</td>
+          <td class="bdg-sticky-col" style="font-weight:600">${r.transportista||''}</td>
           ${valKeys.map(k=>{
             const v=Number(r[k]);
             if(r[k]==null||r[k]===''||isNaN(v)||v===0) return`<td class="r"></td>`;
