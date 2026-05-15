@@ -666,7 +666,7 @@ function renderLastMile(d){
 
   /* ── Tabla 1: Errores por transportista ── */
   const pivot=(Array.isArray(lm.pivot)?lm.pivot:[])
-    .filter(r=>r.transportista||Object.entries(r).some(([k,v])=>k!=='transportista'&&v!=null&&Number(v)>0));
+    .filter(r=>r.transportista&&!/^total/i.test(r.transportista.trim()));
   let errHtml='';
   if(pivot.length){
     const valKeys=Object.keys(pivot[0]).filter(k=>k!=='transportista');
