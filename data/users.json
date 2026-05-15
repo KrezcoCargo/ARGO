@@ -55,12 +55,11 @@
   {
     "username": "boduio",
     "name": "Bodega",
-    "role": "editor",
+    "role": "viewer",
     "pwdHash": "08c26ad95e368f57be44911abb1b9535e4f1abb0d05f188721540c5b11a4d695",
     "created": "2026-05-08T00:00:00.000Z",
     "tenants": [
-      "krezco",
-      "worldvision"
+      "krezco"
     ]
   },
   {
