@@ -4,7 +4,7 @@
       "producto": "LECHE ENTERA",
       "ingresos": 2139121,
       "totalReq": 2526643,
-      "saldo": 294600,
+      "saldo": 205917,
       "porDia": [
         1880373,
         1629829,
@@ -25,7 +25,7 @@
       "producto": "NÉCTAR PERA",
       "ingresos": 363023,
       "totalReq": 360949,
-      "saldo": 99520,
+      "saldo": 86851,
       "porDia": [
         326059,
         290267,
@@ -46,7 +46,7 @@
       "producto": "NÉCTAR PERA-BANANO O MANGO-BANANA",
       "ingresos": 370755,
       "totalReq": 360949,
-      "saldo": 107252,
+      "saldo": 94583,
       "porDia": [
         333791,
         297999,
@@ -67,7 +67,7 @@
       "producto": "NÉCTAR PERA-MANGO",
       "ingresos": 363030,
       "totalReq": 360949,
-      "saldo": 99527,
+      "saldo": 86858,
       "porDia": [
         326066,
         290274,
@@ -109,7 +109,7 @@
       "producto": "PURÉ MANGO-PERA",
       "ingresos": 1410141,
       "totalReq": 1443796,
-      "saldo": 356129,
+      "saldo": 305453,
       "porDia": [
         1262285,
         1119117,
@@ -130,7 +130,7 @@
       "producto": "LECHE CEREAL CHOCOLATE",
       "ingresos": 725429,
       "totalReq": 721898,
-      "saldo": 198423,
+      "saldo": 173085,
       "porDia": [
         651501,
         579917,
@@ -151,7 +151,7 @@
       "producto": "LECHE CEREAL FRESA",
       "ingresos": 362983,
       "totalReq": 360949,
-      "saldo": 99480,
+      "saldo": 86811,
       "porDia": [
         326019,
         290227,
@@ -172,7 +172,7 @@
       "producto": "LECHE SABORIZADA CHOCOLATE",
       "ingresos": 725816,
       "totalReq": 721898,
-      "saldo": 198810,
+      "saldo": 173472,
       "porDia": [
         651888,
         580304,
@@ -193,7 +193,7 @@
       "producto": "LECHE SABORIZADA FRESA",
       "ingresos": 363168,
       "totalReq": 360949,
-      "saldo": 99665,
+      "saldo": 86996,
       "porDia": [
         326204,
         290412,
@@ -214,7 +214,7 @@
       "producto": "EXTRUIDO JAMÓN SERRANO",
       "ingresos": 722456,
       "totalReq": 721898,
-      "saldo": 195450,
+      "saldo": 170112,
       "porDia": [
         648528,
         576944,
@@ -235,7 +235,7 @@
       "producto": "EXTRUIDO POLLO A LA BRASA",
       "ingresos": 361372,
       "totalReq": 360949,
-      "saldo": 97869,
+      "saldo": 85200,
       "porDia": [
         324408,
         288616,
@@ -256,7 +256,7 @@
       "producto": "GALLETA RELLENA FRESA O FRUTOS ROJOS",
       "ingresos": 1444787,
       "totalReq": 1443796,
-      "saldo": 390775,
+      "saldo": 340099,
       "porDia": [
         1296931,
         1153763,
@@ -277,7 +277,7 @@
       "producto": "GALLETA RELLENA CHOCOLATE O FRUTOS AMARILLOS",
       "ingresos": 1105218,
       "totalReq": 1082847,
-      "saldo": 314709,
+      "saldo": 276702,
       "porDia": [
         994326,
         886950,
@@ -298,7 +298,7 @@
       "producto": "GRANOLA",
       "ingresos": 1444731,
       "totalReq": 1443796,
-      "saldo": 390719,
+      "saldo": 340043,
       "porDia": [
         1296875,
         1153707,
@@ -317,30 +317,30 @@
     },
     {
       "producto": "GALLETA SAL",
-      "ingresos": 905876,
+      "ingresos": 1110716,
       "totalReq": 1082847,
-      "saldo": 115367,
+      "saldo": 282200,
       "porDia": [
-        794984,
-        687608,
-        563381,
-        473477,
-        364622,
-        251402,
-        155930,
-        16646,
-        -93808,
-        -145225,
-        -176971
+        999824,
+        892448,
+        768221,
+        678317,
+        569462,
+        456242,
+        360770,
+        221486,
+        111032,
+        59615,
+        27869
       ],
-      "porRecibir": -176971,
-      "pct": 0.8365687858026111
+      "porRecibir": 27869,
+      "pct": 1.0257367846057661
     },
     {
       "producto": "GALLETA DULCE",
       "ingresos": 1085409,
       "totalReq": 1082847,
-      "saldo": 294900,
+      "saldo": 256893,
       "porDia": [
         974517,
         867141,
@@ -479,10 +479,10 @@
     },
     {
       "producto": "GALLETA SAL",
-      "ingresos": 905876,
+      "ingresos": 1110716,
       "totalReq": 1082847,
-      "porRecibir": -176971,
-      "pct": 0.8365687858026111
+      "porRecibir": 27869,
+      "pct": 1.0257367846057661
     },
     {
       "producto": "GALLETA DULCE",
@@ -493,10 +493,10 @@
     },
     {
       "producto": "TOTAL GALLETA",
-      "ingresos": 1991285,
+      "ingresos": 2196125,
       "totalReq": 2165694,
-      "porRecibir": -174409,
-      "pct": 0.91946738551245
+      "porRecibir": 30431,
+      "pct": 1.0140513849140276
     }
   ],
   "proveedores": [
@@ -623,8 +623,8 @@
     {
       "producto": "GALLETA SAL TOMATE Y QUESO",
       "planificado": 1119420,
-      "ingresos": 905876,
-      "pct": 0.8092369262653875
+      "ingresos": 1110716,
+      "pct": 0.9922245448535849
     },
     {
       "producto": "GALLETA DULCE CHOCOCHIPS",
@@ -641,8 +641,8 @@
     {
       "producto": "TOTAL GALLETA",
       "planificado": 2239260,
-      "ingresos": 1991285,
-      "pct": 0.8892602913462483
+      "ingresos": 2196125,
+      "pct": 0.9807369398819252
     }
   ],
   "lotesFinales": [
@@ -738,8 +738,8 @@
     },
     {
       "producto": "GALLETA SAL",
-      "porRecibir": -176971,
-      "pct": 0.8365687858026111,
+      "porRecibir": 27869,
+      "pct": 1.0257367846057661,
       "lotes": "-"
     },
     {
@@ -750,8 +750,8 @@
     },
     {
       "producto": "TOTAL GALLETA",
-      "porRecibir": -174409,
-      "pct": 0.91946738551245,
+      "porRecibir": 30431,
+      "pct": 1.0140513849140276,
       "lotes": "-"
     }
   ],
@@ -1410,6 +1410,23 @@
         "B15": null
       },
       {
+        "transportista": "DELIA COBA",
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "Total general": null,
+        "B13": null,
+        "B14": null,
+        "B15": null
+      },
+      {
         "transportista": "EDISON QUINATOA",
         "1": null,
         "2": null,
@@ -1649,23 +1666,6 @@
       },
       {
         "transportista": "WILSON QUINATOA",
-        "1": null,
-        "2": null,
-        "3": null,
-        "4": null,
-        "5": null,
-        "6": null,
-        "7": null,
-        "8": null,
-        "9": null,
-        "10": null,
-        "Total general": null,
-        "B13": null,
-        "B14": null,
-        "B15": null
-      },
-      {
-        "transportista": "DELIA COBA",
         "1": null,
         "2": null,
         "3": null,
@@ -5785,9 +5785,9 @@
       }
     ]
   },
-  "updatedAt": "15/05/2026 14:50",
+  "updatedAt": "15/05/2026 15:50",
   "_meta": {
-    "generado": "15/05/2026 14:50",
+    "generado": "15/05/2026 15:50",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
