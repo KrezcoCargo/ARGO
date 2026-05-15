@@ -9,9 +9,12 @@ let _bodegaData = null;
 function _diaThHtml(labels, i){
   const raw = labels && labels[i] ? labels[i] : null;
   if(!raw) return `D${i+1}`;
-  // Formato esperado: D{n}_{abbr}{fecha}  ej: D1_Mi6 / D3_D10
+  // Formato esperado: D{n}_{abbr}{fecha}  ej: D1_Mi6 / D3_J10
   const m = raw.match(/^D\d+_([A-Za-zÁÉÍÓÚáéíóúÜü]+)(\d+)$/);
-  if(m) return `<span style="display:block;line-height:1.1">${m[1]}</span><span style="display:block;font-size:9px;opacity:.8;line-height:1">${m[2]}</span>`;
+  if(m) return `<span style="display:flex;flex-direction:column;align-items:center;gap:1px;text-transform:uppercase">`
+    +`<span style="font-size:8.5px;font-weight:700;letter-spacing:.3px">${m[1]}</span>`
+    +`<span style="font-size:9px;opacity:.7;font-weight:400;letter-spacing:0">${m[2]}</span>`
+    +`</span>`;
   return raw;
 }
 let _bodegaView = 'cobertura';
@@ -396,14 +399,15 @@ function renderCobertura(d){
   const nd=(rows.find(r=>Array.isArray(r.porDia)&&r.porDia.length)||{}).porDia?.length||0;
   const _lbls=d.diaLabels||[];
   const dayTh=Array.from({length:nd},(_,i)=>`<th class="r bdg-day-th" title="${_lbls[i]||'D'+(i+1)}">${_diaThHtml(_lbls,i)}</th>`).join('');
-  const trs=rows.map(r=>{
+  const trs=rows.map((r,ri)=>{
     const c=_C(r.pct),neg=(r.saldo||0)<0,negR=(r.porRecibir||0)<0;
     const dias=Array.isArray(r.porDia)?r.porDia:[];
     const dCells=Array.from({length:nd},(_,i)=>{
       const v=dias[i];if(v==null)return`<td class="r bdg-day-td" style="color:#CBD5E1">—</td>`;
       return`<td class="r bdg-day-td${Number(v)<0?' neg':''}">${_N(v)}</td>`;
     }).join('');
-    return`<tr onclick="bdgSelRow(this)">
+    const delay=`animation-delay:${Math.min(ri,14)*45}ms`;
+    return`<tr onclick="bdgSelRow(this)" style="${delay}">
       <td class="bdg-sticky-col" style="font-weight:600;white-space:nowrap">${r.producto||'—'}</td>
       <td class="r">${_N(r.ingresos)}</td><td class="r">${_N(r.totalReq)}</td>
       <td class="r${neg?' neg':''}">${_N(r.saldo)}</td>${dCells}
@@ -528,13 +532,14 @@ function renderReqDiario(d){
   const nd=rows.length?Math.max(...rows.map(r=>(r.dias||[]).length),0):0;
   const _lbls2=d.diaLabels||[];
   const dayTh=Array.from({length:nd},(_,i)=>`<th class="r bdg-day-th" title="${_lbls2[i]||'D'+(i+1)}">${_diaThHtml(_lbls2,i)}</th>`).join('');
-  const trs=rows.map(r=>{
+  const trs=rows.map((r,ri)=>{
     const dias=Array.isArray(r.dias)?r.dias:[];
     const dCells=Array.from({length:nd},(_,i)=>{
       const v=dias[i];if(v==null||v==='')return`<td class="r bdg-day-td" style="color:#CBD5E1">—</td>`;
       return`<td class="r bdg-day-td">${_N(v)}</td>`;
     }).join('');
-    return`<tr onclick="bdgSelRow(this)">
+    const delay=`animation-delay:${Math.min(ri,14)*45}ms`;
+    return`<tr onclick="bdgSelRow(this)" style="${delay}">
       <td class="bdg-sticky-col" style="font-weight:600;white-space:nowrap">${r.producto||'—'}</td>
       ${dCells}
       <td class="r" style="font-weight:700;color:var(--orange)">${_N(r.distributivo)}</td>
