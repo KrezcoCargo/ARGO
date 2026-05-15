@@ -11,20 +11,27 @@ function _diaThHtml(labels, i){
   if(!raw) return `D${i+1}`;
   // Formato esperado: D{n}_{abbr}{fecha}  ej: D1_Mi6 / D3_J10
   const m = raw.match(/^D\d+_([A-Za-zÁÉÍÓÚáéíóúÜü]+)(\d+)$/);
-  if(m) return `<span style="display:flex;flex-direction:column;align-items:center;gap:0px">`
-    +`<span style="font-size:8px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;line-height:1.2">${m[1]}</span>`
+  if(m) return `<span style="display:flex;flex-direction:column;align-items:center;gap:0">`
+    +`<span style="font-size:7px;font-weight:600;line-height:1.1;color:rgba(255,255,255,.65)">D${i+1}</span>`
+    +`<span style="font-size:8px;font-weight:800;text-transform:uppercase;line-height:1.2">${m[1]}</span>`
     +`<span style="font-size:10px;font-weight:700;line-height:1.2;color:rgba(255,255,255,.95)">${m[2]}</span>`
     +`</span>`;
-  return raw;
+  // label no coincide con patrón → mostrar igual con D{i+1}
+  return `<span style="display:flex;flex-direction:column;align-items:center;gap:0">`
+    +`<span style="font-size:7px;color:rgba(255,255,255,.65)">D${i+1}</span>`
+    +`<span style="font-size:8.5px">${raw}</span>`
+    +`</span>`;
 }
 let _bodegaView = 'cobertura';
 let _bdgTabOrder = null;
 let _bdgFilter   = {};
+let _bdgColHidden= {};          // {viewId: Set<colId>}
 let _bdgDragTab  = null;
 let _bdgZoom     = 100;
 let _bdgFilterPushTimer = null;
 let _bdgPollTimer       = null;
 let _bdgFilterOpen      = false;
+let _bdgColOpen         = false;
 
 const GH_FILTER_PATH = 'data/bodega-filter.json';
 
@@ -44,6 +51,10 @@ function _bdgLoad(){
   try{_bdgTabOrder=JSON.parse(localStorage.getItem('kc_bdg_order')||'null');}catch{}
   try{_bdgFilter=JSON.parse(localStorage.getItem('kc_bdg_filter')||'{}');}catch{}
   try{_bdgZoom=parseInt(localStorage.getItem('kc_bdg_zoom')||'100');}catch{}
+  try{
+    const raw=JSON.parse(localStorage.getItem('kc_bdg_col')||'{}');
+    Object.keys(raw).forEach(k=>_bdgColHidden[k]=new Set(raw[k]));
+  }catch{}
 }
 function _bdgSaveOrder(){ localStorage.setItem('kc_bdg_order',JSON.stringify(_bdgTabOrder)); }
 
@@ -178,6 +189,7 @@ function _renderToolbar(){
       ${upd?`<span class="bdg-upd-tag">🕐 ${upd}</span>`:''}
       ${isSA?`<button class="bdg-filter-btn" id="bdg-filter-btn" onclick="bdgToggleFilterPanel()">⚙️ Filtrar</button>
               <span id="bdg-pub-status" class="bdg-pub-status" style="display:none"></span>`:''}
+      <button class="bdg-filter-btn" id="bdg-col-btn" onclick="bdgToggleColPanel()">⊟ Columnas</button>
     </div>
     <div class="bdg-toolbar-right">
       <div class="bdg-zoom-ctrl">
@@ -195,6 +207,13 @@ function _ensureFilterPanel(){
   const pg=document.getElementById('pg-bodega'),body=document.getElementById('bodega-content');
   if(!pg||!body)return;
   const p=document.createElement('div');p.id='bdg-filter-panel';p.className='bdg-filter-panel';
+  pg.insertBefore(p,body);
+}
+function _ensureColPanel(){
+  if(document.getElementById('bdg-col-panel'))return;
+  const pg=document.getElementById('pg-bodega'),body=document.getElementById('bodega-content');
+  if(!pg||!body)return;
+  const p=document.createElement('div');p.id='bdg-col-panel';p.className='bdg-filter-panel';
   pg.insertBefore(p,body);
 }
 function bdgToggleFilterPanel(){
@@ -227,6 +246,83 @@ function _bdgGetProdsForView(viewId){
   return(_bodegaData[m[viewId]]||[]).map(r=>r.producto).filter(Boolean);
 }
 
+/* ── COLUMN FILTER ── */
+function _getViewColDefs(viewId){
+  if(!_bodegaData)return[];
+  const lbls=_bodegaData.diaLabels||[];
+  let nd=0;
+  if(viewId==='cobertura'){
+    const r=(_bodegaData.cobertura||[]).find(r=>Array.isArray(r.porDia)&&r.porDia.length);
+    nd=r?r.porDia.length:0;
+  } else if(viewId==='reqDiario'){
+    const rows=_bodegaData.requerimientoDiario||[];
+    nd=rows.length?Math.max(...rows.map(r=>(r.dias||[]).length)):0;
+  }
+  const days=Array.from({length:nd},(_,i)=>{
+    const raw=lbls[i]||'';
+    const m2=raw.match(/^D\d+_([A-Za-zÁÉÍÓÚáéíóúÜü]+)(\d+)$/);
+    return{id:`dia${i+1}`,label:m2?`D${i+1} · ${m2[1]}${m2[2]}`:`D${i+1}`};
+  });
+  if(viewId==='cobertura') return[
+    {id:'ingresos',  label:'Ingresos'},
+    {id:'req',       label:'Req.'},
+    {id:'saldo',     label:'Saldo'},
+    ...days,
+    {id:'cobertura', label:'Cobertura'},
+    {id:'porrecibir',label:'Por Recibir'}
+  ];
+  if(viewId==='reqDiario') return[
+    ...days,
+    {id:'distributivo',label:'Distributivo'},
+    {id:'numDias',     label:'Días'}
+  ];
+  return[];
+}
+function bdgToggleColPanel(){
+  _bdgColOpen=!_bdgColOpen;
+  _ensureColPanel();
+  const p=document.getElementById('bdg-col-panel');
+  if(p)p.classList.toggle('open',_bdgColOpen);
+  if(_bdgColOpen)_updateColPanel(_bodegaView);
+}
+function _updateColPanel(viewId){
+  const p=document.getElementById('bdg-col-panel');
+  const btn=document.getElementById('bdg-col-btn');
+  if(!p||!_bdgColOpen)return;
+  const cols=_getViewColDefs(viewId);
+  if(!cols.length){
+    p.innerHTML='<div style="padding:6px 16px;font-size:11px;color:#94A3B8">Sin columnas filtrables en esta vista.</div>';
+    if(btn)btn.innerHTML='⊟ Columnas';return;
+  }
+  const hidden=_bdgColHidden[viewId]||new Set();
+  const vis=cols.length-hidden.size;
+  const chips=cols.map(c=>{
+    const off=hidden.has(c.id),s=c.id.replace(/'/g,"\\'");
+    return`<label class="bdg-fchip${off?' bdg-fchip--off':''}"><input type="checkbox" ${off?'':'checked'} onchange="bdgToggleCol('${viewId}','${s}',this.checked)" style="display:none">${c.label}</label>`;
+  }).join('');
+  p.innerHTML=`<div class="bdg-fchips">${chips}</div>`;
+  if(btn)btn.innerHTML=`⊟ Columnas <span class="bdg-fbadge">${vis}/${cols.length}</span>`;
+}
+function bdgToggleCol(viewId,colId,visible){
+  if(!_bdgColHidden[viewId])_bdgColHidden[viewId]=new Set();
+  if(!visible)_bdgColHidden[viewId].add(colId);
+  else _bdgColHidden[viewId].delete(colId);
+  // persist
+  const serial={};
+  Object.keys(_bdgColHidden).forEach(k=>serial[k]=[..._bdgColHidden[k]]);
+  localStorage.setItem('kc_bdg_col',JSON.stringify(serial));
+  _applyColHidden(viewId);
+  _updateColPanel(viewId);
+}
+function _applyColHidden(viewId){
+  const hidden=_bdgColHidden[viewId]||new Set();
+  const content=document.getElementById('bodega-content');
+  if(!content)return;
+  content.querySelectorAll('[data-col]').forEach(el=>{
+    el.style.display=hidden.has(el.dataset.col)?'none':'';
+  });
+}
+
 /* ─── zoom ─── */
 function bdgZoomIn(){_bdgZoom=Math.min(200,_bdgZoom+10);_applyZoom();}
 function bdgZoomOut(){_bdgZoom=Math.max(50,_bdgZoom-10);_applyZoom();}
@@ -257,11 +353,15 @@ function renderBodegaView(v){
     case'proveedores':   w.innerHTML=renderProveedores(d);break;
     case'lotesFinales':  w.innerHTML=renderLotesFinales(d);break;
     case'reqDiario':     w.innerHTML=renderReqDiario(d);break;
+    /* falls through to default for other views */
     case'lastmile':      w.innerHTML=renderLastMile(d);break;
     case'graficas':      w.innerHTML=renderGraficas(d);break;
     case'invSemanal':    w.innerHTML=renderInvSemanal(d);break;
     default:w.innerHTML='<div class="bdg-empty"><div class="bdg-empty-msg">Vista no disponible</div></div>';
   }
+  // apply column visibility and update col panel badge
+  _applyColHidden(v);
+  if(_bdgColOpen)_updateColPanel(v);
 }
 
 /* ─── drag & drop ─── */
@@ -403,16 +503,17 @@ function renderCobertura(d){
     const c=_C(r.pct),neg=(r.saldo||0)<0,negR=(r.porRecibir||0)<0;
     const dias=Array.isArray(r.porDia)?r.porDia:[];
     const dCells=Array.from({length:nd},(_,i)=>{
-      const v=dias[i];if(v==null)return`<td class="r bdg-day-td" style="color:#CBD5E1">—</td>`;
-      return`<td class="r bdg-day-td${Number(v)<0?' neg':''}">${_N(v)}</td>`;
+      const v=dias[i];if(v==null)return`<td class="r bdg-day-td" data-col="dia${i+1}" style="color:#CBD5E1">—</td>`;
+      return`<td class="r bdg-day-td${Number(v)<0?' neg':''}" data-col="dia${i+1}">${_N(v)}</td>`;
     }).join('');
     const delay=`animation-delay:${Math.min(ri,14)*45}ms`;
     return`<tr onclick="bdgSelRow(this)" style="${delay}">
       <td class="bdg-sticky-col" style="font-weight:600;white-space:nowrap">${r.producto||'—'}</td>
-      <td class="r">${_N(r.ingresos)}</td><td class="r">${_N(r.totalReq)}</td>
-      <td class="r${neg?' neg':''}">${_N(r.saldo)}</td>${dCells}
-      <td style="min-width:120px"><div style="display:flex;align-items:center;gap:5px">${_badge(r.pct)}<div style="flex:1">${_bar(r.pct,c.bar,4)}</div></div></td>
-      <td class="r${negR?' neg':''}">${_N(r.porRecibir)}</td>
+      <td class="r" data-col="ingresos">${_N(r.ingresos)}</td>
+      <td class="r" data-col="req">${_N(r.totalReq)}</td>
+      <td class="r${neg?' neg':''}" data-col="saldo">${_N(r.saldo)}</td>${dCells}
+      <td data-col="cobertura" style="min-width:120px"><div style="display:flex;align-items:center;gap:5px">${_badge(r.pct)}<div style="flex:1">${_bar(r.pct,c.bar,4)}</div></div></td>
+      <td class="r${negR?' neg':''}" data-col="porrecibir">${_N(r.porRecibir)}</td>
     </tr>`;
   }).join('');
   return`<div class="bdg-section">
@@ -425,9 +526,12 @@ function renderCobertura(d){
     <div class="bdg-tbl-wrap"><table class="bdg-tbl">
       <thead><tr>
         <th class="bdg-sticky-col">Producto</th>
-        <th class="r">Ingresos</th><th class="r">Req.</th><th class="r">Saldo</th>
+        <th class="r" data-col="ingresos">Ingresos</th>
+        <th class="r" data-col="req">Req.</th>
+        <th class="r" data-col="saldo">Saldo</th>
         ${dayTh}
-        <th style="min-width:120px">Cobertura</th><th class="r">Por recibir</th>
+        <th data-col="cobertura" style="min-width:120px">Cobertura</th>
+        <th class="r" data-col="porrecibir">Por recibir</th>
       </tr></thead>
       <tbody>${trs}</tbody>
     </table></div>
@@ -535,22 +639,23 @@ function renderReqDiario(d){
   const trs=rows.map((r,ri)=>{
     const dias=Array.isArray(r.dias)?r.dias:[];
     const dCells=Array.from({length:nd},(_,i)=>{
-      const v=dias[i];if(v==null||v==='')return`<td class="r bdg-day-td" style="color:#CBD5E1">—</td>`;
-      return`<td class="r bdg-day-td">${_N(v)}</td>`;
+      const v=dias[i];if(v==null||v==='')return`<td class="r bdg-day-td" data-col="dia${i+1}" style="color:#CBD5E1">—</td>`;
+      return`<td class="r bdg-day-td" data-col="dia${i+1}">${_N(v)}</td>`;
     }).join('');
     const delay=`animation-delay:${Math.min(ri,14)*45}ms`;
     return`<tr onclick="bdgSelRow(this)" style="${delay}">
       <td class="bdg-sticky-col" style="font-weight:600;white-space:nowrap">${r.producto||'—'}</td>
       ${dCells}
-      <td class="r" style="font-weight:700;color:var(--orange)">${_N(r.distributivo)}</td>
-      <td class="r">${r.numDias||'—'}</td>
+      <td class="r" data-col="distributivo" style="font-weight:700;color:var(--orange)">${_N(r.distributivo)}</td>
+      <td class="r" data-col="numDias">${r.numDias||'—'}</td>
     </tr>`;
   }).join('');
   return`<div class="bdg-section">
     <div class="bdg-tbl-wrap"><table class="bdg-tbl">
       <thead><tr>
         <th class="bdg-sticky-col">Producto</th>${dayTh}
-        <th class="r">Distributivo</th><th class="r">Días</th>
+        <th class="r" data-col="distributivo">Distributivo</th>
+        <th class="r" data-col="numDias">Días</th>
       </tr></thead>
       <tbody>${trs}</tbody>
     </table></div>
