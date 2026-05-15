@@ -514,6 +514,8 @@ function renderCobertura(d){
       <td class="r${negR?' neg':''}" data-col="porrecibir">${_N(r.porRecibir)}</td>
     </tr>`;
   }).join('');
+  // min-width: product(175) + 3 numeric cols + nd day cols + cobertura(130) + porrecibir = all non-product cols × 82px
+  const _cobW = 175 + (nd + 4) * 82 + 130;
   return`<div class="bdg-section">
     <div class="bdg-kpis">
       <div class="bdg-kpi bdg-kpi--blue"><div class="bdg-kpi-lbl">Total ingresos</div><div class="bdg-kpi-val">${_N(totIng)}</div></div>
@@ -521,14 +523,14 @@ function renderCobertura(d){
       <div class="bdg-kpi bdg-kpi--orange"><div class="bdg-kpi-lbl">Cobertura global</div><div class="bdg-kpi-val" style="color:${cg.fg}">${_P(glob)}</div></div>
       <div class="bdg-kpi"><div class="bdg-kpi-lbl">Productos</div><div class="bdg-kpi-val">${rows.length}</div></div>
     </div>
-    <div class="bdg-tbl-wrap"><table class="bdg-tbl">
+    <div class="bdg-tbl-wrap"><table class="bdg-tbl" style="min-width:${_cobW}px">
       <thead><tr>
         <th class="bdg-sticky-col">Producto</th>
         <th class="r" data-col="ingresos">Ingresos</th>
         <th class="r" data-col="req">Req.</th>
         <th class="r" data-col="saldo">Saldo</th>
         ${dayTh}
-        <th data-col="cobertura" style="min-width:120px">Cobertura</th>
+        <th data-col="cobertura">Cobertura</th>
         <th class="r" data-col="porrecibir">Por recibir</th>
       </tr></thead>
       <tbody>${trs}</tbody>
@@ -591,7 +593,7 @@ function renderProveedores(d){
       <div class="bdg-kpi bdg-kpi--orange"><div class="bdg-kpi-lbl">Cumplimiento global</div><div class="bdg-kpi-val" style="color:${_C(glob).fg}">${_P(glob)}</div></div>
       <div class="bdg-kpi"><div class="bdg-kpi-lbl">Proveedores</div><div class="bdg-kpi-val">${rows.length}</div></div>
     </div>
-    <div class="bdg-tbl-wrap"><table class="bdg-tbl">
+    <div class="bdg-tbl-wrap"><table class="bdg-tbl" style="min-width:700px">
       <thead><tr><th class="bdg-sticky-col">Proveedor / Producto</th><th class="r">Planificado</th><th class="r">Ingresos</th><th>Cumplimiento</th></tr></thead>
       <tbody>${trs}</tbody>
     </table></div>
@@ -619,7 +621,7 @@ function renderLotesFinales(d){
       <div class="bdg-kpi bdg-kpi--red"><div class="bdg-kpi-lbl">Críticos &lt;70%</div><div class="bdg-kpi-val">${crit}</div></div>
       <div class="bdg-kpi"><div class="bdg-kpi-lbl">Total productos</div><div class="bdg-kpi-val">${rows.length}</div></div>
     </div>
-    <div class="bdg-tbl-wrap"><table class="bdg-tbl">
+    <div class="bdg-tbl-wrap"><table class="bdg-tbl" style="min-width:700px">
       <thead><tr><th class="bdg-sticky-col">Producto</th><th class="r">Por recibir</th><th>Cobertura</th><th>Lotes</th></tr></thead>
       <tbody>${trs}</tbody>
     </table></div>
@@ -648,8 +650,9 @@ function renderReqDiario(d){
       <td class="r" data-col="numDias">${r.numDias||'—'}</td>
     </tr>`;
   }).join('');
+  const _reqW = 175 + (nd + 2) * 82;
   return`<div class="bdg-section">
-    <div class="bdg-tbl-wrap"><table class="bdg-tbl">
+    <div class="bdg-tbl-wrap"><table class="bdg-tbl" style="min-width:${_reqW}px">
       <thead><tr>
         <th class="bdg-sticky-col">Producto</th>${dayTh}
         <th class="r" data-col="distributivo">Distributivo</th>
