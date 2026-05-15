@@ -4,7 +4,7 @@
                           "producto":  "LECHE ENTERA",
                           "ingresos":  2026225,
                           "totalReq":  2526643,
-                          "saldo":  499119,
+                          "saldo":  273103,
                           "porDia":  [
                                          1767477,
                                          1516933,
@@ -15,17 +15,17 @@
                                          276351,
                                          -48645,
                                          -306371,
-                                         -426344
+                                         -426344,
+                                         -500418
                                      ],
                           "porRecibir":  -500418,
-                          "pct":  0.80194352743937314,
-                          "orden":  2
+                          "pct":  0.80194352743937314
                       },
                       {
                           "producto":  "NÉCTAR PERA",
                           "ingresos":  363023,
                           "totalReq":  360949,
-                          "saldo":  144865,
+                          "saldo":  112577,
                           "porDia":  [
                                          326059,
                                          290267,
@@ -36,17 +36,17 @@
                                          113041,
                                          66613,
                                          29795,
-                                         12656
+                                         12656,
+                                         2074
                                      ],
                           "porRecibir":  2074,
-                          "pct":  1.0057459641112734,
-                          "orden":  3
+                          "pct":  1.0057459641112734
                       },
                       {
                           "producto":  "NÉCTAR PERA-BANANO O MANGO-BANANA",
                           "ingresos":  370755,
                           "totalReq":  360949,
-                          "saldo":  152597,
+                          "saldo":  120309,
                           "porDia":  [
                                          333791,
                                          297999,
@@ -57,32 +57,32 @@
                                          120773,
                                          74345,
                                          37527,
-                                         20388
+                                         20388,
+                                         9806
                                      ],
                           "porRecibir":  9806,
-                          "pct":  1.0271672729388359,
-                          "orden":  4
+                          "pct":  1.0271672729388361
                       },
                       {
                           "producto":  "NÉCTAR PERA-MANGO",
-                          "ingresos":  329382,
+                          "ingresos":  363030,
                           "totalReq":  360949,
-                          "saldo":  111224,
+                          "saldo":  112584,
                           "porDia":  [
-                                         292418,
-                                         256626,
-                                         215217,
-                                         185249,
-                                         148964,
-                                         111224,
-                                         79400,
-                                         32972,
-                                         -3846,
-                                         -20985
+                                         326066,
+                                         290274,
+                                         248865,
+                                         218897,
+                                         182612,
+                                         144872,
+                                         113048,
+                                         66620,
+                                         29802,
+                                         12663,
+                                         2081
                                      ],
-                          "porRecibir":  -31567,
-                          "pct":  0.91254443148478037,
-                          "orden":  5
+                          "porRecibir":  2081,
+                          "pct":  1.0057653574327674
                       },
                       {
                           "producto":  "NÉCTAR MANGO-BANANA",
@@ -99,101 +99,101 @@
                                          0,
                                          0,
                                          0,
+                                         0,
                                          0
                                      ],
                           "porRecibir":  0,
-                          "pct":  0,
-                          "orden":  6
+                          "pct":  0
                       },
                       {
                           "producto":  "PURÉ MANGO-PERA",
-                          "ingresos":  1234141,
+                          "ingresos":  1410141,
                           "totalReq":  1443796,
-                          "saldo":  361509,
+                          "saldo":  408357,
                           "porDia":  [
-                                         1086285,
-                                         943117,
-                                         777481,
-                                         657609,
-                                         512469,
-                                         361509,
-                                         234213,
-                                         48501,
-                                         -98771,
-                                         -167327
+                                         1262285,
+                                         1119117,
+                                         953481,
+                                         833609,
+                                         688469,
+                                         537509,
+                                         410213,
+                                         224501,
+                                         77229,
+                                         8673,
+                                         -33655
                                      ],
-                          "porRecibir":  -209655,
-                          "pct":  0.854789042219261,
-                          "orden":  7
+                          "porRecibir":  -33655,
+                          "pct":  0.97668992018262968
                       },
                       {
                           "producto":  "LECHE CEREAL CHOCOLATE",
-                          "ingresos":  682469,
+                          "ingresos":  725429,
                           "totalReq":  721898,
-                          "saldo":  246153,
+                          "saldo":  224537,
                           "porDia":  [
-                                         608541,
-                                         536957,
-                                         454139,
-                                         394203,
-                                         321633,
-                                         246153,
-                                         182505,
-                                         89649,
-                                         16013,
-                                         -18265
+                                         651501,
+                                         579917,
+                                         497099,
+                                         437163,
+                                         364593,
+                                         289113,
+                                         225465,
+                                         132609,
+                                         58973,
+                                         24695,
+                                         3531
                                      ],
-                          "porRecibir":  -39429,
-                          "pct":  0.94538148048616288,
-                          "orden":  8
+                          "porRecibir":  3531,
+                          "pct":  1.0048912727282802
                       },
                       {
                           "producto":  "LECHE CEREAL FRESA",
-                          "ingresos":  356623,
+                          "ingresos":  362983,
                           "totalReq":  360949,
-                          "saldo":  138465,
+                          "saldo":  112537,
                           "porDia":  [
-                                         319659,
-                                         283867,
-                                         242458,
-                                         212490,
-                                         176205,
-                                         138465,
-                                         106641,
-                                         60213,
-                                         23395,
-                                         6256
+                                         326019,
+                                         290227,
+                                         248818,
+                                         218850,
+                                         182565,
+                                         144825,
+                                         113001,
+                                         66573,
+                                         29755,
+                                         12616,
+                                         2034
                                      ],
-                          "porRecibir":  -4326,
-                          "pct":  0.98801492731660157,
-                          "orden":  9
+                          "porRecibir":  2034,
+                          "pct":  1.0056351451313066
                       },
                       {
                           "producto":  "LECHE SABORIZADA CHOCOLATE",
-                          "ingresos":  707984,
+                          "ingresos":  725816,
                           "totalReq":  721898,
-                          "saldo":  271668,
+                          "saldo":  224924,
                           "porDia":  [
-                                         634056,
-                                         562472,
-                                         479654,
-                                         419718,
-                                         347148,
-                                         271668,
-                                         208020,
-                                         115164,
-                                         41528,
-                                         7250
+                                         651888,
+                                         580304,
+                                         497486,
+                                         437550,
+                                         364980,
+                                         289500,
+                                         225852,
+                                         132996,
+                                         59360,
+                                         25082,
+                                         3918
                                      ],
-                          "porRecibir":  -13914,
-                          "pct":  0.98072580890929184,
-                          "orden":  10
+                          "porRecibir":  3918,
+                          "pct":  1.005427359543869
                       },
                       {
                           "producto":  "LECHE SABORIZADA FRESA",
                           "ingresos":  363168,
                           "totalReq":  360949,
-                          "saldo":  145010,
+                          "saldo":  112722,
                           "porDia":  [
                                          326204,
                                          290412,
@@ -204,17 +204,17 @@
                                          113186,
                                          66758,
                                          29940,
-                                         12801
+                                         12801,
+                                         2219
                                      ],
                           "porRecibir":  2219,
-                          "pct":  1.0061476829136526,
-                          "orden":  11
+                          "pct":  1.0061476829136526
                       },
                       {
                           "producto":  "EXTRUIDO JAMÓN SERRANO",
                           "ingresos":  722456,
                           "totalReq":  721898,
-                          "saldo":  286140,
+                          "saldo":  221564,
                           "porDia":  [
                                          648528,
                                          576944,
@@ -225,17 +225,17 @@
                                          222492,
                                          129636,
                                          56000,
-                                         21722
+                                         21722,
+                                         558
                                      ],
                           "porRecibir":  558,
-                          "pct":  1.0007729623852677,
-                          "orden":  12
+                          "pct":  1.0007729623852677
                       },
                       {
                           "producto":  "EXTRUIDO POLLO A LA BRASA",
                           "ingresos":  361372,
                           "totalReq":  360949,
-                          "saldo":  143214,
+                          "saldo":  110926,
                           "porDia":  [
                                          324408,
                                          288616,
@@ -246,17 +246,17 @@
                                          111390,
                                          64962,
                                          28144,
-                                         11005
+                                         11005,
+                                         423
                                      ],
                           "porRecibir":  423,
-                          "pct":  1.0011719107131478,
-                          "orden":  13
+                          "pct":  1.0011719107131478
                       },
                       {
                           "producto":  "GALLETA RELLENA FRESA O FRUTOS ROJOS",
                           "ingresos":  1444787,
                           "totalReq":  1443796,
-                          "saldo":  572155,
+                          "saldo":  443003,
                           "porDia":  [
                                          1296931,
                                          1153763,
@@ -267,17 +267,17 @@
                                          444859,
                                          259147,
                                          111875,
-                                         43319
+                                         43319,
+                                         991
                                      ],
                           "porRecibir":  991,
-                          "pct":  1.0006863850571688,
-                          "orden":  14
+                          "pct":  1.0006863850571688
                       },
                       {
                           "producto":  "GALLETA RELLENA CHOCOLATE O FRUTOS AMARILLOS",
                           "ingresos":  1105218,
                           "totalReq":  1082847,
-                          "saldo":  450744,
+                          "saldo":  353880,
                           "porDia":  [
                                          994326,
                                          886950,
@@ -288,17 +288,17 @@
                                          355272,
                                          215988,
                                          105534,
-                                         54117
+                                         54117,
+                                         22371
                                      ],
                           "porRecibir":  22371,
-                          "pct":  1.0206594283402921,
-                          "orden":  15
+                          "pct":  1.0206594283402919
                       },
                       {
                           "producto":  "GRANOLA",
                           "ingresos":  1444731,
                           "totalReq":  1443796,
-                          "saldo":  572099,
+                          "saldo":  442947,
                           "porDia":  [
                                          1296875,
                                          1153707,
@@ -309,17 +309,17 @@
                                          444803,
                                          259091,
                                          111819,
-                                         43263
+                                         43263,
+                                         935
                                      ],
                           "porRecibir":  935,
-                          "pct":  1.0006475984141805,
-                          "orden":  16
+                          "pct":  1.0006475984141805
                       },
                       {
                           "producto":  "GALLETA SAL",
                           "ingresos":  802376,
                           "totalReq":  1082847,
-                          "saldo":  147902,
+                          "saldo":  51038,
                           "porDia":  [
                                          691484,
                                          584108,
@@ -330,17 +330,17 @@
                                          52430,
                                          -86854,
                                          -197308,
-                                         -248725
+                                         -248725,
+                                         -280471
                                      ],
                           "porRecibir":  -280471,
-                          "pct":  0.7409874155813333,
-                          "orden":  17
+                          "pct":  0.7409874155813333
                       },
                       {
                           "producto":  "GALLETA DULCE",
                           "ingresos":  961584,
                           "totalReq":  1082847,
-                          "saldo":  307110,
+                          "saldo":  210246,
                           "porDia":  [
                                          850692,
                                          743316,
@@ -351,32 +351,11 @@
                                          211638,
                                          72354,
                                          -38100,
-                                         -89517
+                                         -89517,
+                                         -121263
                                      ],
                           "porRecibir":  -121263,
-                          "pct":  0.88801465026915172,
-                          "orden":  18
-                      },
-                      {
-                          "producto":  "TOTAL GALLETA",
-                          "ingresos":  1763960,
-                          "totalReq":  2165694,
-                          "saldo":  455012,
-                          "porDia":  [
-                                         1542176,
-                                         1327424,
-                                         1078970,
-                                         899162,
-                                         681452,
-                                         455012,
-                                         264068,
-                                         -14500,
-                                         -235408,
-                                         -338242
-                                     ],
-                          "porRecibir":  -401734,
-                          "pct":  0.81450103292524245,
-                          "orden":  19
+                          "pct":  0.88801465026915161
                       }
                   ],
     "abastecimiento":  [
@@ -403,10 +382,10 @@
                            },
                            {
                                "producto":  "NÉCTAR PERA-MANGO",
-                               "ingresos":  329382,
+                               "ingresos":  363030,
                                "totalReq":  360949,
-                               "porRecibir":  -31567,
-                               "pct":  0.91254443148478037
+                               "porRecibir":  2081,
+                               "pct":  1.0057653574327674
                            },
                            {
                                "producto":  "NÉCTAR MANGO-BANANA",
@@ -417,31 +396,31 @@
                            },
                            {
                                "producto":  "PURÉ MANGO-PERA",
-                               "ingresos":  1234141,
+                               "ingresos":  1410141,
                                "totalReq":  1443796,
-                               "porRecibir":  -209655,
-                               "pct":  0.85478904221926089
+                               "porRecibir":  -33655,
+                               "pct":  0.97668992018262968
                            },
                            {
                                "producto":  "LECHE CEREAL CHOCOLATE",
-                               "ingresos":  682469,
+                               "ingresos":  725429,
                                "totalReq":  721898,
-                               "porRecibir":  -39429,
-                               "pct":  0.94538148048616288
+                               "porRecibir":  3531,
+                               "pct":  1.0048912727282802
                            },
                            {
                                "producto":  "LECHE CEREAL FRESA",
-                               "ingresos":  356623,
+                               "ingresos":  362983,
                                "totalReq":  360949,
-                               "porRecibir":  -4326,
-                               "pct":  0.98801492731660157
+                               "porRecibir":  2034,
+                               "pct":  1.0056351451313066
                            },
                            {
                                "producto":  "LECHE SABORIZADA CHOCOLATE",
-                               "ingresos":  707984,
+                               "ingresos":  725816,
                                "totalReq":  721898,
-                               "porRecibir":  -13914,
-                               "pct":  0.98072580890929184
+                               "porRecibir":  3918,
+                               "pct":  1.005427359543869
                            },
                            {
                                "producto":  "LECHE SABORIZADA FRESA",
@@ -547,8 +526,8 @@
                         {
                             "producto":  "PURÉ MANGO-PERA",
                             "planificado":  1492816,
-                            "ingresos":  1234141,
-                            "pct":  0.82672010482202762
+                            "ingresos":  1410141,
+                            "pct":  0.94461809091006532
                         },
                         {
                             "producto":  "LECHE CEREAL CHOCOLATE",
@@ -669,14 +648,14 @@
                          {
                              "producto":  "NÉCTAR PERA-BANANO O MANGO-BANANA",
                              "porRecibir":  9806,
-                             "pct":  1.0271672729388359,
+                             "pct":  1.0271672729388361,
                              "lotes":  "L6087B (11040); L6078A (5419)"
                          },
                          {
                              "producto":  "NÉCTAR PERA-MANGO",
-                             "porRecibir":  -31567,
-                             "pct":  0.91254443148478037,
-                             "lotes":  "-"
+                             "porRecibir":  2081,
+                             "pct":  1.0057653574327674,
+                             "lotes":  "L6097E (5239)"
                          },
                          {
                              "producto":  "NÉCTAR MANGO-BANANA",
@@ -686,26 +665,26 @@
                          },
                          {
                              "producto":  "PURÉ MANGO-PERA",
-                             "porRecibir":  -209655,
-                             "pct":  0.854789042219261,
+                             "porRecibir":  -33655,
+                             "pct":  0.97668992018262968,
                              "lotes":  "-"
                          },
                          {
                              "producto":  "LECHE CEREAL CHOCOLATE",
-                             "porRecibir":  -39429,
-                             "pct":  0.94538148048616288,
+                             "porRecibir":  3531,
+                             "pct":  1.0048912727282802,
                              "lotes":  "-"
                          },
                          {
                              "producto":  "LECHE CEREAL FRESA",
-                             "porRecibir":  -4326,
-                             "pct":  0.98801492731660157,
+                             "porRecibir":  2034,
+                             "pct":  1.0056351451313066,
                              "lotes":  "-"
                          },
                          {
                              "producto":  "LECHE SABORIZADA CHOCOLATE",
-                             "porRecibir":  -13914,
-                             "pct":  0.98072580890929184,
+                             "porRecibir":  3918,
+                             "pct":  1.005427359543869,
                              "lotes":  "-"
                          },
                          {
@@ -735,7 +714,7 @@
                          {
                              "producto":  "GALLETA RELLENA CHOCOLATE O FRUTOS AMARILLOS",
                              "porRecibir":  22371,
-                             "pct":  1.0206594283402921,
+                             "pct":  1.0206594283402919,
                              "lotes":  "17G23"
                          },
                          {
@@ -753,7 +732,7 @@
                          {
                              "producto":  "GALLETA DULCE",
                              "porRecibir":  -121263,
-                             "pct":  0.88801465026915172,
+                             "pct":  0.88801465026915161,
                              "lotes":  "-"
                          },
                          {
@@ -777,8 +756,7 @@
                                                  324996,
                                                  257726,
                                                  119973,
-                                                 74074,
-                                                 0
+                                                 74074
                                              ],
                                     "distributivo":  2526643,
                                     "numDias":  7
@@ -796,8 +774,7 @@
                                                  46428,
                                                  36818,
                                                  17139,
-                                                 10582,
-                                                 0
+                                                 10582
                                              ],
                                     "distributivo":  360949,
                                     "numDias":  1
@@ -815,8 +792,7 @@
                                                  46428,
                                                  36818,
                                                  17139,
-                                                 10582,
-                                                 0
+                                                 10582
                                              ],
                                     "distributivo":  360949,
                                     "numDias":  1
@@ -834,8 +810,7 @@
                                                  46428,
                                                  36818,
                                                  17139,
-                                                 10582,
-                                                 0
+                                                 10582
                                              ],
                                     "distributivo":  360949,
                                     "numDias":  1
@@ -843,7 +818,6 @@
                                 {
                                     "producto":  "NÉCTAR MANGO-BANANA",
                                     "dias":  [
-                                                 0,
                                                  0,
                                                  0,
                                                  0,
@@ -872,8 +846,7 @@
                                                  185712,
                                                  147272,
                                                  68556,
-                                                 42328,
-                                                 0
+                                                 42328
                                              ],
                                     "distributivo":  1443796,
                                     "numDias":  4
@@ -891,8 +864,7 @@
                                                  92856,
                                                  73636,
                                                  34278,
-                                                 21164,
-                                                 0
+                                                 21164
                                              ],
                                     "distributivo":  721898,
                                     "numDias":  2
@@ -910,8 +882,7 @@
                                                  46428,
                                                  36818,
                                                  17139,
-                                                 10582,
-                                                 0
+                                                 10582
                                              ],
                                     "distributivo":  360949,
                                     "numDias":  1
@@ -929,8 +900,7 @@
                                                  92856,
                                                  73636,
                                                  34278,
-                                                 21164,
-                                                 0
+                                                 21164
                                              ],
                                     "distributivo":  721898,
                                     "numDias":  2
@@ -948,8 +918,7 @@
                                                  46428,
                                                  36818,
                                                  17139,
-                                                 10582,
-                                                 0
+                                                 10582
                                              ],
                                     "distributivo":  360949,
                                     "numDias":  1
@@ -967,8 +936,7 @@
                                                  92856,
                                                  73636,
                                                  34278,
-                                                 21164,
-                                                 0
+                                                 21164
                                              ],
                                     "distributivo":  721898,
                                     "numDias":  2
@@ -986,8 +954,7 @@
                                                  46428,
                                                  36818,
                                                  17139,
-                                                 10582,
-                                                 0
+                                                 10582
                                              ],
                                     "distributivo":  360949,
                                     "numDias":  1
@@ -1005,8 +972,7 @@
                                                  185712,
                                                  147272,
                                                  68556,
-                                                 42328,
-                                                 0
+                                                 42328
                                              ],
                                     "distributivo":  1443796,
                                     "numDias":  4
@@ -1024,8 +990,7 @@
                                                  139284,
                                                  110454,
                                                  51417,
-                                                 31746,
-                                                 0
+                                                 31746
                                              ],
                                     "distributivo":  1082847,
                                     "numDias":  3
@@ -1043,8 +1008,7 @@
                                                  185712,
                                                  147272,
                                                  68556,
-                                                 42328,
-                                                 0
+                                                 42328
                                              ],
                                     "distributivo":  1443796,
                                     "numDias":  4
@@ -1062,8 +1026,7 @@
                                                  139284,
                                                  110454,
                                                  51417,
-                                                 31746,
-                                                 0
+                                                 31746
                                              ],
                                     "distributivo":  1082847,
                                     "numDias":  3
@@ -1081,8 +1044,7 @@
                                                  139284,
                                                  110454,
                                                  51417,
-                                                 31746,
-                                                 0
+                                                 31746
                                              ],
                                     "distributivo":  1082847,
                                     "numDias":  3
@@ -1100,8 +1062,7 @@
                                                  278568,
                                                  220908,
                                                  102834,
-                                                 63492,
-                                                 0
+                                                 63492
                                              ],
                                     "distributivo":  2165694,
                                     "numDias":  6
@@ -1109,15 +1070,15 @@
                             ],
     "notasEntrega":  {
                          "planificadas":  801,
-                         "recibidas":  178,
-                         "pendientes":  623,
-                         "pctRecibidas":  "22,22%",
-                         "pctPendientes":  "77,78%",
+                         "recibidas":  313,
+                         "pendientes":  488,
+                         "pctRecibidas":  "39,08%",
+                         "pctPendientes":  "60,92%",
                          "racionesPlanificadas":  7054240,
-                         "racionesRecibidas":  2880100,
-                         "racionesPendientes":  4174140,
-                         "pctRacRecibidas":  "40,83%",
-                         "pctRacPendientes":  "59,17%"
+                         "racionesRecibidas":  4997080,
+                         "racionesPendientes":  2057160,
+                         "pctRacRecibidas":  "70,84%",
+                         "pctRacPendientes":  "29,16%"
                      },
     "inventario":  [
                        {
@@ -4753,6 +4714,11 @@
                                ],
                      "detalle":  [
                                      {
+                                         "transportista":  "ALEXANDER CAMPAÑA",
+                                         "dia":  "1",
+                                         "validacion":  null
+                                     },
+                                     {
                                          "transportista":  "ALEXIS COBA",
                                          "dia":  "1",
                                          "validacion":  null
@@ -5750,6 +5716,11 @@
                                  ],
                      "resumen":  [
                                      {
+                                         "etiqueta":  "1",
+                                         "cuentaVal":  20,
+                                         "cuentaTrans":  20
+                                     },
+                                     {
                                          "etiqueta":  "2",
                                          "cuentaVal":  20,
                                          "cuentaTrans":  20
@@ -5801,11 +5772,11 @@
                                      }
                                  ]
                  },
-    "updatedAt":  "14/05/2026 16:54",
+    "updatedAt":  "15/05/2026 08:24",
     "_meta":  {
-                  "generado":  "14/05/2026 16:54",
+                  "generado":  "15/05/2026 08:24",
                   "fuente":  "POWER BI.xlsx",
                   "tenant":  "KrezcoCargo",
-                  "script":  "sync-bodega.ps1"
+                  "script":  "sync-bodega.ps1 v3"
               }
 }
