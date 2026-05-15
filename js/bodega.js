@@ -662,41 +662,61 @@ function renderReqDiario(d){
 
 /* ── 6. LAST MILE ── */
 function renderLastMile(d){
-  const errores=d.historialErrores||[];
   const lm=d.lastmile||{};
-  const errHtml=errores.length?`
-    ${_subLabel('ERRORES LASTMILE')}
+
+  /* ── Tabla 1: Errores por transportista (lm_pivot, columnas 1-15 de LASTMILE) ── */
+  const pivot=(Array.isArray(lm.pivot)?lm.pivot:[])
+    .filter(r=>Object.values(r).some(v=>v!=null&&v!==''));
+  let errHtml='';
+  if(pivot.length){
+    const keys=Object.keys(pivot[0]);
+    const labelKey=keys[0];          // primera columna = nombre/ruta del transportista
+    const valKeys=keys.slice(1).filter(k=>k); // resto = conteos de errores
+    errHtml=`
+    ${_subLabel('ERRORES POR TRANSPORTISTA')}
     <div class="bdg-tbl-wrap"><table class="bdg-tbl">
-      <thead><tr><th class="bdg-sticky-col">Transportista</th>${Object.keys(errores[0]).filter(k=>k!=='transportista').map(k=>`<th class="r">${k}</th>`).join('')}</tr></thead>
-      <tbody>${errores.map(r=>`<tr onclick="bdgSelRow(this)">
-        <td class="bdg-sticky-col" style="font-weight:600;white-space:nowrap">${r.transportista||'—'}</td>
-        ${Object.keys(r).filter(k=>k!=='transportista').map(k=>{const v=Number(r[k]);const ok=!isNaN(v)&&r[k]!=null&&r[k]!=='';return`<td class="r${ok&&v>0?' neg':''}">`+(ok?_N(v):'')+'</td>';}).join('')}
-      </tr>`).join('')}</tbody>
-    </table></div>`:'';
-  const res=Array.isArray(lm.resumen)?lm.resumen.filter(r=>r.etiqueta!=null):[];
-  const cumHtml=res.length?`
-    ${_subLabel('CUMPLIMIENTO')}
-    <div class="bdg-tbl-wrap" style="padding:16px">
-      <div style="display:flex;gap:14px;font-size:10px;color:#64748B;margin-bottom:12px">
-        <span><span style="color:#E8C9A0;font-size:13px">●</span> META</span>
-        <span><span style="color:#1A3A6B;font-size:13px">●</span> VALIDACIÓN</span>
-      </div>
-      <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;padding-bottom:4px">
-        ${res.map(r=>{
-          const meta=Number(r.cuentaTrans)||0,val=Number(r.cuentaVal)||0,mx=Math.max(meta,val,1);
-          const hm=Math.max(2,Math.round(meta/mx*100)),hv=Math.max(2,Math.round(val/mx*100));
-          return`<div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:48px">
-            <div style="display:flex;gap:3px;align-items:flex-end;height:110px">
-              <div style="display:flex;flex-direction:column;align-items:center;gap:2px"><span style="font-size:8px;font-weight:700;color:#1E293B">${meta}</span><div style="width:18px;height:${hm}px;background:#E8C9A0;border-radius:3px 3px 0 0"></div></div>
-              <div style="display:flex;flex-direction:column;align-items:center;gap:2px"><span style="font-size:8px;font-weight:700;color:#1E293B">${val}</span><div style="width:18px;height:${hv}px;background:#1A3A6B;border-radius:3px 3px 0 0"></div></div>
-            </div>
-            <span style="font-size:9px;font-weight:600;color:#64748B;text-align:center">${r.etiqueta}</span>
-          </div>`;
-        }).join('')}
-      </div>
-    </div>`:'';
-  if(!errHtml&&!cumHtml)return`<div class="bdg-empty"><div class="bdg-empty-icon">🚚</div><div class="bdg-empty-msg">Sin datos de Last Mile</div></div>`;
-  return`<div class="bdg-section"><div class="bdg-scroll-panel">${errHtml}${cumHtml}</div></div>`;
+      <thead><tr>
+        <th class="bdg-sticky-col">${labelKey||'Transportista'}</th>
+        ${valKeys.map(k=>`<th class="r">${k}</th>`).join('')}
+      </tr></thead>
+      <tbody>${pivot.map((r,ri)=>{
+        const delay=`animation-delay:${Math.min(ri,14)*40}ms`;
+        return`<tr onclick="bdgSelRow(this)" style="${delay}">
+          <td class="bdg-sticky-col" style="font-weight:600;white-space:nowrap">${r[labelKey]||'—'}</td>
+          ${valKeys.map(k=>{const v=Number(r[k]);const ok=!isNaN(v)&&r[k]!=null&&r[k]!=='';
+            return`<td class="r${ok&&v>0?' neg':''}">${ok?_N(v):'—'}</td>`;}).join('')}
+        </tr>`;
+      }).join('')}</tbody>
+    </table></div>`;
+  }
+
+  /* ── Tabla 2: Cantidad de transportistas por día (lm_resumen) ── */
+  const res=(Array.isArray(lm.resumen)?lm.resumen:[]).filter(r=>r.etiqueta!=null);
+  let diaHtml='';
+  if(res.length){
+    diaHtml=`
+    ${_subLabel('TRANSPORTISTAS POR DÍA')}
+    <div class="bdg-tbl-wrap"><table class="bdg-tbl">
+      <thead><tr>
+        <th class="bdg-sticky-col">Día</th>
+        <th class="r">Validaciones</th>
+        <th class="r">Transportistas</th>
+      </tr></thead>
+      <tbody>${res.map((r,ri)=>{
+        const delay=`animation-delay:${Math.min(ri,14)*40}ms`;
+        const cv=r.cuentaVal!=null?Number(r.cuentaVal):null;
+        const ct=r.cuentaTrans!=null?Number(r.cuentaTrans):null;
+        return`<tr onclick="bdgSelRow(this)" style="${delay}">
+          <td class="bdg-sticky-col" style="font-weight:700;color:var(--orange)">${r.etiqueta||'—'}</td>
+          <td class="r">${cv!=null?_N(cv):'—'}</td>
+          <td class="r" style="font-weight:600">${ct!=null?_N(ct):'—'}</td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table></div>`;
+  }
+
+  if(!errHtml&&!diaHtml)return`<div class="bdg-empty"><div class="bdg-empty-icon">🚚</div><div class="bdg-empty-msg">Sin datos de Last Mile</div></div>`;
+  return`<div class="bdg-section"><div class="bdg-scroll-panel">${errHtml}${diaHtml}</div></div>`;
 }
 
 /* ── 7. GRÁFICAS ── */
