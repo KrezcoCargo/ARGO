@@ -1531,8 +1531,8 @@
       {
         "B1": "LIBORIO RODRIGUEZ",
         "1": 1,
-        "2": null,
-        "3": 2,
+        "2": 2,
+        "3": null,
         "4": null,
         "5": null,
         "6": null,
@@ -1567,14 +1567,14 @@
         "1": null,
         "2": null,
         "3": null,
-        "4": 1,
+        "4": 2,
         "5": null,
         "6": null,
         "7": null,
         "8": null,
         "9": null,
         "10": null,
-        "Total general": 1,
+        "Total general": 2,
         "B13": null,
         "B14": null,
         "B15": null
@@ -1684,16 +1684,16 @@
       {
         "B1": "Total general",
         "1": 1,
-        "2": 1,
-        "3": 3,
-        "4": 4,
+        "2": 3,
+        "3": 1,
+        "4": 5,
         "5": null,
         "6": null,
         "7": null,
         "8": null,
         "9": null,
         "10": null,
-        "Total general": 9,
+        "Total general": 10,
         "B13": null,
         "B14": null,
         "B15": null
@@ -4889,7 +4889,7 @@
       {
         "transportista": "LIBORIO RODRIGUEZ",
         "dia": "2",
-        "validacion": null
+        "validacion": 2
       },
       {
         "transportista": "LIZBETH SALTOS",
@@ -4919,7 +4919,7 @@
       {
         "transportista": "VICENTE PULLAS",
         "dia": "2",
-        "validacion": null
+        "validacion": 1
       },
       {
         "transportista": "WILSON QUINATOA",
@@ -4989,7 +4989,7 @@
       {
         "transportista": "LIBORIO RODRIGUEZ",
         "dia": "3",
-        "validacion": 2
+        "validacion": null
       },
       {
         "transportista": "LIZBETH SALTOS",
@@ -5019,7 +5019,7 @@
       {
         "transportista": "VICENTE PULLAS",
         "dia": "3",
-        "validacion": 1
+        "validacion": null
       },
       {
         "transportista": "WILSON QUINATOA",
@@ -5099,69 +5099,69 @@
       {
         "transportista": "LUIS RODRIGUEZ",
         "dia": "4",
+        "validacion": 2
+      },
+      {
+        "transportista": "MIGUEL ORTIZ",
+        "dia": "4",
+        "validacion": null
+      },
+      {
+        "transportista": "NELLY VASCO",
+        "dia": "4",
+        "validacion": null
+      },
+      {
+        "transportista": "SANTIAGO LLUGSI",
+        "dia": "4",
+        "validacion": null
+      },
+      {
+        "transportista": "VICENTE PULLAS",
+        "dia": "4",
+        "validacion": null
+      },
+      {
+        "transportista": "WILSON QUINATOA",
+        "dia": "4",
+        "validacion": null
+      },
+      {
+        "transportista": "ALEXANDER CAMPAÑA",
+        "dia": "5",
+        "validacion": null
+      },
+      {
+        "transportista": "ALEXIS COBA",
+        "dia": "5",
+        "validacion": null
+      },
+      {
+        "transportista": "CRISTIAN REA",
+        "dia": "5",
+        "validacion": null
+      },
+      {
+        "transportista": "CRISTOBAL COBA",
+        "dia": "5",
+        "validacion": null
+      },
+      {
+        "transportista": "DELIA COBA",
+        "dia": "5",
+        "validacion": null
+      },
+      {
+        "transportista": "EDISON QUINATOA",
+        "dia": "5",
+        "validacion": null
+      },
+      {
+        "transportista": "IVAN NICOLALDE",
+        "dia": "5",
         "validacion": 1
       },
       {
-        "transportista": "MIGUEL ORTIZ",
-        "dia": "4",
-        "validacion": null
-      },
-      {
-        "transportista": "NELLY VASCO",
-        "dia": "4",
-        "validacion": null
-      },
-      {
-        "transportista": "SANTIAGO LLUGSI",
-        "dia": "4",
-        "validacion": null
-      },
-      {
-        "transportista": "VICENTE PULLAS",
-        "dia": "4",
-        "validacion": null
-      },
-      {
-        "transportista": "WILSON QUINATOA",
-        "dia": "4",
-        "validacion": null
-      },
-      {
-        "transportista": "ALEXANDER CAMPAÑA",
-        "dia": "5",
-        "validacion": null
-      },
-      {
-        "transportista": "ALEXIS COBA",
-        "dia": "5",
-        "validacion": null
-      },
-      {
-        "transportista": "CRISTIAN REA",
-        "dia": "5",
-        "validacion": null
-      },
-      {
-        "transportista": "CRISTOBAL COBA",
-        "dia": "5",
-        "validacion": null
-      },
-      {
-        "transportista": "DELIA COBA",
-        "dia": "5",
-        "validacion": null
-      },
-      {
-        "transportista": "EDISON QUINATOA",
-        "dia": "5",
-        "validacion": null
-      },
-      {
-        "transportista": "IVAN NICOLALDE",
-        "dia": "5",
-        "validacion": null
-      },
-      {
         "transportista": "JAIME PULLAS",
         "dia": "5",
         "validacion": null
@@ -5294,12 +5294,12 @@
       {
         "transportista": "LIZBETH SALTOS",
         "dia": "6",
-        "validacion": null
+        "validacion": 1
       },
       {
         "transportista": "LUIS RODRIGUEZ",
         "dia": "6",
-        "validacion": null
+        "validacion": 2
       },
       {
         "transportista": "MIGUEL ORTIZ",
@@ -5359,7 +5359,7 @@
       {
         "transportista": "IVAN NICOLALDE",
         "dia": "7",
-        "validacion": null
+        "validacion": 2
       },
       {
         "transportista": "JAIME PULLAS",
@@ -5785,9 +5785,9 @@
       }
     ]
   },
-  "updatedAt": "15/05/2026 11:50",
+  "updatedAt": "15/05/2026 12:17",
   "_meta": {
-    "generado": "15/05/2026 11:50",
+    "generado": "15/05/2026 12:17",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
