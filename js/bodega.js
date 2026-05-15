@@ -669,7 +669,9 @@ function renderLastMile(d){
     .filter(r=>r.transportista&&!/^total/i.test(r.transportista.trim()));
   let errHtml='';
   if(pivot.length){
-    const valKeys=Object.keys(pivot[0]).filter(k=>k!=='transportista');
+    // Exclude fallback bucket names (B1, B2 … B15) — empty Excel header cells
+    const valKeys=Object.keys(pivot[0])
+      .filter(k=>k!=='transportista'&&!/^B\d+$/.test(k));
     errHtml=`
     ${_subLabel('ERRORES POR TRANSPORTISTA')}
     <div class="bdg-tbl-wrap"><table class="bdg-tbl bdg-tbl--compact">
@@ -691,42 +693,45 @@ function renderLastMile(d){
     </table></div>`;
   }
 
-  /* ── Gráfico: Transportistas por día (lm_resumen — META vs VALIDACIÓN) ── */
+  /* ── Gráfico SVG: Transportistas por día (lm_resumen — META vs VALIDACIÓN) ── */
   const res=(Array.isArray(lm.resumen)?lm.resumen:[]).filter(r=>r.etiqueta!=null);
   let diaHtml='';
   if(res.length){
+    const C_META='#3D8EB9', C_VAL='#F47C20';
     const mx=Math.max(...res.map(r=>Math.max(Number(r.cuentaTrans)||0,Number(r.cuentaVal)||0)),1);
+    const n=res.length;
+    const bW=28,gap=5,grpGap=22,topH=22,botH=28,barMax=160;
+    const grpW=bW*2+gap;
+    const vbW=n*(grpW+grpGap)-grpGap+40;
+    const vbH=topH+barMax+botH;
+    const bars=res.map((r,i)=>{
+      const meta=Number(r.cuentaTrans)||0,val=Number(r.cuentaVal)||0;
+      const hm=Math.max(2,Math.round(meta/mx*barMax));
+      const hv=Math.max(2,Math.round(val/mx*barMax));
+      const x=20+i*(grpW+grpGap);
+      const xm=x,xv=x+bW+gap;
+      const ym=topH+(barMax-hm),yv=topH+(barMax-hv);
+      return`<g>
+        <text x="${xm+bW/2}" y="${ym-5}" text-anchor="middle" font-size="8.5" font-weight="700" fill="#1E293B" font-family="Segoe UI,sans-serif">${meta||''}</text>
+        <rect x="${xm}" y="${ym}" width="${bW}" height="${hm}" fill="${C_META}" rx="3"/>
+        <text x="${xv+bW/2}" y="${yv-5}" text-anchor="middle" font-size="8.5" font-weight="700" fill="#1E293B" font-family="Segoe UI,sans-serif">${val||''}</text>
+        <rect x="${xv}" y="${yv}" width="${bW}" height="${hv}" fill="${C_VAL}" rx="3"/>
+        <text x="${x+grpW/2}" y="${vbH-6}" text-anchor="middle" font-size="9.5" fill="#64748B" font-family="Segoe UI,sans-serif" font-weight="600">${r.etiqueta}</text>
+      </g>`;
+    }).join('');
     diaHtml=`
     ${_subLabel('TRANSPORTISTAS POR DÍA')}
-    <div class="bdg-tbl-wrap" style="padding:16px">
-      <div style="display:flex;gap:14px;font-size:10px;color:#64748B;margin-bottom:12px">
-        <span><span style="color:#E8C9A0;font-size:13px">●</span> META</span>
-        <span><span style="color:#1A3A6B;font-size:13px">●</span> VALIDACIÓN</span>
+    <div class="bdg-chart-card bdg-chart-wide bdg-lm-chart">
+      <div style="display:flex;gap:18px;font-size:11px;color:#64748B;margin-bottom:6px;justify-content:center">
+        <span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:13px;height:13px;background:${C_META};border-radius:3px"></span><strong>META</strong></span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:13px;height:13px;background:${C_VAL};border-radius:3px"></span><strong>VALIDACIÓN</strong></span>
       </div>
-      <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;padding-bottom:4px">
-        ${res.map(r=>{
-          const meta=Number(r.cuentaTrans)||0,val=Number(r.cuentaVal)||0;
-          const hm=Math.max(2,Math.round(meta/mx*110)),hv=Math.max(2,Math.round(val/mx*110));
-          return`<div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:48px">
-            <div style="display:flex;gap:3px;align-items:flex-end;height:120px">
-              <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
-                <span style="font-size:8px;font-weight:700;color:#1E293B">${meta}</span>
-                <div style="width:20px;height:${hm}px;background:#E8C9A0;border-radius:3px 3px 0 0"></div>
-              </div>
-              <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
-                <span style="font-size:8px;font-weight:700;color:#1E293B">${val}</span>
-                <div style="width:20px;height:${hv}px;background:#1A3A6B;border-radius:3px 3px 0 0"></div>
-              </div>
-            </div>
-            <span style="font-size:9px;font-weight:600;color:#64748B;text-align:center">${r.etiqueta}</span>
-          </div>`;
-        }).join('')}
-      </div>
+      <svg viewBox="0 0 ${vbW} ${vbH}" width="100%" style="display:block;flex:1;min-height:0" preserveAspectRatio="xMidYMid meet">${bars}</svg>
     </div>`;
   }
 
   if(!errHtml&&!diaHtml)return`<div class="bdg-empty"><div class="bdg-empty-icon">🚚</div><div class="bdg-empty-msg">Sin datos de Last Mile</div></div>`;
-  return`<div class="bdg-section bdg-section--fullh"><div class="bdg-scroll-panel">${errHtml}${diaHtml}</div></div>`;
+  return`<div class="bdg-section bdg-section--fullh"><div class="bdg-scroll-panel bdg-lm-panel">${errHtml}${diaHtml}</div></div>`;
 }
 
 /* ── 7. GRÁFICAS ── */
