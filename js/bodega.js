@@ -454,31 +454,42 @@ function _barChart(data,title,dec=0,barColor='#2574A9'){
   </div>`;
 }
 
-/* ── Horizontal Bar (Inventario) ── */
+/* ── Horizontal Bar (Inventario) — HTML/CSS (no SVG scaling issues) ── */
 function _hbarChart(rows){
   if(!rows.length)return'';
   const vals=rows.filter(r=>r.ajuste!=null&&!isNaN(Number(r.ajuste)));
   if(!vals.length)return'';
   const mx=Math.max(...vals.map(r=>Math.abs(Number(r.ajuste))),1);
-  const bh=22,gap=6,lW=220,rW=200,valW=52;
-  const svgW=lW+rW+valW,svgH=vals.length*(bh+gap)+14;
-  const rs=vals.map((r,i)=>{
+  const items=vals.map(r=>{
     const v=Number(r.ajuste),neg=v<0;
-    const bw=Math.max(2,Math.round(Math.abs(v)/mx*(rW-8)));
-    const y=7+i*(bh+gap),bx=neg?lW-bw:lW,col=neg?'#D84040':'#2574A9';
-    const valX=lW+rW+valW-4,label=r.producto||'—';
-    return`<g>
-      <text x="${lW-8}" y="${y+bh/2+4}" font-size="11" fill="#1E293B" text-anchor="end" font-family="Segoe UI,sans-serif" font-weight="600">${label}</text>
-      <rect x="${lW}" y="${y}" width="${rW}" height="${bh}" fill="#EFF4FB" rx="3"/>
-      <rect x="${bx}" y="${y}" width="${bw}" height="${bh}" fill="${col}" rx="3"/>
-      <text x="${valX}" y="${y+bh/2+4}" font-size="10" fill="${col}" text-anchor="end" font-weight="700" font-family="Segoe UI,sans-serif">${_N(v)}</text>
-    </g>`;
+    const pct=Math.max(0.5,Math.round(Math.abs(v)/mx*100));
+    const col=neg?'#F47C20':'#3D8EB9';
+    const track=neg?'rgba(244,124,32,.1)':'rgba(61,142,185,.1)';
+    return`<div style="display:flex;align-items:center;gap:10px;padding:3px 0">
+      <div style="flex:0 0 34%;min-width:0;text-align:right;font-size:11px;font-weight:600;
+                  color:#1E293B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"
+           title="${(r.producto||'').replace(/"/g,'&quot;')}">${r.producto||'—'}</div>
+      <div style="flex:1;height:24px;background:${track};border-radius:5px;overflow:hidden;min-width:0">
+        <div style="width:${pct}%;height:100%;background:${col};border-radius:5px;
+                    transition:width .45s cubic-bezier(.2,.8,.3,1)"></div>
+      </div>
+      <div style="flex:0 0 62px;text-align:right;font-size:11.5px;font-weight:700;color:${col};
+                  white-space:nowrap">${_N(v)}</div>
+    </div>`;
   }).join('');
-  return`<div class="bdg-tbl-wrap" style="padding:14px 18px">
-    <div class="bdg-chart-title" style="margin-bottom:10px;text-align:left">AJUSTE DE INVENTARIO</div>
-    <svg viewBox="0 0 ${svgW} ${svgH}" width="100%" style="display:block" preserveAspectRatio="xMinYMin meet">
-      ${rs}
-    </svg>
+  return`<div class="bdg-tbl-wrap" style="padding:16px 20px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <div class="bdg-chart-title" style="text-align:left;margin:0">AJUSTE DE INVENTARIO</div>
+      <div style="display:flex;gap:14px;font-size:10px;color:#64748B;margin-left:auto">
+        <span style="display:flex;align-items:center;gap:4px">
+          <span style="display:inline-block;width:10px;height:10px;background:#3D8EB9;border-radius:2px"></span>Positivo
+        </span>
+        <span style="display:flex;align-items:center;gap:4px">
+          <span style="display:inline-block;width:10px;height:10px;background:#F47C20;border-radius:2px"></span>Negativo
+        </span>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:2px">${items}</div>
   </div>`;
 }
 
