@@ -772,7 +772,7 @@
         74074
       ],
       "distributivo": 2526643,
-      "numDias": 7
+      "numDias": null
     },
     {
       "producto": "NÉCTAR PERA",
@@ -790,7 +790,7 @@
         10582
       ],
       "distributivo": 360949,
-      "numDias": 1
+      "numDias": null
     },
     {
       "producto": "NÉCTAR PERA-BANANO O MANGO-BANANA",
@@ -808,7 +808,7 @@
         10582
       ],
       "distributivo": 360949,
-      "numDias": 1
+      "numDias": null
     },
     {
       "producto": "NÉCTAR PERA-MANGO",
@@ -826,7 +826,7 @@
         10582
       ],
       "distributivo": 360949,
-      "numDias": 1
+      "numDias": null
     },
     {
       "producto": "NÉCTAR MANGO-BANANA",
@@ -844,7 +844,7 @@
         0
       ],
       "distributivo": 0,
-      "numDias": 0
+      "numDias": null
     },
     {
       "producto": "PURÉ MANGO-PERA",
@@ -862,7 +862,7 @@
         42328
       ],
       "distributivo": 1443796,
-      "numDias": 4
+      "numDias": null
     },
     {
       "producto": "LECHE CEREAL CHOCOLATE",
@@ -880,7 +880,7 @@
         21164
       ],
       "distributivo": 721898,
-      "numDias": 2
+      "numDias": null
     },
     {
       "producto": "LECHE CEREAL FRESA",
@@ -898,7 +898,7 @@
         10582
       ],
       "distributivo": 360949,
-      "numDias": 1
+      "numDias": null
     },
     {
       "producto": "LECHE SABORIZADA CHOCOLATE",
@@ -916,7 +916,7 @@
         21164
       ],
       "distributivo": 721898,
-      "numDias": 2
+      "numDias": null
     },
     {
       "producto": "LECHE SABORIZADA FRESA",
@@ -934,7 +934,7 @@
         10582
       ],
       "distributivo": 360949,
-      "numDias": 1
+      "numDias": null
     },
     {
       "producto": "EXTRUIDO JAMÓN SERRANO",
@@ -952,7 +952,7 @@
         21164
       ],
       "distributivo": 721898,
-      "numDias": 2
+      "numDias": null
     },
     {
       "producto": "EXTRUIDO POLLO A LA BRASA",
@@ -970,7 +970,7 @@
         10582
       ],
       "distributivo": 360949,
-      "numDias": 1
+      "numDias": null
     },
     {
       "producto": "GALLETA RELLENA FRESA O FRUTOS ROJOS",
@@ -988,7 +988,7 @@
         42328
       ],
       "distributivo": 1443796,
-      "numDias": 4
+      "numDias": null
     },
     {
       "producto": "GALLETA RELLENA CHOCOLATE O FRUTOS AMARILLOS",
@@ -1006,7 +1006,7 @@
         31746
       ],
       "distributivo": 1082847,
-      "numDias": 3
+      "numDias": null
     },
     {
       "producto": "GRANOLA",
@@ -1024,7 +1024,7 @@
         42328
       ],
       "distributivo": 1443796,
-      "numDias": 4
+      "numDias": null
     },
     {
       "producto": "GALLETA SAL",
@@ -1042,7 +1042,7 @@
         31746
       ],
       "distributivo": 1082847,
-      "numDias": 3
+      "numDias": null
     },
     {
       "producto": "GALLETA DULCE",
@@ -1060,7 +1060,7 @@
         31746
       ],
       "distributivo": 1082847,
-      "numDias": 3
+      "numDias": null
     },
     {
       "producto": "TOTAL GALLETA",
@@ -1078,7 +1078,7 @@
         63492
       ],
       "distributivo": 2165694,
-      "numDias": 6
+      "numDias": null
     }
   ],
   "notasEntrega": {
@@ -5785,9 +5785,9 @@
       }
     ]
   },
-  "updatedAt": "15/05/2026 16:59",
+  "updatedAt": "15/05/2026 18:00",
   "_meta": {
-    "generado": "15/05/2026 16:59",
+    "generado": "15/05/2026 18:00",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
