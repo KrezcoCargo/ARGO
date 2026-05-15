@@ -478,7 +478,7 @@ tr:hover td{background:#FBFBFD;}
 .bdg-tbl tbody tr:nth-child(even){background:#F2F7FD;}
 .bdg-tbl tbody tr{transition:background .15s;cursor:pointer;animation:bdgRowIn .28s cubic-bezier(.2,.8,.3,1) both;}
 .bdg-tbl tbody tr:hover{background:#E6F0FB;}
-.bdg-tbl tbody td{padding:5px 8px;border-bottom:1px solid #EBF0F6;color:#1E293B;vertical-align:middle;}
+.bdg-tbl tbody td{padding:5px 10px;border-bottom:1px solid #EBF0F6;color:#1E293B;vertical-align:middle;}
 .bdg-tbl tbody td.r{text-align:right;font-variant-numeric:tabular-nums;}
 .bdg-tbl tbody td.neg{color:#D94040;font-weight:700;}
 /* last row — round bottom corners */
@@ -487,13 +487,14 @@ tr:hover td{background:#FBFBFD;}
 .bdg-tbl tbody tr:last-child td{border-bottom:none;}
 
 /* ── Day columns ── */
-.bdg-day-th{width:46px;min-width:46px;text-align:center;}
-.bdg-day-td{min-width:46px;text-align:center;padding:5px 3px !important;}
+.bdg-day-th{text-align:center;min-width:54px;}
+.bdg-day-td{text-align:center;padding:5px 6px !important;min-width:54px;}
 
 /* ── Sticky first column ── */
 .bdg-sticky-col{position:sticky;left:0;z-index:2;background:#fff;border-right:2px solid #CBD5E1 !important;box-shadow:2px 0 6px rgba(10,48,96,.06);}
-.bdg-tbl thead th.bdg-sticky-col{background:linear-gradient(135deg,#0A3060 0%,#1565C0 100%);z-index:5;position:sticky;left:0;}
-.bdg-tbl tbody td.bdg-sticky-col{white-space:nowrap;}
+.bdg-tbl thead th.bdg-sticky-col{background:linear-gradient(135deg,#0A3060 0%,#1565C0 100%);z-index:5;position:sticky;left:0;min-width:140px;max-width:210px;}
+/* nombres de producto con salto de línea → columna más estrecha, da espacio al resto */
+.bdg-tbl tbody td.bdg-sticky-col{white-space:normal;word-break:break-word;line-height:1.35;}
 .bdg-tbl tbody tr:nth-child(even) td.bdg-sticky-col{background:#F2F7FD;}
 .bdg-tbl tbody tr:hover td.bdg-sticky-col{background:#E6F0FB;}
 .bdg-tbl tbody tr.bdg-row-sel td{background:#DBEAFE !important;}
