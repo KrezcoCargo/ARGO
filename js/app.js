@@ -9,7 +9,9 @@ function startApp(){
   restoreSidebarState();
   loadFromGitHubThenRender();
   startAutoRefresh();
-  navTo('dashboard');
+  // Restore last visited page (survives F5 but not full browser close)
+  const _lastPage = sessionStorage.getItem('kc_last_page') || 'dashboard';
+  navTo(_lastPage);
   const btnEmail=document.getElementById('btn-email-summary');
   if(btnEmail)btnEmail.style.display=(SESSION&&(SESSION.role==='superadmin'||SESSION.role==='editor'))?'flex':'none';
 }
