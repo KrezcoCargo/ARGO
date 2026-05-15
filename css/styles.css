@@ -363,8 +363,9 @@ tr:hover td{background:#FBFBFD;}
 @keyframes bdgSpin{to{transform:rotate(360deg)}}
 
 /* ── Page container ── */
-#pg-bodega{gap:0;height:100%;position:relative;}
-#pg-bodega.active{display:flex;flex-direction:column;overflow:hidden;}
+/* Bodega page fills exact viewport — no padding waste, definite height so children's height:100% resolves */
+#pg-bodega{gap:0;position:relative;padding:0 !important;}
+#pg-bodega.active{display:flex;flex-direction:column;overflow:hidden;height:100vh;}
 
 /* ── Tab bar ── */
 .bdg-tabs-bar{display:flex;padding:0 6px;background:#fff;border-bottom:2px solid #E8ECF0;gap:0;overflow-x:auto;flex-shrink:0;scrollbar-width:none;}
@@ -399,19 +400,25 @@ tr:hover td{background:#FBFBFD;}
 .bdg-fbadge{display:inline-block;background:var(--orange);color:#fff;font-size:9px;font-weight:700;border-radius:10px;padding:1px 7px;}
 
 /* ── Body (overflow hidden → no outer scrollbar) ── */
-.bdg-body{flex:1;min-height:0;overflow:hidden;background:#EEF1F6;}
+/* Single scroll container — no nested scrollbars */
+.bdg-body{flex:1;min-height:0;overflow-y:auto;overflow-x:auto;background:#EEF1F6;
+  scrollbar-width:thin;scrollbar-color:#CBD5E1 transparent;}
+.bdg-body::-webkit-scrollbar{width:6px;height:6px;}
+.bdg-body::-webkit-scrollbar-track{background:transparent;}
+.bdg-body::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:4px;}
 
 /* ── Section base (fills body, flex-col, NO section-level scroll) ── */
 /* ── Bodega tab & row animations ── */
 @keyframes bdgTabIn{
-  from{opacity:0;transform:translateY(22px) scale(.985)}
-  to  {opacity:1;transform:translateY(0)    scale(1)}
+  from{opacity:0;transform:translateY(-18px) scale(.988)}
+  to  {opacity:1;transform:translateY(0)     scale(1)}
 }
 @keyframes bdgRowIn{
-  from{opacity:0;transform:translateY(-14px)}
+  from{opacity:0;transform:translateY(-16px)}
   to  {opacity:1;transform:translateY(0)}
 }
-.bdg-section{height:100%;box-sizing:border-box;padding:5px 2px;display:flex;flex-direction:column;gap:5px;overflow:hidden;
+/* Section flows naturally in scroll container; min-height keeps it tall enough */
+.bdg-section{min-height:100%;box-sizing:border-box;padding:5px 2px;display:flex;flex-direction:column;gap:5px;
   animation:bdgTabIn .35s cubic-bezier(.2,.8,.3,1) both;}
 /* bdg-section--scroll kept only as fallback, no longer used in new layout */
 .bdg-section--scroll{overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:#E2E8F0 transparent;}
@@ -420,8 +427,7 @@ tr:hover td{background:#FBFBFD;}
 .bdg-section--scroll::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:4px;}
 
 /* ── Scroll panel: bounded white box, scroll is INSIDE it (Last Mile, Gráficas, Inv. Semanal) ── */
-.bdg-scroll-panel{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;gap:8px;background:#fff;border-radius:10px;border:1px solid #E8ECF0;padding:10px 10px;box-shadow:0 1px 3px rgba(15,31,61,.03);scrollbar-width:none;
-  animation:bdgTabIn .35s cubic-bezier(.2,.8,.3,1) both;animation-delay:.06s;}
+.bdg-scroll-panel{flex:1;min-height:0;overflow:visible;display:flex;flex-direction:column;gap:8px;background:#fff;border-radius:10px;border:1px solid #E8ECF0;padding:10px 10px;box-shadow:0 1px 3px rgba(15,31,61,.03);}
 .bdg-scroll-panel:hover{scrollbar-width:thin;scrollbar-color:#CBD5E1 transparent;}
 .bdg-scroll-panel:hover::-webkit-scrollbar{display:block;width:4px;}
 .bdg-scroll-panel:hover::-webkit-scrollbar-track{background:transparent;}
@@ -450,12 +456,8 @@ tr:hover td{background:#FBFBFD;}
 .bdg-kpi--blue{border-left:4px solid #0EA5E9;}
 
 /* ── Tables ── */
-.bdg-tbl-wrap{background:#fff;border-radius:10px;border:1px solid #E8ECF0;overflow:auto;width:100%;min-width:0;flex:1;min-height:0;box-shadow:0 1px 3px rgba(15,31,61,.03);scrollbar-width:none;}
-.bdg-tbl-wrap::-webkit-scrollbar{display:none;}
-.bdg-tbl-wrap:hover{scrollbar-width:thin;scrollbar-color:#CBD5E1 transparent;}
-.bdg-tbl-wrap:hover::-webkit-scrollbar{display:block;width:4px;height:4px;}
-.bdg-tbl-wrap:hover::-webkit-scrollbar-track{background:transparent;}
-.bdg-tbl-wrap:hover::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:4px;}
+/* No own scroll — parent .bdg-body handles it; table expands freely */
+.bdg-tbl-wrap{background:#fff;border-radius:10px;border:1px solid #E8ECF0;overflow:visible;width:100%;min-width:0;flex:none;box-shadow:0 1px 3px rgba(15,31,61,.03);}
 .bdg-tbl{width:100%;border-collapse:collapse;font-size:11.5px;}
 /* thead is the sticky layer — whole row freezes as a unit */
 .bdg-tbl thead{position:sticky;top:0;z-index:3;background:#094780;box-shadow:0 2px 5px rgba(0,0,0,.20);}
