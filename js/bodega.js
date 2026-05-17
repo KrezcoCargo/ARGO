@@ -190,6 +190,7 @@ function _renderToolbar(){
       <button class="bdg-filter-btn" id="bdg-col-btn" onclick="bdgToggleColPanel()">⊟ Columnas</button>
     </div>
     <div class="bdg-toolbar-right">
+      <button class="bdg-filter-btn bdg-email-btn" onclick="openEmailModal()" title="Enviar reporte por correo">✉️ Enviar correo</button>
       <div class="bdg-zoom-ctrl">
         <button class="bdg-zoom-btn" onclick="bdgZoomOut()" title="Reducir">−</button>
         <span id="bdg-zoom-pct" class="bdg-zoom-pct" onclick="bdgZoomFit()" title="100%">${_bdgZoom}%</span>
@@ -268,6 +269,12 @@ function _getViewColDefs(viewId){
     ...days,
     {id:'cobertura', label:'Cobertura'},
     {id:'porrecibir',label:'Por Recibir'}
+  ];
+  if(viewId==='proveedores') return[
+    {id:'planificado', label:'Planificado'},
+    {id:'ingresos',    label:'Ingresos'},
+    {id:'porrecibir',  label:'Por Recibir'},
+    {id:'cumplimiento',label:'Cumplimiento'}
   ];
   if(viewId==='reqDiario') return[
     ...days,
@@ -584,12 +591,15 @@ function renderProveedores(d){
   const rows=_bdgRows('proveedores',all);
   const totP=rows.reduce((a,r)=>a+(r.planificado||0),0),totI=rows.reduce((a,r)=>a+(r.ingresos||0),0);
   const glob=totP>0?totI/totP:0;
+  const totPR=rows.reduce((a,r)=>a+(r.porRecibir||0),0);
   const trs=rows.map(r=>{
-    const c=_C(r.pct);
+    const c=_C(r.pct),negPR=(r.porRecibir||0)<0;
     return`<tr onclick="bdgSelRow(this)">
       <td class="bdg-sticky-col" style="font-weight:600">${r.producto||'—'}</td>
-      <td class="r">${_N(r.planificado)}</td><td class="r">${_N(r.ingresos)}</td>
-      <td style="min-width:160px"><div style="display:flex;flex-direction:column;gap:3px">
+      <td class="r" data-col="planificado">${_N(r.planificado)}</td>
+      <td class="r" data-col="ingresos">${_N(r.ingresos)}</td>
+      <td class="r${negPR?' neg':''}" data-col="porrecibir">${_N(r.porRecibir)}</td>
+      <td data-col="cumplimiento" style="min-width:160px"><div style="display:flex;flex-direction:column;gap:3px">
         <div style="display:flex;align-items:center;justify-content:space-between">${_badge(r.pct)}<span style="font-size:10px;color:#64748B">${_N(r.ingresos)} / ${_N(r.planificado)}</span></div>
         ${_bar(r.pct,c.bar,6)}
       </div></td>
@@ -600,10 +610,16 @@ function renderProveedores(d){
       <div class="bdg-kpi bdg-kpi--blue"><div class="bdg-kpi-lbl">Total planificado</div><div class="bdg-kpi-val">${_N(totP)}</div></div>
       <div class="bdg-kpi bdg-kpi--green"><div class="bdg-kpi-lbl">Total ingresos</div><div class="bdg-kpi-val">${_N(totI)}</div></div>
       <div class="bdg-kpi bdg-kpi--orange"><div class="bdg-kpi-lbl">Cumplimiento global</div><div class="bdg-kpi-val" style="color:${_C(glob).fg}">${_P(glob)}</div></div>
-      <div class="bdg-kpi"><div class="bdg-kpi-lbl">Proveedores</div><div class="bdg-kpi-val">${rows.length}</div></div>
+      <div class="bdg-kpi${totPR<0?' bdg-kpi--red':''}"><div class="bdg-kpi-lbl">Por recibir</div><div class="bdg-kpi-val">${_N(totPR)}</div></div>
     </div>
     <div class="bdg-tbl-wrap"><table class="bdg-tbl">
-      <thead><tr><th class="bdg-sticky-col">Proveedor / Producto</th><th class="r">Planificado</th><th class="r">Ingresos</th><th>Cumplimiento</th></tr></thead>
+      <thead><tr>
+        <th class="bdg-sticky-col">Proveedor / Producto</th>
+        <th class="r" data-col="planificado">Planificado</th>
+        <th class="r" data-col="ingresos">Ingresos</th>
+        <th class="r" data-col="porrecibir">Por recibir</th>
+        <th data-col="cumplimiento">Cumplimiento</th>
+      </tr></thead>
       <tbody>${trs}</tbody>
     </table></div>
   </div>`;
