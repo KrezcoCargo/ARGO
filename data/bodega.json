@@ -2,24 +2,24 @@
   "cobertura": [
     {
       "producto": "LECHE ENTERA",
-      "ingresos": 2340721,
+      "ingresos": 2469745,
       "totalReq": 2526643,
-      "saldo": 308278,
+      "saldo": 437302,
       "porDia": [
-        2081973,
-        1831429,
-        1541566,
-        1331790,
-        1077795,
-        813615,
-        590847,
-        265851,
-        8125,
-        -111848,
-        -185922
+        2210997,
+        1960453,
+        1670590,
+        1460814,
+        1206819,
+        942639,
+        719871,
+        394875,
+        137149,
+        17176,
+        -56898
       ],
-      "porRecibir": -185922,
-      "pct": 0.9264154057379693
+      "porRecibir": -56898,
+      "pct": 0.9774807917066242
     },
     {
       "producto": "NÉCTAR PERA",
@@ -374,10 +374,10 @@
   "abastecimiento": [
     {
       "producto": "LECHE ENTERA",
-      "ingresos": 2340721,
+      "ingresos": 2469745,
       "totalReq": 2526643,
-      "porRecibir": -185922,
-      "pct": 0.9264154057379693
+      "porRecibir": -56898,
+      "pct": 0.9774807917066242
     },
     {
       "producto": "NÉCTAR PERA",
@@ -510,9 +510,9 @@
     {
       "producto": "LECHE ENTERA (VITA)",
       "planificado": 2133552,
-      "ingresos": 1813111,
-      "pct": 0.8498086758607243,
-      "porRecibir": -320441
+      "ingresos": 1942135,
+      "pct": 0.9102824772960771,
+      "porRecibir": -191417
     },
     {
       "producto": "NÉCTAR PERA",
@@ -672,8 +672,8 @@
   "lotesFinales": [
     {
       "producto": "LECHE ENTERA",
-      "porRecibir": -185922,
-      "pct": 0.9264154057379693,
+      "porRecibir": -56898,
+      "pct": 0.9774807917066242,
       "lotes": "-"
     },
     {
@@ -5809,9 +5809,9 @@
       }
     ]
   },
-  "updatedAt": "17/05/2026 10:15",
+  "updatedAt": "17/05/2026 10:25",
   "_meta": {
-    "generado": "17/05/2026 10:15",
+    "generado": "17/05/2026 10:25",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
