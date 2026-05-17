@@ -718,43 +718,56 @@ function _exportBodegaPDF(view){
   const navy=[10,48,96], blue=[21,101,192], gray=[92,100,120], lightbg=[244,246,251];
   const green=[31,157,85], orange=[244,124,32], red=[220,38,38];
 
-  // ── Header band ──
-  doc.setFillColor(...blue);
-  doc.rect(0,0,W,26,'F');
-  doc.setTextColor(255,255,255);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(13);
+  // Header
+  doc.setFillColor(...blue); doc.rect(0,0,W,26,'F');
+  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(13);
   doc.text('Reporte Bodega — '+_bdgVLabel(view), 14, 11);
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(8.5);
-  doc.setTextColor(200,220,255);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(200,220,255);
   doc.text('Actualizado: '+upd+'   ·   Generado: '+today, 14, 19);
 
   let y=34;
 
-  // ── Helper: KPI row ──
   function kpiRow(items){
     const kW=(W-28)/items.length;
     items.forEach((k,i)=>{
       const x=14+i*(kW+2);
-      doc.setFillColor(...(k.bg||lightbg));
-      doc.roundedRect(x,y,kW-2,16,2,2,'F');
+      doc.setFillColor(...(k.bg||lightbg)); doc.roundedRect(x,y,kW-2,16,2,2,'F');
       doc.setFont('helvetica','bold'); doc.setFontSize(6.5); doc.setTextColor(...(k.lc||gray));
-      doc.text((k.label||'').toUpperCase(), x+3, y+5);
+      // Replace special chars jsPDF can't render
+      doc.text((k.label||'').replace(/≥/g,'>=').replace(/≤/g,'<=').toUpperCase(), x+3, y+5);
       doc.setFontSize(12); doc.setTextColor(...(k.vc||navy));
       doc.text(String(k.val||'—'), x+3, y+13);
     });
     y+=22;
   }
 
-  // ── Helper: progress bar ──
-  function progBar(pct, col){
+  function progBar(pct,col){
     col=col||green;
     doc.setFillColor(220,224,233); doc.roundedRect(14,y,W-28,4,1,1,'F');
     doc.setFillColor(...col); doc.roundedRect(14,y,(W-28)*(Math.min(100,pct)/100),4,1,1,'F');
     doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...col);
-    doc.text(pct+'%', W-14, y+3.5, {align:'right'});
+    doc.text(pct+'%', W-14, y+3.5,{align:'right'});
     y+=10;
+  }
+
+  // ── Helper: color cell by coverage pct ──
+  function _pctColor(pct){ return pct>=1?green:pct>=0.7?orange:red; }
+
+  // ── didParseCell hook for coverage-based row coloring ──
+  function _coverageHook(rows, pctColIdx){
+    return function(data){
+      if(data.section!=='body')return;
+      const r=rows[data.row.index];
+      if(!r)return;
+      const pct=r.pct||0;
+      if(pct<1){
+        const col=_pctColor(pct);
+        if(data.column.index===0){data.cell.styles.textColor=col;data.cell.styles.fontStyle='bold';}
+        if(data.column.index===pctColIdx){data.cell.styles.textColor=col;data.cell.styles.fontStyle='bold';}
+      } else {
+        if(data.column.index===pctColIdx){data.cell.styles.textColor=green;data.cell.styles.fontStyle='bold';}
+      }
+    };
   }
 
   // ── Per-view content ──
@@ -762,40 +775,35 @@ function _exportBodegaPDF(view){
     const rows=(d.cobertura||[]).filter(r=>!(_bdgFilter['cobertura']||[]).includes(r.producto));
     const totIng=rows.reduce((a,r)=>a+(r.ingresos||0),0);
     const totReq=rows.reduce((a,r)=>a+(r.totalReq||0),0);
-    const glob=totReq>0?totIng/totReq:0;
-    const pctG=Math.round(glob*100);
-    const ok=rows.filter(r=>(r.pct||0)>=1).length;
-    const med=rows.filter(r=>(r.pct||0)>=0.7&&(r.pct||0)<1).length;
-    const crit=rows.filter(r=>(r.pct||0)<0.7).length;
+    const glob=totReq>0?totIng/totReq:0, pctG=Math.round(glob*100);
+    const ok=rows.filter(r=>(r.pct||0)>=1).length, med=rows.filter(r=>(r.pct||0)>=0.7&&(r.pct||0)<1).length, crit=rows.filter(r=>(r.pct||0)<0.7).length;
     const col=glob>=0.95?green:glob>=0.7?orange:red;
     kpiRow([
-      {label:'Total ingresos', val:_eN(totIng), bg:[235,244,253], vc:[2,119,189], lc:[2,119,189]},
-      {label:'Total requerido', val:_eN(totReq), bg:navy, vc:[255,255,255], lc:[180,200,230]},
-      {label:'Cobertura global', val:pctG+'%', bg:lightbg, vc:col, lc:col},
-      {label:'Completos / Proceso / Críticos', val:ok+' / '+med+' / '+crit, bg:lightbg, vc:gray, lc:gray},
+      {label:'Total ingresos',val:_eN(totIng),bg:[235,244,253],vc:[2,119,189],lc:[2,119,189]},
+      {label:'Total requerido',val:_eN(totReq),bg:navy,vc:[255,255,255],lc:[180,200,230]},
+      {label:'Cobertura global',val:pctG+'%',bg:lightbg,vc:col,lc:col},
+      {label:'Completos / Proceso / Criticos',val:ok+' / '+med+' / '+crit,bg:lightbg,vc:gray,lc:gray},
     ]);
-    doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...gray);
-    doc.text('COBERTURA GLOBAL DEL INVENTARIO', 14, y); y+=4;
-    progBar(pctG, col);
+    doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...gray);
+    doc.text('COBERTURA GLOBAL DEL INVENTARIO',14,y);y+=4;
+    progBar(pctG,col);
     doc.autoTable({startY:y,
       head:[['Producto','Ingresos','Requerido','Saldo','Cobertura']],
       body:rows.map(r=>[r.producto||'—',_eN(r.ingresos),_eN(r.totalReq),_eN(r.saldo),Math.round((r.pct||0)*100)+'%']),
       styles:{fontSize:8,cellPadding:2.5,textColor:navy},
       headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:7.5},
       alternateRowStyles:{fillColor:[248,249,252]},
-      columnStyles:{4:{textColor:green,fontStyle:'bold'}},
+      didParseCell:_coverageHook(rows,4),
       margin:{left:14,right:14}});
 
   } else if(view==='abastecimiento'){
     const rows=(d.abastecimiento||[]).filter(r=>!(_bdgFilter['abastecimiento']||[]).includes(r.producto));
-    const ok=rows.filter(r=>(r.pct||0)>=1).length;
-    const med=rows.filter(r=>(r.pct||0)>=0.7&&(r.pct||0)<1).length;
-    const crit=rows.filter(r=>(r.pct||0)<0.7).length;
+    const ok=rows.filter(r=>(r.pct||0)>=1).length, med=rows.filter(r=>(r.pct||0)>=0.7&&(r.pct||0)<1).length, crit=rows.filter(r=>(r.pct||0)<0.7).length;
     kpiRow([
-      {label:'Completos ≥100%', val:ok, bg:[230,246,236], vc:green, lc:green},
-      {label:'En proceso 70-99%', val:med, bg:[255,241,227], vc:orange, lc:orange},
-      {label:'Críticos <70%', val:crit, bg:[254,226,226], vc:red, lc:red},
-      {label:'Total productos', val:rows.length, bg:lightbg, vc:gray, lc:gray},
+      {label:'Completos >=100%',val:ok,bg:[230,246,236],vc:green,lc:green},
+      {label:'En proceso 70-99%',val:med,bg:[255,241,227],vc:orange,lc:orange},
+      {label:'Criticos <70%',val:crit,bg:[254,226,226],vc:red,lc:red},
+      {label:'Total productos',val:rows.length,bg:lightbg,vc:gray,lc:gray},
     ]);
     doc.autoTable({startY:y,
       head:[['Producto','Ingresos','Requerido','Por Recibir','Cobertura']],
@@ -803,43 +811,40 @@ function _exportBodegaPDF(view){
       styles:{fontSize:8,cellPadding:2.5,textColor:navy},
       headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:7.5},
       alternateRowStyles:{fillColor:[248,249,252]},
-      columnStyles:{4:{fontStyle:'bold'}},
+      didParseCell:_coverageHook(rows,4),
       margin:{left:14,right:14}});
 
   } else if(view==='proveedores'){
     const rows=(d.proveedores||[]).filter(r=>!(_bdgFilter['proveedores']||[]).includes(r.producto));
-    const totP=rows.reduce((a,r)=>a+(r.planificado||0),0);
-    const totI=rows.reduce((a,r)=>a+(r.ingresos||0),0);
-    const glob=totP>0?totI/totP:0;
-    const pctG=Math.round(glob*100);
+    const totP=rows.reduce((a,r)=>a+(r.planificado||0),0), totI=rows.reduce((a,r)=>a+(r.ingresos||0),0);
+    const glob=totP>0?totI/totP:0, pctG=Math.round(glob*100);
     const col=glob>=0.95?green:glob>=0.7?orange:red;
     kpiRow([
-      {label:'Total planificado', val:_eN(totP), bg:navy, vc:[255,255,255], lc:[180,200,230]},
-      {label:'Total ingresos', val:_eN(totI), bg:[230,246,236], vc:green, lc:green},
-      {label:'Cumplimiento global', val:pctG+'%', bg:lightbg, vc:col, lc:col},
-      {label:'Proveedores', val:rows.length, bg:lightbg, vc:gray, lc:gray},
+      {label:'Total planificado',val:_eN(totP),bg:navy,vc:[255,255,255],lc:[180,200,230]},
+      {label:'Total ingresos',val:_eN(totI),bg:[230,246,236],vc:green,lc:green},
+      {label:'Cumplimiento global',val:pctG+'%',bg:lightbg,vc:col,lc:col},
+      {label:'Proveedores',val:rows.length,bg:lightbg,vc:gray,lc:gray},
     ]);
-    doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...gray);
-    doc.text('CUMPLIMIENTO GLOBAL DE PROVEEDORES', 14, y); y+=4;
-    progBar(pctG, col);
+    doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...gray);
+    doc.text('CUMPLIMIENTO GLOBAL DE PROVEEDORES',14,y);y+=4;
+    progBar(pctG,col);
     doc.autoTable({startY:y,
       head:[['Proveedor / Producto','Planificado','Ingresos','Por Recibir','Cumplimiento']],
       body:rows.map(r=>[r.producto||'—',_eN(r.planificado),_eN(r.ingresos),_eN(r.porRecibir),Math.round((r.pct||0)*100)+'%']),
       styles:{fontSize:8,cellPadding:2.5,textColor:navy},
       headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:7.5},
       alternateRowStyles:{fillColor:[248,249,252]},
-      columnStyles:{4:{fontStyle:'bold'}},
+      didParseCell:_coverageHook(rows,4),
       margin:{left:14,right:14}});
 
   } else if(view==='lotesFinales'){
     const rows=(d.lotesFinales||[]).filter(r=>!(_bdgFilter['lotesFinales']||[]).includes(r.producto));
-    const ok=rows.filter(r=>(r.pct||0)>=1).length;
-    const crit=rows.filter(r=>(r.pct||0)<0.7).length;
+    const ok=rows.filter(r=>(r.pct||0)>=1).length, crit=rows.filter(r=>(r.pct||0)<0.7).length;
     kpiRow([
-      {label:'Completados ≥100%', val:ok, bg:[230,246,236], vc:green, lc:green},
-      {label:'Críticos <70%', val:crit, bg:[254,226,226], vc:red, lc:red},
-      {label:'Total productos', val:rows.length, bg:lightbg, vc:gray, lc:gray},
-      {label:'Actualizado', val:upd, bg:lightbg, vc:gray, lc:gray},
+      {label:'Completados >=100%',val:ok,bg:[230,246,236],vc:green,lc:green},
+      {label:'Criticos <70%',val:crit,bg:[254,226,226],vc:red,lc:red},
+      {label:'Total productos',val:rows.length,bg:lightbg,vc:gray,lc:gray},
+      {label:'Actualizado',val:upd,bg:lightbg,vc:gray,lc:gray},
     ]);
     doc.autoTable({startY:y,
       head:[['Producto','Por Recibir','Cobertura','Lote']],
@@ -847,7 +852,7 @@ function _exportBodegaPDF(view){
       styles:{fontSize:8,cellPadding:2.5,textColor:navy},
       headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:7.5},
       alternateRowStyles:{fillColor:[248,249,252]},
-      columnStyles:{2:{fontStyle:'bold'}},
+      didParseCell:_coverageHook(rows,2),
       margin:{left:14,right:14}});
 
   } else if(view==='reqDiario'){
@@ -855,15 +860,15 @@ function _exportBodegaPDF(view){
     const totDist=rows.reduce((a,r)=>a+(r.distributivo||0),0);
     const nd=rows.length?Math.max(...rows.map(r=>(r.dias||[]).length),0):0;
     kpiRow([
-      {label:'Total productos', val:rows.length, bg:navy, vc:[255,255,255], lc:[180,200,230]},
-      {label:'Total distributivo', val:_eN(totDist), bg:[255,241,227], vc:orange, lc:orange},
-      {label:'Días planificados', val:nd, bg:[235,244,253], vc:[2,119,189], lc:[2,119,189]},
-      {label:'Actualizado', val:upd, bg:lightbg, vc:gray, lc:gray},
+      {label:'Total productos',val:rows.length,bg:navy,vc:[255,255,255],lc:[180,200,230]},
+      {label:'Total distributivo',val:_eN(totDist),bg:[255,241,227],vc:orange,lc:orange},
+      {label:'Dias planificados',val:nd,bg:[235,244,253],vc:[2,119,189],lc:[2,119,189]},
+      {label:'Actualizado',val:upd,bg:lightbg,vc:gray,lc:gray},
     ]);
     const lbls=d.diaLabels||[];
     const dayHdrs=Array.from({length:nd},(_,i)=>{const r=lbls[i]||'';const m=r.match(/^D\d+_(.+)$/);return m?m[1]:'D'+(i+1);});
     doc.autoTable({startY:y,
-      head:[['Producto',...dayHdrs,'Distributivo','Días']],
+      head:[['Producto',...dayHdrs,'Distributivo','Dias']],
       body:rows.map(r=>[r.producto||'—',...Array.from({length:nd},(_,i)=>r.dias&&r.dias[i]!=null?_eN(r.dias[i]):'—'),_eN(r.distributivo),r.numDias||'—']),
       styles:{fontSize:7,cellPadding:2,textColor:navy},
       headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:6.5},
@@ -873,14 +878,15 @@ function _exportBodegaPDF(view){
   } else if(view==='lastmile'){
     const lm=d.lastmile||{};
     const pivot=(lm.pivot||[]).filter(r=>r.transportista&&!/^total/i.test(r.transportista));
-    const vk=pivot.length?Object.keys(pivot[0]).filter(k=>k!=='transportista'&&!/^B\d+$/.test(k)):[];
+    // Exclude fallback cols (B1..B15) AND any pre-computed total column
+    const vk=pivot.length?Object.keys(pivot[0]).filter(k=>k!=='transportista'&&!/^B\d+$/.test(k)&&!/total/i.test(k)):[];
     const totErr=pivot.reduce((a,r)=>a+vk.reduce((b,k)=>b+(Number(r[k])||0),0),0);
     const res=lm.resumen||[];
     kpiRow([
-      {label:'Transportistas c/ errores', val:pivot.length, bg:[254,226,226], vc:red, lc:red},
-      {label:'Total errores', val:_eN(totErr), bg:[255,241,227], vc:orange, lc:orange},
-      {label:'Días registrados', val:res.length, bg:[235,244,253], vc:[2,119,189], lc:[2,119,189]},
-      {label:'Actualizado', val:upd, bg:lightbg, vc:gray, lc:gray},
+      {label:'Transportistas c/ errores',val:pivot.length,bg:[254,226,226],vc:red,lc:red},
+      {label:'Total errores',val:_eN(totErr),bg:[255,241,227],vc:orange,lc:orange},
+      {label:'Dias registrados',val:res.length,bg:[235,244,253],vc:[2,119,189],lc:[2,119,189]},
+      {label:'Actualizado',val:upd,bg:lightbg,vc:gray,lc:gray},
     ]);
     if(pivot.length){
       doc.autoTable({startY:y,
@@ -889,17 +895,77 @@ function _exportBodegaPDF(view){
         styles:{fontSize:7.5,cellPadding:2.5,textColor:navy},
         headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:7},
         alternateRowStyles:{fillColor:[248,249,252]},
+        didParseCell:function(data){
+          if(data.section!=='body')return;
+          const ci=data.column.index;
+          if(ci>0){const v=Number(data.cell.raw);if(v>0){data.cell.styles.textColor=red;data.cell.styles.fontStyle='bold';}}
+        },
         margin:{left:14,right:14}});
       y=doc.lastAutoTable.finalY+8;
     }
     if(res.length){
-      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...navy);
-      doc.text('RESUMEN DIARIO (META VS VALIDACIÓN)', 14, y); y+=4;
+      doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...navy);
+      doc.text('RESUMEN DIARIO (META VS VALIDACION)',14,y);y+=4;
       doc.autoTable({startY:y,
-        head:[['Día','Meta (Transportistas)','Validación']],
+        head:[['Dia','Meta (Transportistas)','Validacion']],
         body:res.map(r=>[r.etiqueta||'—',_eN(r.cuentaTrans),_eN(r.cuentaVal)]),
         styles:{fontSize:8,cellPadding:2.5,textColor:navy},
         headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:7.5},
+        alternateRowStyles:{fillColor:[248,249,252]},
+        margin:{left:14,right:14}});
+    }
+
+  } else if(view==='graficas'){
+    const sc=typeof SCHOOLS!=='undefined'?SCHOOLS:[];
+    if(!sc.length){
+      doc.setFont('helvetica','normal');doc.setFontSize(11);doc.setTextColor(...gray);
+      doc.text('Sin datos de instituciones educativas cargados.',14,y);
+    } else {
+      const tot=sc.length;
+      const racTot=sc.reduce((a,s)=>a+(s.raciones||0),0);
+      const nE=sc.filter(s=>s.estado==='entregada').length;
+      const nR=sc.filter(s=>s.estado==='en_ruta').length;
+      const nPr=sc.filter(s=>s.estado==='problema').length;
+      const racEnt=sc.filter(s=>s.estado==='entregada').reduce((a,s)=>a+(s.raciones||0),0);
+      const racRuta=sc.filter(s=>s.estado==='en_ruta').reduce((a,s)=>a+(s.raciones||0),0);
+      const tonEnt=(sc.filter(s=>s.estado==='entregada').reduce((a,s)=>a+(s.peso_kg||0),0)/1000).toFixed(1);
+      const pctEnt=racTot>0?Math.round(racEnt/racTot*100):0;
+      kpiRow([
+        {label:'Total raciones',val:racTot.toLocaleString('es-EC'),bg:navy,vc:[255,255,255],lc:[180,200,230]},
+        {label:'Entregadas',val:racEnt.toLocaleString('es-EC'),bg:[230,246,236],vc:green,lc:green},
+        {label:'En ruta',val:racRuta.toLocaleString('es-EC'),bg:[255,241,227],vc:orange,lc:orange},
+        {label:'Toneladas entregadas',val:tonEnt+' TON',bg:[235,244,253],vc:[2,119,189],lc:[2,119,189]},
+      ]);
+      doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...gray);
+      doc.text('PROGRESO ACUMULADO DEL PROGRAMA',14,y);y+=4;
+      progBar(pctEnt,green);
+      const provs=[...new Set(sc.map(s=>s.prov).filter(Boolean))].sort();
+      doc.autoTable({startY:y,
+        head:[['Provincia','IE Entregadas','% Avance','Raciones Ent.','En Ruta','Pendientes']],
+        body:provs.map(p=>{
+          const ptot=sc.filter(s=>s.prov===p).length;
+          const pent=sc.filter(s=>s.prov===p&&s.estado==='entregada').length;
+          const pruta=sc.filter(s=>s.prov===p&&s.estado==='en_ruta').length;
+          const ppct=ptot>0?Math.round(pent/ptot*100):0;
+          const racTP=sc.filter(s=>s.prov===p).reduce((a,s)=>a+(s.raciones||0),0);
+          const racEP=sc.filter(s=>s.prov===p&&s.estado==='entregada').reduce((a,s)=>a+(s.raciones||0),0);
+          return[p.charAt(0)+p.slice(1).toLowerCase(),pent+' / '+ptot+' IE',ppct+'%',
+            racEP.toLocaleString('es-EC')+' / '+racTP.toLocaleString('es-EC'),
+            pruta+' IE',(ptot-pent-pruta)+' IE'];
+        }),
+        styles:{fontSize:8,cellPadding:2.5,textColor:navy},
+        headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:7.5},
+        alternateRowStyles:{fillColor:[248,249,252]},
+        columnStyles:{2:{fontStyle:'bold',textColor:green}},
+        margin:{left:14,right:14}});
+      y=doc.lastAutoTable.finalY+8;
+      doc.autoTable({startY:y,
+        head:[['Indicador','Valor']],
+        body:[['Total IE programa',tot+' IE'],['IE entregadas',nE+' IE'],['IE en ruta',nR+' IE'],
+          ['IE con problema',nPr+' IE'],['IE pendientes',(tot-nE-nR-nPr)+' IE'],
+          ['Toneladas entregadas',tonEnt+' TON'],['% avance raciones',pctEnt+'%']],
+        styles:{fontSize:9,cellPadding:3,textColor:navy},
+        headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:8},
         alternateRowStyles:{fillColor:[248,249,252]},
         margin:{left:14,right:14}});
     }
@@ -909,10 +975,10 @@ function _exportBodegaPDF(view){
     const pos=inv.filter(r=>Number(r.ajuste||0)>0).length;
     const neg=inv.filter(r=>Number(r.ajuste||0)<0).length;
     kpiRow([
-      {label:'Ajustes positivos', val:pos, bg:[230,246,236], vc:green, lc:green},
-      {label:'Ajustes negativos', val:neg, bg:[254,226,226], vc:red, lc:red},
-      {label:'Total productos', val:inv.length, bg:lightbg, vc:gray, lc:gray},
-      {label:'Actualizado', val:upd, bg:lightbg, vc:gray, lc:gray},
+      {label:'Ajustes positivos',val:pos,bg:[230,246,236],vc:green,lc:green},
+      {label:'Ajustes negativos',val:neg,bg:[254,226,226],vc:red,lc:red},
+      {label:'Total productos',val:inv.length,bg:lightbg,vc:gray,lc:gray},
+      {label:'Actualizado',val:upd,bg:lightbg,vc:gray,lc:gray},
     ]);
     if(inv.length){
       doc.autoTable({startY:y,
@@ -920,18 +986,28 @@ function _exportBodegaPDF(view){
         body:inv.map(r=>[r.producto||'—',_eN(r.ajuste)]),
         styles:{fontSize:8,cellPadding:2.5,textColor:navy},
         headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:7.5},
-        alternateRowStyles:{fillColor:[248,249,252]},
-        columnStyles:{1:{halign:'right',fontStyle:'bold'}},
+        // No alternateRowStyles — each row is fully colored by value
+        didParseCell:function(data){
+          if(data.section!=='body')return;
+          const r=inv[data.row.index];if(!r)return;
+          const v=Number(r.ajuste||0),isNeg=v<0;
+          const col=isNeg?red:green;
+          const bg=isNeg?[255,242,242]:[242,253,246];
+          data.cell.styles.textColor=col;
+          data.cell.styles.fontStyle='bold';
+          data.cell.styles.fillColor=bg;
+          if(data.column.index===1)data.cell.styles.halign='right';
+        },
         margin:{left:14,right:14}});
       y=doc.lastAutoTable.finalY+8;
     }
     const sem=d.inventarioSemanal||[];
     if(sem.length){
       const keys=Object.keys(sem[0]||{}).filter(k=>k!=='dia'&&k!=='__rowNum');
-      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...navy);
-      doc.text('INVENTARIO SEMANAL', 14, y); y+=4;
+      doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...navy);
+      doc.text('INVENTARIO SEMANAL',14,y);y+=4;
       doc.autoTable({startY:y,
-        head:[['Día',...keys]],
+        head:[['Dia',...keys]],
         body:sem.map(r=>[r.dia||'—',...keys.map(k=>r[k]!=null?String(r[k]):'—')]),
         styles:{fontSize:8,cellPadding:2.5,textColor:navy},
         headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:7.5},
@@ -940,11 +1016,11 @@ function _exportBodegaPDF(view){
     }
   }
 
-  // ── Footer ──
+  // Footer
   const pageH=doc.internal.pageSize.getHeight();
-  doc.setDrawColor(220,224,233); doc.line(14,pageH-10,W-14,pageH-10);
-  doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(...gray);
-  doc.text('Reporte generado automáticamente · Bodega Dashboard · '+today, 14, pageH-5);
+  doc.setDrawColor(220,224,233);doc.line(14,pageH-10,W-14,pageH-10);
+  doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(...gray);
+  doc.text('Reporte generado automaticamente · Bodega Dashboard · '+today,14,pageH-5);
 
   const fname='Bodega_'+_bdgVLabel(view).replace(/\s/g,'_')+'_'+today.replace(/\//g,'-')+'.pdf';
   doc.save(fname);
