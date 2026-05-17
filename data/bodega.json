@@ -2,24 +2,24 @@
   "cobertura": [
     {
       "producto": "LECHE ENTERA",
-      "ingresos": 2469745,
+      "ingresos": 2534257,
       "totalReq": 2526643,
-      "saldo": 392208,
+      "saldo": 456720,
       "porDia": [
-        2210997,
-        1960453,
-        1670590,
-        1460814,
-        1206819,
-        942639,
-        719871,
-        394875,
-        137149,
-        17176,
-        -56898
+        2275509,
+        2024965,
+        1735102,
+        1525326,
+        1271331,
+        1007151,
+        784383,
+        459387,
+        201661,
+        81688,
+        7614
       ],
-      "porRecibir": -56898,
-      "pct": 0.9774807917066242
+      "porRecibir": 7614,
+      "pct": 1.0030134846909515
     },
     {
       "producto": "NÉCTAR PERA",
@@ -374,10 +374,10 @@
   "abastecimiento": [
     {
       "producto": "LECHE ENTERA",
-      "ingresos": 2469745,
+      "ingresos": 2534257,
       "totalReq": 2526643,
-      "porRecibir": -56898,
-      "pct": 0.9774807917066242
+      "porRecibir": 7614,
+      "pct": 1.0030134846909515
     },
     {
       "producto": "NÉCTAR PERA",
@@ -510,9 +510,9 @@
     {
       "producto": "LECHE ENTERA (VITA)",
       "planificado": 2133552,
-      "ingresos": 1942135,
-      "pct": 0.9102824772960771,
-      "porRecibir": -191417
+      "ingresos": 2006647,
+      "pct": 0.9405193780137536,
+      "porRecibir": -126905
     },
     {
       "producto": "NÉCTAR PERA",
@@ -672,9 +672,9 @@
   "lotesFinales": [
     {
       "producto": "LECHE ENTERA",
-      "porRecibir": -56898,
-      "pct": 0.9774807917066242,
-      "lotes": "-"
+      "porRecibir": 7614,
+      "pct": 1.0030134846909515,
+      "lotes": "VITA107 (33000)"
     },
     {
       "producto": "NÉCTAR PERA",
@@ -5809,9 +5809,9 @@
       }
     ]
   },
-  "updatedAt": "17/05/2026 10:46",
+  "updatedAt": "17/05/2026 11:14",
   "_meta": {
-    "generado": "17/05/2026 10:46",
+    "generado": "17/05/2026 11:14",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
