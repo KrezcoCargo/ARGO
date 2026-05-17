@@ -722,7 +722,7 @@
       "producto": "LECHE SABORIZADA CHOCOLATE",
       "porRecibir": 3918,
       "pct": 1.005427359543869,
-      "lotes": "L6127H (14486)"
+      "lotes": "L6123A (14486)"
     },
     {
       "producto": "LECHE SABORIZADA FRESA",
@@ -5809,9 +5809,9 @@
       }
     ]
   },
-  "updatedAt": "17/05/2026 15:17",
+  "updatedAt": "17/05/2026 15:23",
   "_meta": {
-    "generado": "17/05/2026 15:17",
+    "generado": "17/05/2026 15:23",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
