@@ -1,4 +1,10 @@
 ﻿function openEmailModal(){
+  if(typeof currentPage!=='undefined'&&currentPage==='bodega'){
+    if(!_bodegaData){showToast('Sin datos de bodega disponibles.',true);return;}
+    _renderBodegaModal(_bodegaView);
+    document.getElementById('email-modal').style.display='flex';
+    return;
+  }
   if(!SCHOOLS.length){showToast('Carga primero un archivo Excel.',true);return;}
   renderEmailModal();
   document.getElementById('email-modal').style.display='flex';
@@ -179,6 +185,7 @@ function buildHtmlEmail(){
 }
 
 function exportPDF(){
+  if(typeof currentPage!=='undefined'&&currentPage==='bodega'){showToast('Exportar PDF no disponible para reportes de bodega. Usa "Copiar para Gmail".',true);return;}
   if(typeof window.jspdf==='undefined'){showToast('Cargando librería PDF, intenta en unos segundos.',true);return;}
   const {jsPDF}=window.jspdf;
   const d=ST.dia;
@@ -321,9 +328,11 @@ function exportPDF(){
 }
 
 async function copyHtmlForGmail(){
-  const html=buildHtmlEmail();
+  const isBodega=typeof currentPage!=='undefined'&&currentPage==='bodega';
+  const html=isBodega?_buildBodegaHtmlEmail(_bodegaView):buildHtmlEmail();
+  const text=isBodega?_buildBodegaEmailBody(_bodegaView):buildEmailBody();
   try{
-    await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([buildEmailBody()],{type:'text/plain'})})]);
+    await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([text],{type:'text/plain'})})]);
     const btn=document.getElementById('btn-copy-html');
     btn.textContent='✅ ¡Copiado!';btn.style.background='#1F9D55';btn.style.color='#fff';btn.style.borderColor='#1F9D55';
     setTimeout(()=>{btn.textContent='📋 Copiar para Gmail';btn.style.background='#fff';btn.style.color='#1F9D55';btn.style.borderColor='#1F9D55';},2500);
@@ -335,10 +344,612 @@ async function copyHtmlForGmail(){
 function sendEmailSummary(){
   const recipients=document.getElementById('email-recipients').value.trim();
   if(!recipients){document.getElementById('email-recipients').style.borderColor='#DC2626';document.getElementById('email-recipients').focus();return;}
+  if(typeof currentPage!=='undefined'&&currentPage==='bodega'){
+    const subject=encodeURIComponent(_buildBodegaEmailSubject(_bodegaView));
+    const body=encodeURIComponent(_buildBodegaEmailBody(_bodegaView));
+    window.location.href='mailto:'+encodeURIComponent(recipients)+'?subject='+subject+'&body='+body;
+    return;
+  }
   const d=ST.dia;
   const fecha=d2i(d);
   const [y,m,dd]=fecha.split('-');
   const subject=encodeURIComponent('Resumen Día '+d+' - '+CFG.programa+' - '+dd+'/'+m+'/'+y);
   const body=encodeURIComponent(buildEmailBody());
   window.location.href='mailto:'+encodeURIComponent(recipients)+'?subject='+subject+'&body='+body;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BODEGA EMAIL — modal render + plain text + HTML
+═══════════════════════════════════════════════════════════ */
+
+function _bdgVLabel(view){
+  return{cobertura:'Cobertura',abastecimiento:'Abastecimiento',proveedores:'Proveedores',
+    lotesFinales:'Lotes Finales',reqDiario:'Req. Diario',lastmile:'Last Mile',
+    graficas:'Gráficas',invSemanal:'Inv. Semanal'}[view]||view;
+}
+
+/* Shared colour helper (mirrors bodega.js _C) */
+function _eC(pct){
+  const p=Number(pct||0);
+  if(p>=0.95)return{bg:'#E6F6EC',fg:'#166534',bar:'#1F9D55'};
+  if(p>=0.7) return{bg:'#FEF3C7',fg:'#92400E',bar:'#D97706'};
+  return{bg:'#FEE2E2',fg:'#991B1B',bar:'#EF4444'};
+}
+function _eN(n,d=0){if(n==null||n===''||isNaN(Number(n)))return'—';return Number(n).toLocaleString('es-EC',{minimumFractionDigits:d,maximumFractionDigits:d});}
+function _eP(v){if(v==null||isNaN(Number(v)))return'—';return(Number(v)*100).toFixed(1)+'%';}
+
+/* Set the text/visibility of a modal element if it exists */
+function _emEl(id,html){const el=document.getElementById(id);if(el)el.innerHTML=html;}
+function _emTxt(id,txt){const el=document.getElementById(id);if(el)el.textContent=txt;}
+function _emShow(id,show){const el=document.getElementById(id);if(el)el.style.display=show?'':'none';}
+
+/* Build KPI card HTML */
+function _emKpi(label,val,sub,bg,vc,sc){
+  return`<div style="background:${bg};border-radius:10px;padding:12px 14px">
+    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:${sc};margin-bottom:4px">${label}</div>
+    <div style="font-size:20px;font-weight:800;color:${vc};line-height:1">${val}</div>
+    <div style="font-size:10px;color:${sc};margin-top:3px">${sub}</div>
+  </div>`;
+}
+
+/* Product progress row (reuse for provinces-section) */
+function _emProdBar(name,pct,left,right,barColor){
+  const w=Math.min(100,Math.max(0,Math.round(pct)));
+  return`<div style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <span style="font-size:12px;font-weight:700;color:#14213D;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:55%">${name||'—'}</span>
+      <span style="font-size:11px;color:#5C6478;white-space:nowrap">${left} · <strong style="color:${barColor}">${right}</strong></span>
+    </div>
+    <div style="background:#EEF1F7;border-radius:999px;height:8px;overflow:hidden">
+      <div style="height:100%;background:${barColor};border-radius:999px;width:${w}%"></div>
+    </div>
+  </div>`;
+}
+
+/* Detail chip */
+function _emChip(label,val,color){
+  return`<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:#F4F6FB;border-radius:8px">
+    <div style="width:8px;height:8px;border-radius:50%;background:${color};flex-shrink:0"></div>
+    <div><div style="font-size:10px;color:#5C6478">${label}</div>
+    <div style="font-size:13px;font-weight:800;color:${color}">${val}</div></div>
+  </div>`;
+}
+
+/* ── Main modal renderer ── */
+function _renderBodegaModal(view){
+  const d=_bodegaData;
+  const upd=d.updatedAt||'';
+  _emTxt('em-subtitle',_bdgVLabel(view)+(upd?' · '+upd:'')+' · Bodega');
+
+  /* reset prog bar color */
+  const pb=document.getElementById('em-prog-bar');
+  if(pb)pb.style.background='#1F9D55';
+
+  if(view==='cobertura')      _emBodegaCobertura(d);
+  else if(view==='abastecimiento') _emBodegaAbastecimiento(d);
+  else if(view==='proveedores')    _emBodegaProveedores(d);
+  else if(view==='lotesFinales')   _emBodegaLotes(d);
+  else if(view==='reqDiario')      _emBodegaReqDiario(d);
+  else if(view==='lastmile')       _emBodegaLastMile(d);
+  else if(view==='invSemanal')     _emBodegaInvSemanal(d);
+  else                             _emBodegaGenerico(d,view);
+}
+
+/* ── 1. COBERTURA ── */
+function _emBodegaCobertura(d){
+  const rows=(d.cobertura||[]).filter(r=>!(_bdgFilter['cobertura']||[]).includes(r.producto));
+  const totIng=rows.reduce((a,r)=>a+(r.ingresos||0),0);
+  const totReq=rows.reduce((a,r)=>a+(r.totalReq||0),0);
+  const glob=totReq>0?totIng/totReq:0;
+  const pctGlob=Math.round(glob*100);
+  const ok=rows.filter(r=>(r.pct||0)>=1).length;
+  const med=rows.filter(r=>(r.pct||0)>=0.7&&(r.pct||0)<1).length;
+  const crit=rows.filter(r=>(r.pct||0)<0.7).length;
+  const cg=_eC(glob);
+  _emEl('em-kpis',[
+    _emKpi('Total ingresos',_eN(totIng),ok+' productos completos','#EBF4FD','#0277BD','#0277BD'),
+    _emKpi('Total requerido',_eN(totReq),rows.length+' productos','#14213D','#fff','rgba(255,255,255,.6)'),
+    _emKpi('Cobertura global',pctGlob+'%',crit+' críticos <70%',cg.bg,cg.fg,cg.fg),
+    _emKpi('Estado',ok+'✅ '+med+'⚠️ '+crit+'❌','Completos · Proceso · Críticos','#EEF1F7','#5C6478','#5C6478'),
+  ].join(''));
+  _emShow('em-prog-section',true);
+  _emTxt('em-prog-title','Cobertura global del inventario');
+  _emTxt('em-pct-label',pctGlob+'% cobertura');
+  const pb=document.getElementById('em-prog-bar');
+  if(pb){pb.style.width=pctGlob+'%';pb.style.background=cg.bar;}
+  _emShow('em-provs-section',true);
+  _emTxt('em-provs-title','Cobertura por producto');
+  _emEl('em-provs',rows.map(r=>{
+    const c=_eC(r.pct),p=Math.round((r.pct||0)*100);
+    return _emProdBar(r.producto,p,_eN(r.ingresos)+' / '+_eN(r.totalReq),p+'%',c.bar);
+  }).join(''));
+  _emShow('em-ie-section',true);
+  _emTxt('em-ie-title','Resumen de cobertura');
+  _emEl('em-ie',[
+    _emChip('Cobertura global',pctGlob+'%',cg.bar),
+    _emChip('Completos ≥100%',ok,   '#1F9D55'),
+    _emChip('En proceso 70–99%',med,'#D97706'),
+    _emChip('Críticos <70%',crit,   '#EF4444'),
+    _emChip('Total ingresos',_eN(totIng),'#0277BD'),
+    _emChip('Total requerido',_eN(totReq),'#14213D'),
+  ].join(''));
+}
+
+/* ── 2. ABASTECIMIENTO ── */
+function _emBodegaAbastecimiento(d){
+  const rows=(d.abastecimiento||[]).filter(r=>!(_bdgFilter['abastecimiento']||[]).includes(r.producto));
+  const ok=rows.filter(r=>(r.pct||0)>=1).length;
+  const med=rows.filter(r=>(r.pct||0)>=0.7&&(r.pct||0)<1).length;
+  const crit=rows.filter(r=>(r.pct||0)<0.7).length;
+  const pctOk=rows.length?Math.round(ok/rows.length*100):0;
+  _emEl('em-kpis',[
+    _emKpi('Completados ≥100%',ok,'100% abastecidos','#E6F6EC','#1F9D55','#2D7A47'),
+    _emKpi('En proceso 70–99%',med,'Parcialmente abast.','#FFF1E3','#F47C20','#A8510D'),
+    _emKpi('Críticos <70%',crit,'Requieren atención','#FEE2E2','#DC2626','#991B1B'),
+    _emKpi('Total productos',rows.length,pctOk+'% completados','#EEF1F7','#5C6478','#5C6478'),
+  ].join(''));
+  _emShow('em-prog-section',true);
+  _emTxt('em-prog-title','Productos con abastecimiento completo');
+  _emTxt('em-pct-label',pctOk+'% completos');
+  const pb=document.getElementById('em-prog-bar');
+  if(pb){pb.style.width=pctOk+'%';pb.style.background='#1F9D55';}
+  _emShow('em-provs-section',true);
+  _emTxt('em-provs-title','Nivel de abastecimiento por producto');
+  _emEl('em-provs',rows.map(r=>{
+    const c=_eC(r.pct),p=Math.round((r.pct||0)*100);
+    return _emProdBar(r.producto,p,_eN(r.ingresos)+' / '+_eN(r.totalReq),p+'%',c.bar);
+  }).join(''));
+  _emShow('em-ie-section',true);
+  _emTxt('em-ie-title','Productos críticos');
+  const critRows=rows.filter(r=>(r.pct||0)<0.7);
+  _emEl('em-ie',critRows.length
+    ? critRows.map(r=>_emChip(r.producto,_eP(r.pct),'#EF4444')).join('')
+    : '<div style="font-size:12px;color:#1F9D55;padding:8px">✅ Sin productos críticos</div>');
+}
+
+/* ── 3. PROVEEDORES ── */
+function _emBodegaProveedores(d){
+  const rows=(d.proveedores||[]).filter(r=>!(_bdgFilter['proveedores']||[]).includes(r.producto));
+  const totP=rows.reduce((a,r)=>a+(r.planificado||0),0);
+  const totI=rows.reduce((a,r)=>a+(r.ingresos||0),0);
+  const glob=totP>0?totI/totP:0;
+  const pctG=Math.round(glob*100);
+  const cg=_eC(glob);
+  const crit=rows.filter(r=>(r.pct||0)<0.7).length;
+  const ok=rows.filter(r=>(r.pct||0)>=1).length;
+  _emEl('em-kpis',[
+    _emKpi('Total planificado',_eN(totP),rows.length+' proveedores','#14213D','#fff','rgba(255,255,255,.6)'),
+    _emKpi('Total ingresos',_eN(totI),ok+' completos','#E6F6EC','#1F9D55','#2D7A47'),
+    _emKpi('Cumplimiento global',pctG+'%',crit+' críticos','#EBF4FD','#0277BD','#0277BD'),
+    _emKpi('Estado',ok+'✅ '+crit+'❌','Completos · Críticos',cg.bg,cg.fg,cg.fg),
+  ].join(''));
+  _emShow('em-prog-section',true);
+  _emTxt('em-prog-title','Cumplimiento global de proveedores');
+  _emTxt('em-pct-label',pctG+'% cumplimiento');
+  const pb=document.getElementById('em-prog-bar');
+  if(pb){pb.style.width=pctG+'%';pb.style.background=cg.bar;}
+  _emShow('em-provs-section',true);
+  _emTxt('em-provs-title','Cumplimiento por proveedor');
+  _emEl('em-provs',rows.map(r=>{
+    const c=_eC(r.pct),p=Math.round((r.pct||0)*100);
+    return _emProdBar(r.producto,p,_eN(r.ingresos)+' / '+_eN(r.planificado),p+'%',c.bar);
+  }).join(''));
+  _emShow('em-ie-section',true);
+  _emTxt('em-ie-title','Resumen de proveedores');
+  _emEl('em-ie',[
+    _emChip('Cumplimiento global',pctG+'%',cg.bar),
+    _emChip('Total planificado',_eN(totP),'#14213D'),
+    _emChip('Total ingresos',_eN(totI),'#1F9D55'),
+    _emChip('Completos ≥100%',ok,'#1F9D55'),
+    _emChip('En proceso 70–99%',rows.filter(r=>(r.pct||0)>=0.7&&(r.pct||0)<1).length,'#D97706'),
+    _emChip('Críticos <70%',crit,'#EF4444'),
+  ].join(''));
+}
+
+/* ── 4. LOTES FINALES ── */
+function _emBodegaLotes(d){
+  const rows=(d.lotesFinales||[]).filter(r=>!(_bdgFilter['lotesFinales']||[]).includes(r.producto));
+  const ok=rows.filter(r=>(r.pct||0)>=1).length;
+  const crit=rows.filter(r=>(r.pct||0)<0.7).length;
+  const pctOk=rows.length?Math.round(ok/rows.length*100):0;
+  _emEl('em-kpis',[
+    _emKpi('Completados ≥100%',ok,'Lotes cubiertos','#E6F6EC','#1F9D55','#2D7A47'),
+    _emKpi('Críticos <70%',crit,'Requieren lotes','#FEE2E2','#DC2626','#991B1B'),
+    _emKpi('Total productos',rows.length,pctOk+'% completados','#EEF1F7','#5C6478','#5C6478'),
+    _emKpi('Actualizado',d.updatedAt||'—','Última sincronización','#EBF4FD','#0277BD','#0277BD'),
+  ].join(''));
+  _emShow('em-prog-section',true);
+  _emTxt('em-prog-title','Productos con cobertura completa');
+  _emTxt('em-pct-label',pctOk+'% completados');
+  const pb=document.getElementById('em-prog-bar');
+  if(pb){pb.style.width=pctOk+'%';pb.style.background='#1F9D55';}
+  _emShow('em-provs-section',true);
+  _emTxt('em-provs-title','Cobertura y lotes por producto');
+  _emEl('em-provs',rows.map(r=>{
+    const c=_eC(r.pct),p=Math.round((r.pct||0)*100);
+    const loteText=r.lotes&&r.lotes!=='—'&&r.lotes!=='-'?r.lotes:'Sin lote';
+    return`<div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+        <span style="font-size:12px;font-weight:700;color:#14213D;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:50%">${r.producto||'—'}</span>
+        <span style="font-size:11px;color:#5C6478;white-space:nowrap"><strong style="color:${c.bar}">${p}%</strong> · ${_eN(r.porRecibir)}</span>
+      </div>
+      <div style="background:#EEF1F7;border-radius:999px;height:8px;overflow:hidden;margin-bottom:3px">
+        <div style="height:100%;background:${c.bar};border-radius:999px;width:${Math.min(100,p)}%"></div>
+      </div>
+      <div style="font-size:10px;color:#64748B">${loteText}</div>
+    </div>`;
+  }).join(''));
+  _emShow('em-ie-section',true);
+  _emTxt('em-ie-title','Alertas de lotes');
+  const critRows=rows.filter(r=>(r.pct||0)<0.7);
+  _emEl('em-ie',critRows.length
+    ? critRows.map(r=>{const c=_eC(r.pct);return _emChip(r.producto,_eP(r.pct),c.bar);}).join('')
+    : '<div style="font-size:12px;color:#1F9D55;padding:8px">✅ Sin productos críticos</div>');
+}
+
+/* ── 5. REQ. DIARIO ── */
+function _emBodegaReqDiario(d){
+  const rows=(d.requerimientoDiario||[]).filter(r=>!(_bdgFilter['reqDiario']||[]).includes(r.producto));
+  const totDist=rows.reduce((a,r)=>a+(r.distributivo||0),0);
+  const nd=rows.length?Math.max(...rows.map(r=>(r.dias||[]).length),0):0;
+  const lbls=d.diaLabels||[];
+  _emEl('em-kpis',[
+    _emKpi('Total productos',rows.length,'En requerimiento','#14213D','#fff','rgba(255,255,255,.6)'),
+    _emKpi('Total distributivo',_eN(totDist),nd+' días planificados','#EBF4FD','#0277BD','#0277BD'),
+    _emKpi('Días',nd,lbls[0]?(lbls[0].replace(/^D\d+_/,''))+' – '+(lbls[nd-1]||'').replace(/^D\d+_/,''):'planificados','#FFF1E3','#F47C20','#A8510D'),
+    _emKpi('Actualizado',d.updatedAt||'—','Última sincronización','#EEF1F7','#5C6478','#5C6478'),
+  ].join(''));
+  _emShow('em-prog-section',false);
+  _emShow('em-provs-section',true);
+  _emTxt('em-provs-title','Requerimiento diario por producto');
+  _emEl('em-provs',rows.map(r=>{
+    const dias=(r.dias||[]).filter(v=>v!=null&&v!=='');
+    const sum=dias.reduce((a,v)=>a+Number(v),0);
+    return`<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #F1F5F9">
+      <span style="font-size:12px;font-weight:700;color:#14213D">${r.producto||'—'}</span>
+      <span style="font-size:12px;color:#5C6478">Dist: <strong style="color:#F47C20">${_eN(r.distributivo)}</strong> · Suma: ${_eN(sum)}</span>
+    </div>`;
+  }).join(''));
+  _emShow('em-ie-section',true);
+  _emTxt('em-ie-title','Resumen requerimiento');
+  _emEl('em-ie',[
+    _emChip('Total productos',rows.length,'#14213D'),
+    _emChip('Total distributivo',_eN(totDist),'#F47C20'),
+    _emChip('Días planificados',nd,'#0277BD'),
+    _emChip('Actualizado',d.updatedAt||'—','#9AA4B8'),
+  ].join(''));
+}
+
+/* ── 6. LAST MILE ── */
+function _emBodegaLastMile(d){
+  const lm=d.lastmile||{};
+  const pivot=(lm.pivot||[]).filter(r=>r.transportista&&!/^total/i.test(r.transportista.trim()));
+  const res=lm.resumen||[];
+  const totTrans=pivot.length;
+  const valKeys=pivot.length?Object.keys(pivot[0]).filter(k=>k!=='transportista'&&!/^B\d+$/.test(k)):[];
+  const totErr=pivot.reduce((a,r)=>a+valKeys.reduce((b,k)=>b+(Number(r[k])||0),0),0);
+  _emEl('em-kpis',[
+    _emKpi('Transportistas',totTrans,'Con errores registrados','#FEE2E2','#DC2626','#991B1B'),
+    _emKpi('Total errores',_eN(totErr),'Suma de todas las novedades','#FFF1E3','#F47C20','#A8510D'),
+    _emKpi('Días registrados',res.length,'Con datos de validación','#EBF4FD','#0277BD','#0277BD'),
+    _emKpi('Actualizado',d.updatedAt||'—','Última sincronización','#EEF1F7','#5C6478','#5C6478'),
+  ].join(''));
+  _emShow('em-prog-section',false);
+  _emShow('em-provs-section',true);
+  _emTxt('em-provs-title','Errores por transportista');
+  _emEl('em-provs',pivot.length?pivot.map(r=>{
+    const errTotal=valKeys.reduce((a,k)=>a+(Number(r[k])||0),0);
+    return`<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #F1F5F9">
+      <span style="font-size:12px;font-weight:700;color:#14213D">${r.transportista||'—'}</span>
+      <span style="font-size:12px;color:#EF4444;font-weight:700">${_eN(errTotal)} errores</span>
+    </div>`;
+  }).join(''):'<div style="font-size:12px;color:#1F9D55;padding:8px">✅ Sin errores registrados</div>');
+  _emShow('em-ie-section',true);
+  _emTxt('em-ie-title','Resumen por día (Meta vs Validación)');
+  _emEl('em-ie',res.length?res.map(r=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:#F4F6FB;border-radius:8px">
+      <div><div style="font-size:10px;color:#5C6478">${r.etiqueta||'—'}</div>
+      <div style="font-size:12px;font-weight:700;color:#14213D">Meta: ${_eN(r.cuentaTrans)} · Val: ${_eN(r.cuentaVal)}</div></div>
+    </div>`).join(''):'<div style="font-size:12px;color:#9AA4B8;padding:8px">Sin datos diarios</div>');
+}
+
+/* ── 7. INV. SEMANAL ── */
+function _emBodegaInvSemanal(d){
+  const inv=(d.inventario||[]).filter(r=>!(_bdgFilter['invSemanal']||[]).includes(r.producto));
+  const pos=inv.filter(r=>Number(r.ajuste||0)>0).length;
+  const neg=inv.filter(r=>Number(r.ajuste||0)<0).length;
+  const sumPos=inv.filter(r=>Number(r.ajuste||0)>0).reduce((a,r)=>a+Number(r.ajuste),0);
+  const sumNeg=inv.filter(r=>Number(r.ajuste||0)<0).reduce((a,r)=>a+Number(r.ajuste),0);
+  _emEl('em-kpis',[
+    _emKpi('Ajustes positivos',pos,'+'+_eN(sumPos)+' unidades','#E6F6EC','#1F9D55','#2D7A47'),
+    _emKpi('Ajustes negativos',neg,_eN(sumNeg)+' unidades','#FEE2E2','#DC2626','#991B1B'),
+    _emKpi('Total productos',inv.length,'Con ajuste de inventario','#EEF1F7','#5C6478','#5C6478'),
+    _emKpi('Actualizado',d.updatedAt||'—','Última sincronización','#EBF4FD','#0277BD','#0277BD'),
+  ].join(''));
+  _emShow('em-prog-section',false);
+  _emShow('em-provs-section',true);
+  _emTxt('em-provs-title','Ajuste de inventario por producto');
+  _emEl('em-provs',inv.length?inv.map(r=>{
+    const v=Number(r.ajuste||0),neg=v<0;
+    const col=neg?'#F47C20':'#3D8EB9';
+    const mx=Math.max(...inv.map(x=>Math.abs(Number(x.ajuste||0))),1);
+    const pct=Math.round(Math.abs(v)/mx*100);
+    return`<div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <span style="font-size:12px;font-weight:700;color:#14213D;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60%">${r.producto||'—'}</span>
+        <span style="font-size:12px;font-weight:800;color:${col}">${_eN(v)}</span>
+      </div>
+      <div style="background:${neg?'rgba(244,124,32,.1)':'rgba(61,142,185,.1)'};border-radius:999px;height:8px;overflow:hidden">
+        <div style="height:100%;background:${col};border-radius:999px;width:${pct}%"></div>
+      </div>
+    </div>`;
+  }).join(''):'<div style="font-size:12px;color:#9AA4B8;padding:8px">Sin ajustes registrados</div>');
+  _emShow('em-ie-section',true);
+  _emTxt('em-ie-title','Inventario semanal');
+  const sem=d.inventarioSemanal||[];
+  const keys=Object.keys(sem[0]||{}).filter(k=>k!=='dia'&&k!=='__rowNum');
+  _emEl('em-ie',sem.length?sem.map(r=>`
+    <div style="padding:7px 10px;background:#F4F6FB;border-radius:8px;grid-column:1/-1">
+      <div style="font-size:11px;font-weight:700;color:#F47C20;margin-bottom:4px">${r.dia||'—'}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">${keys.map(k=>`<span style="font-size:11px;color:#14213D"><span style="color:#9AA4B8">${k}:</span> <strong>${r[k]!=null?r[k]:'—'}</strong></span>`).join('')}</div>
+    </div>`).join(''):'<div style="font-size:12px;color:#9AA4B8;padding:8px">Sin datos semanales</div>');
+}
+
+/* ── 8. Genérico (Gráficas, etc.) ── */
+function _emBodegaGenerico(d,view){
+  _emEl('em-kpis',[
+    _emKpi('Vista',_bdgVLabel(view),'Reporte de bodega','#14213D','#fff','rgba(255,255,255,.6)'),
+    _emKpi('Actualizado',d.updatedAt||'—','Última sincronización','#EEF1F7','#5C6478','#5C6478'),
+  ].join(''));
+  _emShow('em-prog-section',false);
+  _emShow('em-provs-section',false);
+  _emShow('em-ie-section',false);
+}
+
+/* ══ PLAIN TEXT EMAIL ══ */
+function _buildBodegaEmailSubject(view){
+  const today=new Date().toLocaleDateString('es-EC');
+  return 'Reporte Bodega — '+_bdgVLabel(view)+' — '+today;
+}
+
+function _buildBodegaEmailBody(view){
+  const d=_bodegaData;
+  const upd=d.updatedAt||'—';
+  const sep='─'.repeat(48);
+  let body='REPORTE DE BODEGA — '+_bdgVLabel(view).toUpperCase()+'\n'+
+    'Actualizado: '+upd+'\n'+sep+'\n\n';
+
+  if(view==='cobertura'){
+    const rows=(d.cobertura||[]).filter(r=>!(_bdgFilter['cobertura']||[]).includes(r.producto));
+    const totIng=rows.reduce((a,r)=>a+(r.ingresos||0),0);
+    const totReq=rows.reduce((a,r)=>a+(r.totalReq||0),0);
+    const glob=totReq>0?totIng/totReq:0;
+    body+='RESUMEN\n  Total ingresos : '+_eN(totIng)+'\n  Total requerido: '+_eN(totReq)+'\n  Cobertura global: '+(Math.round(glob*100))+'%\n\n';
+    body+='COBERTURA POR PRODUCTO\n';
+    rows.forEach(r=>{
+      const p=Math.round((r.pct||0)*100);
+      const bar='█'.repeat(Math.round(p/10))+'░'.repeat(10-Math.round(p/10));
+      body+='  '+(r.producto||'—').substring(0,30).padEnd(30)+bar+' '+p+'%\n';
+    });
+  } else if(view==='abastecimiento'){
+    const rows=(d.abastecimiento||[]).filter(r=>!(_bdgFilter['abastecimiento']||[]).includes(r.producto));
+    const ok=rows.filter(r=>(r.pct||0)>=1).length;
+    const med=rows.filter(r=>(r.pct||0)>=0.7&&(r.pct||0)<1).length;
+    const crit=rows.filter(r=>(r.pct||0)<0.7).length;
+    body+='RESUMEN\n  Completos ≥100%: '+ok+'\n  En proceso 70-99%: '+med+'\n  Críticos <70%: '+crit+'\n\n';
+    body+='DETALLE POR PRODUCTO\n';
+    rows.forEach(r=>{
+      const p=Math.round((r.pct||0)*100);
+      body+='  '+(r.producto||'—').substring(0,28).padEnd(28)+p+'%\t Ing:'+_eN(r.ingresos)+' Req:'+_eN(r.totalReq)+'\n';
+    });
+  } else if(view==='proveedores'){
+    const rows=(d.proveedores||[]).filter(r=>!(_bdgFilter['proveedores']||[]).includes(r.producto));
+    const totP=rows.reduce((a,r)=>a+(r.planificado||0),0);
+    const totI=rows.reduce((a,r)=>a+(r.ingresos||0),0);
+    const glob=totP>0?totI/totP:0;
+    body+='RESUMEN\n  Total planificado: '+_eN(totP)+'\n  Total ingresos: '+_eN(totI)+'\n  Cumplimiento global: '+(Math.round(glob*100))+'%\n\n';
+    body+='CUMPLIMIENTO POR PROVEEDOR\n';
+    rows.forEach(r=>{
+      const p=Math.round((r.pct||0)*100);
+      const bar='█'.repeat(Math.round(p/10))+'░'.repeat(10-Math.round(p/10));
+      body+='  '+(r.producto||'—').substring(0,28).padEnd(28)+bar+' '+p+'%\n';
+    });
+  } else if(view==='lotesFinales'){
+    const rows=(d.lotesFinales||[]).filter(r=>!(_bdgFilter['lotesFinales']||[]).includes(r.producto));
+    body+='LOTES FINALES\n';
+    rows.forEach(r=>{
+      const p=Math.round((r.pct||0)*100);
+      body+='  '+(r.producto||'—').substring(0,28).padEnd(28)+p+'%\t Lote: '+(r.lotes&&r.lotes!=='-'?r.lotes:'—')+'\n';
+    });
+  } else if(view==='reqDiario'){
+    const rows=(d.requerimientoDiario||[]).filter(r=>!(_bdgFilter['reqDiario']||[]).includes(r.producto));
+    body+='REQUERIMIENTO DIARIO\n';
+    rows.forEach(r=>{
+      body+='  '+(r.producto||'—').substring(0,28).padEnd(28)+'Dist: '+_eN(r.distributivo)+' ('+r.numDias+' días)\n';
+    });
+  } else if(view==='lastmile'){
+    const lm=d.lastmile||{};
+    const pivot=(lm.pivot||[]).filter(r=>r.transportista&&!/^total/i.test(r.transportista));
+    body+='ERRORES POR TRANSPORTISTA\n';
+    const vk=pivot.length?Object.keys(pivot[0]).filter(k=>k!=='transportista'&&!/^B\d+$/.test(k)):[];
+    pivot.forEach(r=>{
+      const tot=vk.reduce((a,k)=>a+(Number(r[k])||0),0);
+      body+='  '+(r.transportista||'—').substring(0,28).padEnd(28)+' Total: '+tot+'\n';
+    });
+  } else if(view==='invSemanal'){
+    const inv=(d.inventario||[]).filter(r=>!(_bdgFilter['invSemanal']||[]).includes(r.producto));
+    body+='AJUSTE DE INVENTARIO\n';
+    inv.forEach(r=>{
+      body+='  '+(r.producto||'—').substring(0,28).padEnd(28)+_eN(r.ajuste)+'\n';
+    });
+  }
+  body+='\n'+sep+'\nReporte generado automáticamente · Bodega Dashboard';
+  return body;
+}
+
+/* ══ HTML EMAIL ══ */
+function _buildBodegaHtmlEmail(view){
+  const d=_bodegaData;
+  const upd=d.updatedAt||'—';
+  const today=new Date().toLocaleDateString('es-EC',{day:'numeric',month:'long',year:'numeric'});
+  let contentHtml='';
+
+  if(view==='cobertura'){
+    const rows=(d.cobertura||[]).filter(r=>!(_bdgFilter['cobertura']||[]).includes(r.producto));
+    const totIng=rows.reduce((a,r)=>a+(r.ingresos||0),0);
+    const totReq=rows.reduce((a,r)=>a+(r.totalReq||0),0);
+    const glob=totReq>0?totIng/totReq:0;
+    const pctG=Math.round(glob*100);
+    const cg=_eC(glob);
+    const ok=rows.filter(r=>(r.pct||0)>=1).length;
+    const crit=rows.filter(r=>(r.pct||0)<0.7).length;
+    contentHtml=`<table width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:16px"><tr>
+      <td style="width:25%;padding:4px"><div style="background:#EBF4FD;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#0277BD">Total ingresos</div><div style="font-size:20px;font-weight:800;color:#0277BD">${_eN(totIng)}</div><div style="font-size:10px;color:#0277BD">${ok} completos</div></div></td>
+      <td style="width:25%;padding:4px"><div style="background:#14213D;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,.6)">Total requerido</div><div style="font-size:20px;font-weight:800;color:#fff">${_eN(totReq)}</div><div style="font-size:10px;color:rgba(255,255,255,.5)">${rows.length} productos</div></div></td>
+      <td style="width:25%;padding:4px"><div style="background:${cg.bg};border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:${cg.fg}">Cobertura global</div><div style="font-size:20px;font-weight:800;color:${cg.fg}">${pctG}%</div><div style="font-size:10px;color:${cg.fg}">${crit} críticos</div></div></td>
+      <td style="width:25%;padding:4px"><div style="background:#EEF1F7;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#5C6478">Productos</div><div style="font-size:20px;font-weight:800;color:#5C6478">${rows.length}</div><div style="font-size:10px;color:#5C6478">${ok}✅ ${crit}❌</div></div></td>
+    </tr></table>
+    <div style="background:#fff;border-radius:10px;padding:14px 16px;border:1px solid #DDE3EE;margin-bottom:16px">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#5C6478;margin-bottom:8px">Cobertura por producto</div>
+      <table width="100%" cellspacing="0" cellpadding="0">${rows.map(r=>{
+        const c=_eC(r.pct),p=Math.round((r.pct||0)*100);
+        return`<tr><td style="padding:5px 0;width:38%;font-size:12px;font-weight:600;color:#14213D;vertical-align:middle;overflow:hidden">${r.producto||'—'}</td>
+          <td style="padding:5px 8px;vertical-align:middle"><div style="background:#EEF1F7;border-radius:999px;height:10px;overflow:hidden"><div style="height:100%;width:${Math.min(100,p)}%;background:${c.bar};border-radius:999px"></div></div></td>
+          <td style="padding:5px 0 5px 8px;white-space:nowrap;font-size:12px;font-weight:700;color:${c.bar};width:50px;text-align:right">${p}%</td>
+          <td style="padding:5px 0 5px 12px;white-space:nowrap;font-size:11px;color:#9AA4B8;width:120px;text-align:right">${_eN(r.ingresos)} / ${_eN(r.totalReq)}</td></tr>`;
+      }).join('')}</table>
+    </div>`;
+  } else if(view==='abastecimiento'){
+    const rows=(d.abastecimiento||[]).filter(r=>!(_bdgFilter['abastecimiento']||[]).includes(r.producto));
+    const ok=rows.filter(r=>(r.pct||0)>=1).length;
+    const med=rows.filter(r=>(r.pct||0)>=0.7&&(r.pct||0)<1).length;
+    const crit=rows.filter(r=>(r.pct||0)<0.7).length;
+    contentHtml=`<table width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:16px"><tr>
+      <td style="width:25%;padding:4px"><div style="background:#E6F6EC;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#2D7A47">Completos ≥100%</div><div style="font-size:24px;font-weight:800;color:#1F9D55">${ok}</div></div></td>
+      <td style="width:25%;padding:4px"><div style="background:#FFF1E3;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#A8510D">En proceso 70–99%</div><div style="font-size:24px;font-weight:800;color:#F47C20">${med}</div></div></td>
+      <td style="width:25%;padding:4px"><div style="background:#FEE2E2;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#991B1B">Críticos &lt;70%</div><div style="font-size:24px;font-weight:800;color:#DC2626">${crit}</div></div></td>
+      <td style="width:25%;padding:4px"><div style="background:#EEF1F7;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#5C6478">Total</div><div style="font-size:24px;font-weight:800;color:#5C6478">${rows.length}</div></div></td>
+    </tr></table>
+    <div style="background:#fff;border-radius:10px;padding:14px 16px;border:1px solid #DDE3EE">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#5C6478;margin-bottom:8px">Abastecimiento por producto</div>
+      <table width="100%" cellspacing="0" cellpadding="0">${rows.map(r=>{
+        const c=_eC(r.pct),p=Math.round((r.pct||0)*100);
+        return`<tr><td style="padding:5px 0;width:40%;font-size:12px;font-weight:600;color:#14213D;vertical-align:middle">${r.producto||'—'}</td>
+          <td style="padding:5px 8px;vertical-align:middle"><div style="background:#EEF1F7;border-radius:999px;height:10px;overflow:hidden"><div style="height:100%;width:${Math.min(100,p)}%;background:${c.bar};border-radius:999px"></div></div></td>
+          <td style="padding:5px 0 5px 8px;white-space:nowrap;font-size:12px;font-weight:700;color:${c.bar};width:50px">${p}%</td></tr>`;
+      }).join('')}</table>
+    </div>`;
+  } else if(view==='proveedores'){
+    const rows=(d.proveedores||[]).filter(r=>!(_bdgFilter['proveedores']||[]).includes(r.producto));
+    const totP=rows.reduce((a,r)=>a+(r.planificado||0),0);
+    const totI=rows.reduce((a,r)=>a+(r.ingresos||0),0);
+    const glob=totP>0?totI/totP:0;
+    const pctG=Math.round(glob*100);
+    const cg=_eC(glob);
+    contentHtml=`<table width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:16px"><tr>
+      <td style="width:25%;padding:4px"><div style="background:#14213D;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,.6)">Total planificado</div><div style="font-size:18px;font-weight:800;color:#fff">${_eN(totP)}</div></div></td>
+      <td style="width:25%;padding:4px"><div style="background:#E6F6EC;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#2D7A47">Total ingresos</div><div style="font-size:18px;font-weight:800;color:#1F9D55">${_eN(totI)}</div></div></td>
+      <td style="width:25%;padding:4px"><div style="background:${cg.bg};border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:${cg.fg}">Cumplimiento</div><div style="font-size:18px;font-weight:800;color:${cg.fg}">${pctG}%</div></div></td>
+      <td style="width:25%;padding:4px"><div style="background:#EEF1F7;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#5C6478">Proveedores</div><div style="font-size:18px;font-weight:800;color:#5C6478">${rows.length}</div></div></td>
+    </tr></table>
+    <div style="background:#fff;border-radius:10px;padding:14px 16px;border:1px solid #DDE3EE">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#5C6478;margin-bottom:8px">Cumplimiento por proveedor</div>
+      <table width="100%" cellspacing="0" cellpadding="0">${rows.map(r=>{
+        const c=_eC(r.pct),p=Math.round((r.pct||0)*100);
+        return`<tr><td style="padding:5px 0;width:40%;font-size:12px;font-weight:600;color:#14213D;vertical-align:middle">${r.producto||'—'}</td>
+          <td style="padding:5px 8px;vertical-align:middle"><div style="background:#EEF1F7;border-radius:999px;height:10px;overflow:hidden"><div style="height:100%;width:${Math.min(100,p)}%;background:${c.bar};border-radius:999px"></div></div></td>
+          <td style="padding:5px 0 5px 8px;white-space:nowrap;font-size:12px;font-weight:700;color:${c.bar};width:50px">${p}%</td>
+          <td style="padding:5px 0 5px 8px;font-size:11px;color:#9AA4B8;white-space:nowrap">${_eN(r.ingresos)} / ${_eN(r.planificado)}</td></tr>`;
+      }).join('')}</table>
+    </div>`;
+  } else if(view==='lotesFinales'){
+    const rows=(d.lotesFinales||[]).filter(r=>!(_bdgFilter['lotesFinales']||[]).includes(r.producto));
+    const ok=rows.filter(r=>(r.pct||0)>=1).length;
+    const crit=rows.filter(r=>(r.pct||0)<0.7).length;
+    contentHtml=`<table width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:16px"><tr>
+      <td style="width:33%;padding:4px"><div style="background:#E6F6EC;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#2D7A47">Completados ≥100%</div><div style="font-size:28px;font-weight:800;color:#1F9D55">${ok}</div></div></td>
+      <td style="width:33%;padding:4px"><div style="background:#FEE2E2;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#991B1B">Críticos &lt;70%</div><div style="font-size:28px;font-weight:800;color:#DC2626">${crit}</div></div></td>
+      <td style="width:33%;padding:4px"><div style="background:#EEF1F7;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#5C6478">Total</div><div style="font-size:28px;font-weight:800;color:#5C6478">${rows.length}</div></div></td>
+    </tr></table>
+    <div style="background:#fff;border-radius:10px;padding:14px 16px;border:1px solid #DDE3EE">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#5C6478;margin-bottom:8px">Lotes finales por producto</div>
+      <table width="100%" cellspacing="0" cellpadding="0">${rows.map(r=>{
+        const c=_eC(r.pct),p=Math.round((r.pct||0)*100);
+        const lote=r.lotes&&r.lotes!=='-'&&r.lotes!=='—'?r.lotes:'—';
+        return`<tr><td style="padding:5px 0;width:35%;font-size:12px;font-weight:600;color:#14213D;vertical-align:top">${r.producto||'—'}</td>
+          <td style="padding:5px 8px;vertical-align:middle;width:30%"><div style="background:#EEF1F7;border-radius:999px;height:10px;overflow:hidden"><div style="height:100%;width:${Math.min(100,p)}%;background:${c.bar};border-radius:999px"></div></div></td>
+          <td style="padding:5px 0 5px 8px;font-weight:700;color:${c.bar};font-size:12px;white-space:nowrap;width:40px">${p}%</td>
+          <td style="padding:5px 0 5px 8px;font-size:10px;color:#9AA4B8">${lote}</td></tr>`;
+      }).join('')}</table>
+    </div>`;
+  } else if(view==='reqDiario'){
+    const rows=(d.requerimientoDiario||[]).filter(r=>!(_bdgFilter['reqDiario']||[]).includes(r.producto));
+    const totDist=rows.reduce((a,r)=>a+(r.distributivo||0),0);
+    contentHtml=`<table width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:16px"><tr>
+      <td style="width:33%;padding:4px"><div style="background:#14213D;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,.6)">Total productos</div><div style="font-size:28px;font-weight:800;color:#fff">${rows.length}</div></div></td>
+      <td style="width:33%;padding:4px"><div style="background:#FFF1E3;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#A8510D">Total distributivo</div><div style="font-size:24px;font-weight:800;color:#F47C20">${_eN(totDist)}</div></div></td>
+      <td style="width:33%;padding:4px"><div style="background:#EBF4FD;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#0277BD">Actualizado</div><div style="font-size:14px;font-weight:800;color:#0277BD">${d.updatedAt||'—'}</div></div></td>
+    </tr></table>
+    <div style="background:#fff;border-radius:10px;padding:14px 16px;border:1px solid #DDE3EE">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#5C6478;margin-bottom:8px">Requerimiento por producto</div>
+      <table width="100%" cellspacing="0" cellpadding="0"><tr style="background:#F4F6FB"><td style="padding:6px 8px;font-size:10px;font-weight:700;color:#5C6478;text-transform:uppercase">Producto</td><td style="padding:6px 8px;font-size:10px;font-weight:700;color:#5C6478;text-align:right">Distributivo</td><td style="padding:6px 8px;font-size:10px;font-weight:700;color:#5C6478;text-align:right">Días</td></tr>
+      ${rows.map((r,i)=>`<tr style="background:${i%2?'#F9FAFB':'#fff'}"><td style="padding:6px 8px;font-size:12px;color:#14213D;font-weight:600">${r.producto||'—'}</td><td style="padding:6px 8px;font-size:12px;font-weight:800;color:#F47C20;text-align:right">${_eN(r.distributivo)}</td><td style="padding:6px 8px;font-size:12px;color:#5C6478;text-align:right">${r.numDias||'—'}</td></tr>`).join('')}
+      </table>
+    </div>`;
+  } else if(view==='lastmile'){
+    const lm=d.lastmile||{};
+    const pivot=(lm.pivot||[]).filter(r=>r.transportista&&!/^total/i.test(r.transportista));
+    const vk=pivot.length?Object.keys(pivot[0]).filter(k=>k!=='transportista'&&!/^B\d+$/.test(k)):[];
+    const res=lm.resumen||[];
+    const totErr=pivot.reduce((a,r)=>a+vk.reduce((b,k)=>b+(Number(r[k])||0),0),0);
+    contentHtml=`<table width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:16px"><tr>
+      <td style="width:33%;padding:4px"><div style="background:#FEE2E2;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#991B1B">Transportistas</div><div style="font-size:28px;font-weight:800;color:#DC2626">${pivot.length}</div><div style="font-size:10px;color:#991B1B">Con errores</div></div></td>
+      <td style="width:33%;padding:4px"><div style="background:#FFF1E3;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#A8510D">Total errores</div><div style="font-size:28px;font-weight:800;color:#F47C20">${_eN(totErr)}</div></div></td>
+      <td style="width:33%;padding:4px"><div style="background:#EBF4FD;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#0277BD">Días registrados</div><div style="font-size:28px;font-weight:800;color:#0277BD">${res.length}</div></div></td>
+    </tr></table>
+    ${pivot.length?`<div style="background:#fff;border-radius:10px;padding:14px 16px;border:1px solid #DDE3EE;margin-bottom:16px">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#5C6478;margin-bottom:8px">Errores por transportista</div>
+      <table width="100%" cellspacing="0" cellpadding="0">
+        <tr style="background:#F4F6FB"><td style="padding:6px 8px;font-size:10px;font-weight:700;color:#5C6478">Transportista</td>${vk.map(k=>`<td style="padding:6px 8px;font-size:10px;font-weight:700;color:#5C6478;text-align:right">${k}</td>`).join('')}</tr>
+        ${pivot.map((r,i)=>`<tr style="background:${i%2?'#F9FAFB':'#fff'}"><td style="padding:6px 8px;font-size:12px;font-weight:600;color:#14213D">${r.transportista}</td>${vk.map(k=>`<td style="padding:6px 8px;font-size:12px;font-weight:700;color:${Number(r[k])>0?'#EF4444':'#9AA4B8'};text-align:right">${Number(r[k])>0?_eN(r[k]):'—'}</td>`).join('')}</tr>`).join('')}
+      </table>
+    </div>`:''}`;
+  } else if(view==='invSemanal'){
+    const inv=(d.inventario||[]).filter(r=>!(_bdgFilter['invSemanal']||[]).includes(r.producto));
+    const pos=inv.filter(r=>Number(r.ajuste||0)>0).length;
+    const neg=inv.filter(r=>Number(r.ajuste||0)<0).length;
+    const mx=Math.max(...inv.map(r=>Math.abs(Number(r.ajuste||0))),1);
+    contentHtml=`<table width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:16px"><tr>
+      <td style="width:33%;padding:4px"><div style="background:#E6F6EC;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#2D7A47">Ajustes positivos</div><div style="font-size:28px;font-weight:800;color:#1F9D55">${pos}</div></div></td>
+      <td style="width:33%;padding:4px"><div style="background:#FEE2E2;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#991B1B">Ajustes negativos</div><div style="font-size:28px;font-weight:800;color:#DC2626">${neg}</div></div></td>
+      <td style="width:33%;padding:4px"><div style="background:#EEF1F7;border-radius:10px;padding:12px"><div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#5C6478">Total productos</div><div style="font-size:28px;font-weight:800;color:#5C6478">${inv.length}</div></div></td>
+    </tr></table>
+    <div style="background:#fff;border-radius:10px;padding:14px 16px;border:1px solid #DDE3EE">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#5C6478;margin-bottom:8px">Ajuste por producto</div>
+      ${inv.map(r=>{
+        const v=Number(r.ajuste||0),isNeg=v<0;
+        const col=isNeg?'#F47C20':'#3D8EB9';
+        const pct=Math.round(Math.abs(v)/mx*100);
+        return`<div style="display:flex;align-items:center;gap:10px;padding:4px 0">
+          <div style="width:38%;font-size:12px;font-weight:600;color:#14213D;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.producto||'—'}</div>
+          <div style="flex:1;background:${isNeg?'rgba(244,124,32,.1)':'rgba(61,142,185,.1)'};border-radius:5px;height:16px;overflow:hidden">
+            <div style="width:${pct}%;height:100%;background:${col};border-radius:5px"></div>
+          </div>
+          <div style="width:60px;text-align:right;font-size:12px;font-weight:800;color:${col};white-space:nowrap">${_eN(v)}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  } else {
+    contentHtml=`<div style="text-align:center;padding:24px;color:#9AA4B8">Vista ${_bdgVLabel(view)} — sin contenido exportable</div>`;
+  }
+
+  return`<div style="font-family:'Segoe UI',Arial,sans-serif;max-width:620px;margin:0 auto;background:#F4F6FB;border-radius:12px;overflow:hidden">
+  <div style="background:linear-gradient(135deg,#0A3060 0%,#1565C0 100%);padding:20px 24px">
+    <div style="color:#fff;font-size:16px;font-weight:800">Reporte Bodega — ${_bdgVLabel(view)}</div>
+    <div style="color:rgba(255,255,255,.55);font-size:12px;margin-top:3px">${today} &nbsp;·&nbsp; Actualizado: ${upd}</div>
+  </div>
+  <div style="padding:20px 24px">${contentHtml}
+    <div style="text-align:center;margin-top:16px;font-size:10px;color:#9AA4B8">Reporte generado automáticamente · Bodega Dashboard</div>
+  </div>
+</div>`;
 }
