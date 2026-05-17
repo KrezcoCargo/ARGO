@@ -511,7 +511,8 @@ function renderCobertura(d){
   if(!all.length)return`<div class="bdg-empty"><div class="bdg-empty-icon">📊</div><div class="bdg-empty-msg">Sin datos de cobertura</div></div>`;
   const rows=_bdgRows('cobertura',all);
   const totIng=rows.reduce((a,r)=>a+(r.ingresos||0),0),totReq=rows.reduce((a,r)=>a+(r.totalReq||0),0);
-  const glob=totReq>0?totIng/totReq:0,cg=_C(glob);
+  const _rawGlob=totReq>0?totIng/totReq:0;
+  const glob=(_rawGlob>=1&&rows.some(r=>(r.pct||0)<1))?0.99:_rawGlob,cg=_C(glob);
   const nd=(rows.find(r=>Array.isArray(r.porDia)&&r.porDia.length)||{}).porDia?.length||0;
   const _lbls=d.diaLabels||[];
   const dayTh=Array.from({length:nd},(_,i)=>`<th class="bdg-day-th" title="${_lbls[i]||'D'+(i+1)}">${_diaThHtml(_lbls,i)}</th>`).join('');
@@ -590,7 +591,8 @@ function renderProveedores(d){
   if(!all.length)return`<div class="bdg-empty"><div class="bdg-empty-icon">🏭</div><div class="bdg-empty-msg">Sin datos de proveedores</div></div>`;
   const rows=_bdgRows('proveedores',all);
   const totP=rows.reduce((a,r)=>a+(r.planificado||0),0),totI=rows.reduce((a,r)=>a+(r.ingresos||0),0);
-  const glob=totP>0?totI/totP:0;
+  const _rawGlobP=totP>0?totI/totP:0;
+  const glob=(_rawGlobP>=1&&rows.some(r=>(r.pct||0)<1))?0.99:_rawGlobP;
   const totPR=rows.reduce((a,r)=>a+(r.porRecibir||0),0);
   const trs=rows.map(r=>{
     const c=_C(r.pct),negPR=(r.porRecibir||0)<0;
