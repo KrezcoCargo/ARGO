@@ -440,7 +440,8 @@ function _emBodegaCobertura(d){
   const rows=(d.cobertura||[]).filter(r=>!(_bdgFilter['cobertura']||[]).includes(r.producto));
   const totIng=rows.reduce((a,r)=>a+(r.ingresos||0),0);
   const totReq=rows.reduce((a,r)=>a+(r.totalReq||0),0);
-  const glob=totReq>0?totIng/totReq:0;
+  const _rg1=totReq>0?totIng/totReq:0;
+  const glob=(_rg1>=1&&rows.some(r=>(r.pct||0)<1))?0.99:_rg1;
   const pctGlob=Math.round(glob*100);
   const ok=rows.filter(r=>(r.pct||0)>=1).length;
   const med=rows.filter(r=>(r.pct||0)>=0.7&&(r.pct||0)<1).length;
@@ -512,7 +513,8 @@ function _emBodegaProveedores(d){
   const rows=(d.proveedores||[]).filter(r=>!(_bdgFilter['proveedores']||[]).includes(r.producto));
   const totP=rows.reduce((a,r)=>a+(r.planificado||0),0);
   const totI=rows.reduce((a,r)=>a+(r.ingresos||0),0);
-  const glob=totP>0?totI/totP:0;
+  const _rg2=totP>0?totI/totP:0;
+  const glob=(_rg2>=1&&rows.some(r=>(r.pct||0)<1))?0.99:_rg2;
   const pctG=Math.round(glob*100);
   const cg=_eC(glob);
   const crit=rows.filter(r=>(r.pct||0)<0.7).length;
@@ -775,7 +777,8 @@ function _exportBodegaPDF(view){
     const rows=(d.cobertura||[]).filter(r=>!(_bdgFilter['cobertura']||[]).includes(r.producto));
     const totIng=rows.reduce((a,r)=>a+(r.ingresos||0),0);
     const totReq=rows.reduce((a,r)=>a+(r.totalReq||0),0);
-    const glob=totReq>0?totIng/totReq:0, pctG=Math.round(glob*100);
+    const _rg3=totReq>0?totIng/totReq:0;
+    const glob=(_rg3>=1&&rows.some(r=>(r.pct||0)<1))?0.99:_rg3, pctG=Math.round(glob*100);
     const ok=rows.filter(r=>(r.pct||0)>=1).length, med=rows.filter(r=>(r.pct||0)>=0.7&&(r.pct||0)<1).length, crit=rows.filter(r=>(r.pct||0)<0.7).length;
     const col=glob>=0.95?green:glob>=0.7?orange:red;
     kpiRow([
@@ -817,7 +820,8 @@ function _exportBodegaPDF(view){
   } else if(view==='proveedores'){
     const rows=(d.proveedores||[]).filter(r=>!(_bdgFilter['proveedores']||[]).includes(r.producto));
     const totP=rows.reduce((a,r)=>a+(r.planificado||0),0), totI=rows.reduce((a,r)=>a+(r.ingresos||0),0);
-    const glob=totP>0?totI/totP:0, pctG=Math.round(glob*100);
+    const _rg4=totP>0?totI/totP:0;
+    const glob=(_rg4>=1&&rows.some(r=>(r.pct||0)<1))?0.99:_rg4, pctG=Math.round(glob*100);
     const col=glob>=0.95?green:glob>=0.7?orange:red;
     kpiRow([
       {label:'Total planificado',val:_eN(totP),bg:navy,vc:[255,255,255],lc:[180,200,230]},
@@ -1043,7 +1047,8 @@ function _buildBodegaEmailBody(view){
     const rows=(d.cobertura||[]).filter(r=>!(_bdgFilter['cobertura']||[]).includes(r.producto));
     const totIng=rows.reduce((a,r)=>a+(r.ingresos||0),0);
     const totReq=rows.reduce((a,r)=>a+(r.totalReq||0),0);
-    const glob=totReq>0?totIng/totReq:0;
+    const _rg5=totReq>0?totIng/totReq:0;
+    const glob=(_rg5>=1&&rows.some(r=>(r.pct||0)<1))?0.99:_rg5;
     body+='RESUMEN\n  Total ingresos : '+_eN(totIng)+'\n  Total requerido: '+_eN(totReq)+'\n  Cobertura global: '+(Math.round(glob*100))+'%\n\n';
     body+='COBERTURA POR PRODUCTO\n';
     rows.forEach(r=>{
@@ -1067,7 +1072,8 @@ function _buildBodegaEmailBody(view){
     const rows=(d.proveedores||[]).filter(r=>!(_bdgFilter['proveedores']||[]).includes(r.producto));
     const totP=rows.reduce((a,r)=>a+(r.planificado||0),0);
     const totI=rows.reduce((a,r)=>a+(r.ingresos||0),0);
-    const glob=totP>0?totI/totP:0;
+    const _rg6=totP>0?totI/totP:0;
+    const glob=(_rg6>=1&&rows.some(r=>(r.pct||0)<1))?0.99:_rg6;
     body+='RESUMEN\n  Total planificado: '+_eN(totP)+'\n  Total ingresos: '+_eN(totI)+'\n  Cumplimiento global: '+(Math.round(glob*100))+'%\n\n';
     body+='CUMPLIMIENTO POR PROVEEDOR\n';
     rows.forEach(r=>{
@@ -1120,7 +1126,8 @@ function _buildBodegaHtmlEmail(view){
     const rows=(d.cobertura||[]).filter(r=>!(_bdgFilter['cobertura']||[]).includes(r.producto));
     const totIng=rows.reduce((a,r)=>a+(r.ingresos||0),0);
     const totReq=rows.reduce((a,r)=>a+(r.totalReq||0),0);
-    const glob=totReq>0?totIng/totReq:0;
+    const _rg7=totReq>0?totIng/totReq:0;
+    const glob=(_rg7>=1&&rows.some(r=>(r.pct||0)<1))?0.99:_rg7;
     const pctG=Math.round(glob*100);
     const cg=_eC(glob);
     const ok=rows.filter(r=>(r.pct||0)>=1).length;
@@ -1165,7 +1172,8 @@ function _buildBodegaHtmlEmail(view){
     const rows=(d.proveedores||[]).filter(r=>!(_bdgFilter['proveedores']||[]).includes(r.producto));
     const totP=rows.reduce((a,r)=>a+(r.planificado||0),0);
     const totI=rows.reduce((a,r)=>a+(r.ingresos||0),0);
-    const glob=totP>0?totI/totP:0;
+    const _rg8=totP>0?totI/totP:0;
+    const glob=(_rg8>=1&&rows.some(r=>(r.pct||0)<1))?0.99:_rg8;
     const pctG=Math.round(glob*100);
     const cg=_eC(glob);
     contentHtml=`<table width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:16px"><tr>
