@@ -729,7 +729,7 @@ function _buildBodegaEmailBody(view){
     rows.forEach(r=>{
       const p=Math.round((r.pct||0)*100);
       const bar='█'.repeat(Math.round(p/10))+'░'.repeat(10-Math.round(p/10));
-      body+='  '+(r.producto||'—').substring(0,30).padEnd(30)+bar+' '+p+'%\n';
+      body+='  '+(r.producto||'—')+'\n    '+bar+' '+p+'%  ('+_eN(r.ingresos)+' / '+_eN(r.totalReq)+')\n';
     });
   } else if(view==='abastecimiento'){
     const rows=(d.abastecimiento||[]).filter(r=>!(_bdgFilter['abastecimiento']||[]).includes(r.producto));
@@ -740,7 +740,8 @@ function _buildBodegaEmailBody(view){
     body+='DETALLE POR PRODUCTO\n';
     rows.forEach(r=>{
       const p=Math.round((r.pct||0)*100);
-      body+='  '+(r.producto||'—').substring(0,28).padEnd(28)+p+'%\t Ing:'+_eN(r.ingresos)+' Req:'+_eN(r.totalReq)+'\n';
+      const bar='█'.repeat(Math.round(p/10))+'░'.repeat(10-Math.round(p/10));
+      body+='  '+(r.producto||'—')+'\n    '+bar+' '+p+'%  Ing: '+_eN(r.ingresos)+'  Req: '+_eN(r.totalReq)+'\n';
     });
   } else if(view==='proveedores'){
     const rows=(d.proveedores||[]).filter(r=>!(_bdgFilter['proveedores']||[]).includes(r.producto));
@@ -752,20 +753,21 @@ function _buildBodegaEmailBody(view){
     rows.forEach(r=>{
       const p=Math.round((r.pct||0)*100);
       const bar='█'.repeat(Math.round(p/10))+'░'.repeat(10-Math.round(p/10));
-      body+='  '+(r.producto||'—').substring(0,28).padEnd(28)+bar+' '+p+'%\n';
+      body+='  '+(r.producto||'—')+'\n    '+bar+' '+p+'%  Plan: '+_eN(r.planificado)+'  Ing: '+_eN(r.ingresos)+'\n';
     });
   } else if(view==='lotesFinales'){
     const rows=(d.lotesFinales||[]).filter(r=>!(_bdgFilter['lotesFinales']||[]).includes(r.producto));
     body+='LOTES FINALES\n';
     rows.forEach(r=>{
       const p=Math.round((r.pct||0)*100);
-      body+='  '+(r.producto||'—').substring(0,28).padEnd(28)+p+'%\t Lote: '+(r.lotes&&r.lotes!=='-'?r.lotes:'—')+'\n';
+      const bar='█'.repeat(Math.round(p/10))+'░'.repeat(10-Math.round(p/10));
+      body+='  '+(r.producto||'—')+'\n    '+bar+' '+p+'%  Lote: '+(r.lotes&&r.lotes!=='-'?r.lotes:'—')+'\n';
     });
   } else if(view==='reqDiario'){
     const rows=(d.requerimientoDiario||[]).filter(r=>!(_bdgFilter['reqDiario']||[]).includes(r.producto));
     body+='REQUERIMIENTO DIARIO\n';
     rows.forEach(r=>{
-      body+='  '+(r.producto||'—').substring(0,28).padEnd(28)+'Dist: '+_eN(r.distributivo)+' ('+r.numDias+' días)\n';
+      body+='  '+(r.producto||'—')+'\n    Distributivo: '+_eN(r.distributivo)+'  ('+r.numDias+' días)\n';
     });
   } else if(view==='lastmile'){
     const lm=d.lastmile||{};
@@ -774,13 +776,13 @@ function _buildBodegaEmailBody(view){
     const vk=pivot.length?Object.keys(pivot[0]).filter(k=>k!=='transportista'&&!/^B\d+$/.test(k)):[];
     pivot.forEach(r=>{
       const tot=vk.reduce((a,k)=>a+(Number(r[k])||0),0);
-      body+='  '+(r.transportista||'—').substring(0,28).padEnd(28)+' Total: '+tot+'\n';
+      body+='  '+(r.transportista||'—')+'\n    Total errores: '+tot+'\n';
     });
   } else if(view==='invSemanal'){
     const inv=(d.inventario||[]).filter(r=>!(_bdgFilter['invSemanal']||[]).includes(r.producto));
     body+='AJUSTE DE INVENTARIO\n';
     inv.forEach(r=>{
-      body+='  '+(r.producto||'—').substring(0,28).padEnd(28)+_eN(r.ajuste)+'\n';
+      body+='  '+(r.producto||'—')+'\n    Ajuste: '+_eN(r.ajuste)+'\n';
     });
   }
   body+='\n'+sep+'\nReporte generado automáticamente · Bodega Dashboard';
