@@ -516,9 +516,9 @@
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px" id="em-kpis"></div>
 
       <!-- Barra de progreso global -->
-      <div style="background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:16px;border:1px solid #DDE3EE">
+      <div id="em-prog-section" style="background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:16px;border:1px solid #DDE3EE">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <span style="font-size:11px;font-weight:700;color:#5C6478;text-transform:uppercase;letter-spacing:.5px">Progreso acumulado del programa</span>
+          <span id="em-prog-title" style="font-size:11px;font-weight:700;color:#5C6478;text-transform:uppercase;letter-spacing:.5px">Progreso acumulado del programa</span>
           <span style="font-size:13px;font-weight:800;color:#14213D" id="em-pct-label">0%</span>
         </div>
         <div style="background:#EEF1F7;border-radius:999px;height:10px;overflow:hidden">
@@ -527,14 +527,14 @@
       </div>
 
       <!-- Provincias -->
-      <div style="background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:16px;border:1px solid #DDE3EE">
-        <div style="font-size:11px;font-weight:700;color:#5C6478;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Progreso por Provincia</div>
+      <div id="em-provs-section" style="background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:16px;border:1px solid #DDE3EE">
+        <div id="em-provs-title" style="font-size:11px;font-weight:700;color:#5C6478;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Progreso por Provincia</div>
         <div id="em-provs"></div>
       </div>
 
       <!-- Detalle IE -->
-      <div style="background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:16px;border:1px solid #DDE3EE">
-        <div style="font-size:11px;font-weight:700;color:#5C6478;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Instituciones Educativas</div>
+      <div id="em-ie-section" style="background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:16px;border:1px solid #DDE3EE">
+        <div id="em-ie-title" style="font-size:11px;font-weight:700;color:#5C6478;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Instituciones Educativas</div>
         <div id="em-ie" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
       </div>
 
@@ -568,8 +568,8 @@
 <script src="js/data-loader.js?v=40"></script>
 <script src="js/dashboard.js?v=40"></script>
 <script src="js/map.js?v=40"></script>
-<script src="js/email.js?v=40"></script>
-<script src="js/bodega.js?v=47"></script>
+<script src="js/email.js?v=50"></script>
+<script src="js/bodega.js?v=51"></script>
 <script>window.addEventListener('DOMContentLoaded', initAuth);</script>
 </body>
 </html>
