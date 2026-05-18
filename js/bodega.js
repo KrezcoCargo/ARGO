@@ -464,9 +464,10 @@ function _barChart(data,title,dec=0,barColor='#2574A9'){
 /* ── Horizontal Bar (Inventario) — HTML/CSS (no SVG scaling issues) ── */
 function _hbarChart(rows){
   if(!rows.length)return'';
-  const vals=rows.filter(r=>r.ajuste!=null&&!isNaN(Number(r.ajuste)));
+  const vals=rows.filter(r=>r.ajuste!=null&&!isNaN(Number(r.ajuste)))
+               .slice().sort((a,b)=>Math.abs(Number(b.ajuste))-Math.abs(Number(a.ajuste)));
   if(!vals.length)return'';
-  const mx=Math.max(...vals.map(r=>Math.abs(Number(r.ajuste))),1);
+  const mx=Math.abs(Number(vals[0].ajuste))||1;
   const items=vals.map(r=>{
     const v=Number(r.ajuste),neg=v<0;
     const pct=Math.max(0.5,Math.round(Math.abs(v)/mx*100));
