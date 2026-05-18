@@ -1112,10 +1112,10 @@
     "pctRecibidas": "48%",
     "pctPendientes": "52%",
     "racionesPlanificadas": 7054240,
-    "racionesRecibidas": 4997080,
-    "racionesPendientes": 2057160,
-    "pctRacRecibidas": "71%",
-    "pctRacPendientes": "29%"
+    "racionesRecibidas": 6666780,
+    "racionesPendientes": 387460,
+    "pctRacRecibidas": "95%",
+    "pctRacPendientes": "5%"
   },
   "inventario": [
     {
@@ -1148,11 +1148,11 @@
     },
     {
       "producto": "LECHE CEREAL CHOCOLATE",
-      "ajuste": -140426
+      "ajuste": -2546
     },
     {
       "producto": "LECHE CEREAL FRESA",
-      "ajuste": -72085
+      "ajuste": -205
     },
     {
       "producto": "LECHE ENTERA",
@@ -1172,11 +1172,11 @@
     },
     {
       "producto": "NÉCTAR PERA",
-      "ajuste": -72013
+      "ajuste": -181
     },
     {
       "producto": "NÉCTAR PERA-BANANO O MANGO-BANANA",
-      "ajuste": -80581
+      "ajuste": 35
     },
     {
       "producto": "NÉCTAR PERA-MANGO",
@@ -5809,9 +5809,9 @@
       }
     ]
   },
-  "updatedAt": "18/05/2026 11:57",
+  "updatedAt": "18/05/2026 12:43",
   "_meta": {
-    "generado": "18/05/2026 11:57",
+    "generado": "18/05/2026 12:43",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
