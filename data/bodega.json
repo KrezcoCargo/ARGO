@@ -1120,31 +1120,31 @@
   "inventario": [
     {
       "producto": "EXTRUIDO JAMÓN SERRANO",
-      "ajuste": -129386
+      "ajuste": 1014
     },
     {
       "producto": "EXTRUIDO POLLO A LA BRASA",
-      "ajuste": -73693
+      "ajuste": 907
     },
     {
       "producto": "GALLETA DULCE",
-      "ajuste": -263154
+      "ajuste": 1966
     },
     {
       "producto": "GALLETA RELLENA CHOCOLATE O FRUTOS AMARILLOS",
-      "ajuste": -225879
+      "ajuste": 921
     },
     {
       "producto": "GALLETA RELLENA FRESA O FRUTOS ROJOS",
-      "ajuste": -270572
+      "ajuste": -4412
     },
     {
       "producto": "GALLETA SAL",
-      "ajuste": -235479
+      "ajuste": -399
     },
     {
       "producto": "GRANOLA",
-      "ajuste": -278972
+      "ajuste": 748
     },
     {
       "producto": "LECHE CEREAL CHOCOLATE",
@@ -1155,22 +1155,6 @@
       "ajuste": -205
     },
     {
-      "producto": "LECHE ENTERA",
-      "ajuste": -484375
-    },
-    {
-      "producto": "LECHE SABORIZADA CHOCOLATE",
-      "ajuste": -142802
-    },
-    {
-      "producto": "LECHE SABORIZADA FRESA",
-      "ajuste": -75061
-    },
-    {
-      "producto": "NÉCTAR MANGO-BANANA",
-      "ajuste": 0
-    },
-    {
       "producto": "NÉCTAR PERA",
       "ajuste": -181
     },
@@ -1179,16 +1163,8 @@
       "ajuste": 35
     },
     {
-      "producto": "NÉCTAR PERA-MANGO",
-      "ajuste": -69397
-    },
-    {
-      "producto": "PURÉ MANGO-PERA",
-      "ajuste": -244962
-    },
-    {
       "producto": "TOTAL GALLETA",
-      "ajuste": -498633
+      "ajuste": 1567
     }
   ],
   "inventarioSemanal": [
@@ -5809,9 +5785,9 @@
       }
     ]
   },
-  "updatedAt": "18/05/2026 12:43",
+  "updatedAt": "18/05/2026 12:53",
   "_meta": {
-    "generado": "18/05/2026 12:43",
+    "generado": "18/05/2026 12:53",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
