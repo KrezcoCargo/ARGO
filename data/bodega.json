@@ -5782,54 +5782,59 @@
       },
       {
         "etiqueta": "3",
-        "cuentaVal": null,
+        "cuentaVal": 20,
         "cuentaTrans": 20
       },
       {
         "etiqueta": "4",
-        "cuentaVal": null,
+        "cuentaVal": 20,
         "cuentaTrans": 20
       },
       {
         "etiqueta": "5",
-        "cuentaVal": null,
+        "cuentaVal": 20,
         "cuentaTrans": 20
       },
       {
         "etiqueta": "6",
-        "cuentaVal": null,
+        "cuentaVal": 20,
         "cuentaTrans": 20
       },
       {
         "etiqueta": "7",
-        "cuentaVal": null,
-        "cuentaTrans": 20
+        "cuentaVal": 18,
+        "cuentaTrans": 18
       },
       {
         "etiqueta": "8",
-        "cuentaVal": null,
-        "cuentaTrans": 20
+        "cuentaVal": 19,
+        "cuentaTrans": 19
       },
       {
         "etiqueta": "9",
-        "cuentaVal": null,
-        "cuentaTrans": 20
+        "cuentaVal": 18,
+        "cuentaTrans": 18
       },
       {
         "etiqueta": "10",
         "cuentaVal": null,
-        "cuentaTrans": 20
+        "cuentaTrans": 13
+      },
+      {
+        "etiqueta": "11",
+        "cuentaVal": null,
+        "cuentaTrans": 9
       },
       {
         "etiqueta": "Total general",
-        "cuentaVal": 40,
-        "cuentaTrans": 200
+        "cuentaVal": 175,
+        "cuentaTrans": 197
       }
     ]
   },
-  "updatedAt": "19/05/2026 13:09",
+  "updatedAt": "19/05/2026 14:09",
   "_meta": {
-    "generado": "19/05/2026 13:09",
+    "generado": "19/05/2026 14:09",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
