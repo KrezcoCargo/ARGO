@@ -1107,10 +1107,10 @@
   ],
   "notasEntrega": {
     "planificadas": 801,
-    "recibidas": 463,
-    "pendientes": 338,
-    "pctRecibidas": "58%",
-    "pctPendientes": "42%",
+    "recibidas": 536,
+    "pendientes": 265,
+    "pctRecibidas": "67%",
+    "pctPendientes": "33%",
     "racionesPlanificadas": 7054240,
     "racionesRecibidas": 6666780,
     "racionesPendientes": 387460,
@@ -5827,9 +5827,9 @@
       }
     ]
   },
-  "updatedAt": "19/05/2026 12:08",
+  "updatedAt": "19/05/2026 13:09",
   "_meta": {
-    "generado": "19/05/2026 12:08",
+    "generado": "19/05/2026 13:09",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
