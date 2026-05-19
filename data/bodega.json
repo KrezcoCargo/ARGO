@@ -4,7 +4,7 @@
       "producto": "LECHE ENTERA",
       "ingresos": 2558449,
       "totalReq": 2526643,
-      "saldo": 217236,
+      "saldo": 31806,
       "porDia": [
         2299701,
         2049157,
@@ -25,7 +25,7 @@
       "producto": "NÉCTAR PERA",
       "ingresos": 363023,
       "totalReq": 360949,
-      "saldo": 28564,
+      "saldo": 2074,
       "porDia": [
         326059,
         290267,
@@ -46,7 +46,7 @@
       "producto": "NÉCTAR PERA-BANANO O MANGO-BANANA",
       "ingresos": 370755,
       "totalReq": 360949,
-      "saldo": 36296,
+      "saldo": 9806,
       "porDia": [
         333791,
         297999,
@@ -67,7 +67,7 @@
       "producto": "NÉCTAR PERA-MANGO",
       "ingresos": 363030,
       "totalReq": 360949,
-      "saldo": 28571,
+      "saldo": 2081,
       "porDia": [
         326066,
         290274,
@@ -109,7 +109,7 @@
       "producto": "PURÉ MANGO-PERA",
       "ingresos": 1506941,
       "totalReq": 1443796,
-      "saldo": 169105,
+      "saldo": 63145,
       "porDia": [
         1359085,
         1215917,
@@ -130,7 +130,7 @@
       "producto": "LECHE CEREAL CHOCOLATE",
       "ingresos": 725429,
       "totalReq": 721898,
-      "saldo": 56511,
+      "saldo": 3531,
       "porDia": [
         651501,
         579917,
@@ -151,7 +151,7 @@
       "producto": "LECHE CEREAL FRESA",
       "ingresos": 362983,
       "totalReq": 360949,
-      "saldo": 28524,
+      "saldo": 2034,
       "porDia": [
         326019,
         290227,
@@ -172,7 +172,7 @@
       "producto": "LECHE SABORIZADA CHOCOLATE",
       "ingresos": 725816,
       "totalReq": 721898,
-      "saldo": 56898,
+      "saldo": 3918,
       "porDia": [
         651888,
         580304,
@@ -193,7 +193,7 @@
       "producto": "LECHE SABORIZADA FRESA",
       "ingresos": 363168,
       "totalReq": 360949,
-      "saldo": 28709,
+      "saldo": 2219,
       "porDia": [
         326204,
         290412,
@@ -214,7 +214,7 @@
       "producto": "EXTRUIDO JAMÓN SERRANO",
       "ingresos": 722456,
       "totalReq": 721898,
-      "saldo": 53538,
+      "saldo": 558,
       "porDia": [
         648528,
         576944,
@@ -235,7 +235,7 @@
       "producto": "EXTRUIDO POLLO A LA BRASA",
       "ingresos": 361372,
       "totalReq": 360949,
-      "saldo": 26913,
+      "saldo": 423,
       "porDia": [
         324408,
         288616,
@@ -256,7 +256,7 @@
       "producto": "GALLETA RELLENA FRESA O FRUTOS ROJOS",
       "ingresos": 1444787,
       "totalReq": 1443796,
-      "saldo": 106951,
+      "saldo": 991,
       "porDia": [
         1296931,
         1153763,
@@ -277,7 +277,7 @@
       "producto": "GALLETA RELLENA CHOCOLATE O FRUTOS AMARILLOS",
       "ingresos": 1105218,
       "totalReq": 1082847,
-      "saldo": 101841,
+      "saldo": 22371,
       "porDia": [
         994326,
         886950,
@@ -298,7 +298,7 @@
       "producto": "GRANOLA",
       "ingresos": 1444731,
       "totalReq": 1443796,
-      "saldo": 106895,
+      "saldo": 935,
       "porDia": [
         1296875,
         1153707,
@@ -319,7 +319,7 @@
       "producto": "GALLETA SAL",
       "ingresos": 1110716,
       "totalReq": 1082847,
-      "saldo": 107339,
+      "saldo": 27869,
       "porDia": [
         999824,
         892448,
@@ -340,7 +340,7 @@
       "producto": "GALLETA DULCE",
       "ingresos": 1085409,
       "totalReq": 1082847,
-      "saldo": 82032,
+      "saldo": 2562,
       "porDia": [
         974517,
         867141,
@@ -5832,9 +5832,9 @@
       }
     ]
   },
-  "updatedAt": "19/05/2026 16:10",
+  "updatedAt": "19/05/2026 17:11",
   "_meta": {
-    "generado": "19/05/2026 16:10",
+    "generado": "19/05/2026 17:11",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
