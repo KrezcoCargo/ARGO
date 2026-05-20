@@ -1410,9 +1410,9 @@
         "6": null,
         "7": null,
         "8": null,
-        "9": null,
+        "9": 2,
         "10": null,
-        "Total general": 4,
+        "Total general": 6,
         "B13": null,
         "B14": null,
         "B15": null
@@ -1461,9 +1461,9 @@
         "6": null,
         "7": null,
         "8": null,
-        "9": null,
+        "9": 2,
         "10": null,
-        "Total general": null,
+        "Total general": 2,
         "B13": null,
         "B14": null,
         "B15": null
@@ -1733,9 +1733,9 @@
         "6": 3,
         "7": 2,
         "8": null,
-        "9": null,
+        "9": 4,
         "10": null,
-        "Total general": 16,
+        "Total general": 20,
         "B13": null,
         "B14": null,
         "B15": null
@@ -5832,9 +5832,9 @@
       }
     ]
   },
-  "updatedAt": "20/05/2026 09:18",
+  "updatedAt": "20/05/2026 09:21",
   "_meta": {
-    "generado": "20/05/2026 09:18",
+    "generado": "20/05/2026 09:21",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
