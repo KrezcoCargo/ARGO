@@ -1120,23 +1120,23 @@
   "inventario": [
     {
       "producto": "LECHE ENTERA",
-      "ajuste": -59461,
-      "orden": -2477
+      "ajuste": -2341,
+      "orden": -97
     },
     {
       "producto": "NÉCTAR PERA",
-      "ajuste": -7855,
-      "orden": -327
+      "ajuste": -185,
+      "orden": -7
     },
     {
       "producto": "NÉCTAR PERA-BANANO O MANGO-BANANA",
-      "ajuste": -16423,
-      "orden": -684
+      "ajuste": -511,
+      "orden": -21
     },
     {
       "producto": "NÉCTAR PERA-MANGO",
-      "ajuste": -5239,
-      "orden": -218
+      "ajuste": 425,
+      "orden": 17
     },
     {
       "producto": "NÉCTAR MANGO-BANANA",
@@ -1145,28 +1145,28 @@
     },
     {
       "producto": "PURÉ MANGO-PERA",
-      "ajuste": -85130,
-      "orden": -773
+      "ajuste": -330,
+      "orden": -3
     },
     {
       "producto": "LECHE CEREAL CHOCOLATE",
-      "ajuste": -12110,
-      "orden": -504
+      "ajuste": -2522,
+      "orden": -105
     },
     {
       "producto": "LECHE CEREAL FRESA",
-      "ajuste": -7927,
-      "orden": -330
+      "ajuste": -199,
+      "orden": -8
     },
     {
       "producto": "LECHE SABORIZADA CHOCOLATE",
-      "ajuste": -14486,
-      "orden": -603
+      "ajuste": -206,
+      "orden": -8
     },
     {
       "producto": "LECHE SABORIZADA FRESA",
-      "ajuste": -10903,
-      "orden": -454
+      "ajuste": 2382,
+      "orden": 99
     },
     {
       "producto": "EXTRUIDO JAMÓN SERRANO",
@@ -5832,9 +5832,9 @@
       }
     ]
   },
-  "updatedAt": "20/05/2026 12:02",
+  "updatedAt": "20/05/2026 13:03",
   "_meta": {
-    "generado": "20/05/2026 12:02",
+    "generado": "20/05/2026 13:03",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
