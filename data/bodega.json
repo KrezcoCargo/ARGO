@@ -5576,7 +5576,7 @@
       {
         "transportista": "ALEXIS COBA",
         "dia": "9",
-        "validacion": null
+        "validacion": 2
       },
       {
         "transportista": "CRISTIAN REA",
@@ -5591,7 +5591,7 @@
       {
         "transportista": "DELIA COBA",
         "dia": "9",
-        "validacion": null
+        "validacion": 2
       },
       {
         "transportista": "EDISON QUINATOA",
@@ -5832,9 +5832,9 @@
       }
     ]
   },
-  "updatedAt": "20/05/2026 08:59",
+  "updatedAt": "20/05/2026 09:18",
   "_meta": {
-    "generado": "20/05/2026 08:59",
+    "generado": "20/05/2026 09:18",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
