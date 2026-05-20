@@ -791,12 +791,23 @@ function _exportBodegaPDF(view){
     doc.text('COBERTURA GLOBAL DEL INVENTARIO',14,y);y+=4;
     progBar(pctG,col);
     doc.autoTable({startY:y,
-      head:[['Producto','Ingresos','Requerido','Saldo','Cobertura']],
+      head:[['Producto','Ingresos','Requerido','Por Recibir','Cobertura']],
       body:rows.map(r=>[r.producto||'—',_eN(r.ingresos),_eN(r.totalReq),_eN(r.saldo),Math.round((r.pct||0)*100)+'%']),
       styles:{fontSize:8,cellPadding:2.5,textColor:navy},
       headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:7.5},
       alternateRowStyles:{fillColor:[248,249,252]},
-      didParseCell:_coverageHook(rows,4),
+      didParseCell(data){
+        if(data.section!=='body')return;
+        const r=rows[data.row.index];
+        if(!r)return;
+        const pr=r.saldo||0;
+        const bg=pr>=0?[230,246,236]:[254,226,226];
+        const fg=pr>=0?[21,128,61]:[185,28,28];
+        data.cell.styles.fillColor=bg;
+        data.cell.styles.textColor=fg;
+        if(data.column.index===3){data.cell.styles.fontStyle='bold';}
+        if(data.column.index===4){data.cell.styles.fontStyle='bold';}
+      },
       margin:{left:14,right:14}});
 
   } else if(view==='abastecimiento'){
