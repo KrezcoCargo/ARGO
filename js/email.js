@@ -1093,37 +1093,65 @@ function _exportBodegaPDF(view){
     // Ordenar por campo "orden" del Excel
     const invSorted=inv.slice().sort((a,b)=>(a.orden??9999)-(b.orden??9999));
     const hasCajas=invSorted.some(r=>r.cajas!=null);
+    const mxInv=Math.max(...invSorted.map(r=>Math.abs(Number(r.ajuste||0))),1);
     if(invSorted.length){
-      const head=hasCajas?['Producto','Unidades','Cajas']:['Producto','Unidades'];
+      // Columnas: Producto | Barra (visual) | Unidades | Cajas
+      const head=hasCajas?['Producto','','Unidades','Cajas']:['Producto','','Unidades'];
       const body=invSorted.map(r=>{
-        const row=[r.producto||'—',_eN(r.ajuste)];
+        const row=[r.producto||'—','',_eN(r.ajuste)];
         if(hasCajas)row.push(r.cajas!=null?_eN(r.cajas,1):'—');
         return row;
       });
+      const C_POS=[61,142,185], C_NEG=[244,124,32];
+      const C_POS_BG=[235,246,253], C_NEG_BG=[255,243,232];
+      const C_POS_TXT=[21,100,160], C_NEG_TXT=[160,70,10];
       doc.autoTable({startY:y,
         head:[head],
         body,
-        styles:{fontSize:8,cellPadding:2.5,textColor:navy},
+        styles:{fontSize:8,cellPadding:{top:3,bottom:3,left:5,right:5},textColor:navy},
         headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:7.5},
         columnStyles:hasCajas?
-          {0:{cellWidth:'auto'},1:{halign:'right'},2:{halign:'right'}}:
-          {0:{cellWidth:'auto'},1:{halign:'right'}},
+          {0:{cellWidth:62},1:{cellWidth:58},2:{cellWidth:22,halign:'right'},3:{cellWidth:18,halign:'right'}}:
+          {0:{cellWidth:62},1:{cellWidth:68},2:{cellWidth:22,halign:'right'}},
         didParseCell:function(data){
           if(data.section!=='body')return;
           const r=invSorted[data.row.index];if(!r)return;
           const v=Number(r.ajuste||0),isNeg=v<0;
-          // Toda la fila: fondo sutil
-          data.cell.styles.fillColor=isNeg?[255,248,248]:[245,255,249];
-          // Columna Unidades: bold + color fuerte
+          const bg=isNeg?C_NEG_BG:C_POS_BG;
+          const fg=isNeg?C_NEG_TXT:C_POS_TXT;
+          // Fondo de toda la fila
+          data.cell.styles.fillColor=bg;
+          // Columna barra: sin texto, sin padding lateral
           if(data.column.index===1){
-            data.cell.styles.textColor=isNeg?[185,28,28]:[21,128,61];
+            data.cell.styles.cellPadding={top:4,bottom:4,left:3,right:3};
+          }
+          // Columna Unidades
+          if(data.column.index===2){
+            data.cell.styles.textColor=fg;
+            data.cell.styles.fontStyle='bold';
+            data.cell.styles.fontSize=8.5;
+          }
+          // Columna Cajas
+          if(hasCajas&&data.column.index===3){
+            data.cell.styles.textColor=isNeg?[185,80,80]:[50,130,90];
             data.cell.styles.fontStyle='bold';
           }
-          // Columna Cajas: bold + mismo color pero más tenue
-          if(hasCajas&&data.column.index===2){
-            data.cell.styles.textColor=isNeg?[185,28,28]:[21,128,61];
-            data.cell.styles.fontStyle='bold';
-          }
+        },
+        didDrawCell:function(data){
+          if(data.section!=='body'||data.column.index!==1)return;
+          const r=invSorted[data.row.index];if(!r)return;
+          const v=Number(r.ajuste||0),isNeg=v<0;
+          const barPct=Math.max(0.02,Math.abs(v)/mxInv);
+          const cellW=data.cell.width-6, cellH=data.cell.height-6;
+          const trackH=6, trackY=data.cell.y+data.cell.height/2-trackH/2;
+          const trackX=data.cell.x+3, trackW=cellW;
+          // Track background
+          doc.setFillColor(...(isNeg?[254,226,200]:[210,235,248]));
+          doc.roundedRect(trackX,trackY,trackW,trackH,2,2,'F');
+          // Bar fill
+          const barW=Math.max(4,Math.round(barPct*trackW));
+          doc.setFillColor(...(isNeg?C_NEG:C_POS));
+          doc.roundedRect(trackX,trackY,barW,trackH,2,2,'F');
         },
         margin:{left:14,right:14}});
       y=doc.lastAutoTable.finalY+8;
