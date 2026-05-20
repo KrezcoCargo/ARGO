@@ -1090,23 +1090,40 @@ function _exportBodegaPDF(view){
       {label:'Total productos',val:inv.length,bg:lightbg,vc:gray,lc:gray},
       {label:'Actualizado',val:upd,bg:lightbg,vc:gray,lc:gray},
     ]);
-    if(inv.length){
+    // Ordenar por campo "orden" del Excel
+    const invSorted=inv.slice().sort((a,b)=>(a.orden??9999)-(b.orden??9999));
+    const hasCajas=invSorted.some(r=>r.cajas!=null);
+    if(invSorted.length){
+      const head=hasCajas?['Producto','Unidades','Cajas']:['Producto','Unidades'];
+      const body=invSorted.map(r=>{
+        const row=[r.producto||'—',_eN(r.ajuste)];
+        if(hasCajas)row.push(r.cajas!=null?_eN(r.cajas,1):'—');
+        return row;
+      });
       doc.autoTable({startY:y,
-        head:[['Producto','Ajuste']],
-        body:inv.map(r=>[r.producto||'—',_eN(r.ajuste)]),
+        head:[head],
+        body,
         styles:{fontSize:8,cellPadding:2.5,textColor:navy},
         headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:7.5},
-        // No alternateRowStyles — each row is fully colored by value
+        columnStyles:hasCajas?
+          {0:{cellWidth:'auto'},1:{halign:'right'},2:{halign:'right'}}:
+          {0:{cellWidth:'auto'},1:{halign:'right'}},
         didParseCell:function(data){
           if(data.section!=='body')return;
-          const r=inv[data.row.index];if(!r)return;
+          const r=invSorted[data.row.index];if(!r)return;
           const v=Number(r.ajuste||0),isNeg=v<0;
-          const col=isNeg?red:green;
-          const bg=isNeg?[255,242,242]:[242,253,246];
-          data.cell.styles.textColor=col;
-          data.cell.styles.fontStyle='bold';
-          data.cell.styles.fillColor=bg;
-          if(data.column.index===1)data.cell.styles.halign='right';
+          // Toda la fila: fondo sutil
+          data.cell.styles.fillColor=isNeg?[255,248,248]:[245,255,249];
+          // Columna Unidades: bold + color fuerte
+          if(data.column.index===1){
+            data.cell.styles.textColor=isNeg?[185,28,28]:[21,128,61];
+            data.cell.styles.fontStyle='bold';
+          }
+          // Columna Cajas: bold + mismo color pero más tenue
+          if(hasCajas&&data.column.index===2){
+            data.cell.styles.textColor=isNeg?[185,28,28]:[21,128,61];
+            data.cell.styles.fontStyle='bold';
+          }
         },
         margin:{left:14,right:14}});
       y=doc.lastAutoTable.finalY+8;
