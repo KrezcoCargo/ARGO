@@ -1111,11 +1111,11 @@
     "pendientes": 265,
     "pctRecibidas": "67%",
     "pctPendientes": "33%",
-    "racionesPlanificadas": 7054240,
-    "racionesRecibidas": 6666780,
-    "racionesPendientes": 387460,
-    "pctRacRecibidas": "95%",
-    "pctRacPendientes": "5%"
+    "racionesPlanificadas": 7216420,
+    "racionesRecibidas": 7216420,
+    "racionesPendientes": 0,
+    "pctRacRecibidas": "100%",
+    "pctRacPendientes": "0%"
   },
   "inventario": [
     {
@@ -1236,27 +1236,27 @@
     },
     {
       "dia": "MIÉRCOLES",
-      "carlos": "ENTERA",
-      "stalyn": "PURÉ",
-      "jonathan": "GRANOLA"
-    },
-    {
-      "dia": "JUEVES",
-      "carlos": "CEREAL CHOCOLATE",
-      "stalyn": "NÉCTAR PERA",
-      "jonathan": "GALLETA SAL"
-    },
-    {
-      "dia": "JUEVES",
-      "carlos": "CEREAL FRESA",
-      "stalyn": "NÉCTAR PERA-BANANO",
-      "jonathan": "GALLETA DULCE"
-    },
-    {
-      "dia": "VIERNES",
       "carlos": "INVENTARIO GENERAL",
       "stalyn": "INVENTARIO GENERAL",
       "jonathan": "INVENTARIO GENERAL"
+    },
+    {
+      "dia": "JUEVES",
+      "carlos": null,
+      "stalyn": null,
+      "jonathan": null
+    },
+    {
+      "dia": "JUEVES",
+      "carlos": null,
+      "stalyn": null,
+      "jonathan": null
+    },
+    {
+      "dia": "VIERNES",
+      "carlos": null,
+      "stalyn": null,
+      "jonathan": null
     }
   ],
   "historialErrores": [
@@ -5832,9 +5832,9 @@
       }
     ]
   },
-  "updatedAt": "20/05/2026 09:21",
+  "updatedAt": "20/05/2026 09:22",
   "_meta": {
-    "generado": "20/05/2026 09:21",
+    "generado": "20/05/2026 09:22",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
