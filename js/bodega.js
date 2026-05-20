@@ -727,13 +727,14 @@ function renderLastMile(d){
   }
 
   /* ── Gráfico SVG: Transportistas por día (lm_resumen — META vs VALIDACIÓN) ── */
-  const res=(Array.isArray(lm.resumen)?lm.resumen:[]).filter(r=>r.etiqueta!=null);
+  const res=(Array.isArray(lm.resumen)?lm.resumen:[])
+    .filter(r=>r.etiqueta!=null&&!/total/i.test(String(r.etiqueta)));
   let diaHtml='';
   if(res.length){
     const C_META='#3D8EB9', C_VAL='#F47C20';
     const mx=Math.max(...res.map(r=>Math.max(Number(r.cuentaTrans)||0,Number(r.cuentaVal)||0)),1);
     const n=res.length;
-    const bW=28,gap=5,grpGap=22,topH=22,botH=28,barMax=160;
+    const bW=32,gap=6,grpGap=24,topH=24,botH=28,barMax=220;
     const grpW=bW*2+gap;
     const vbW=n*(grpW+grpGap)-grpGap+40;
     const vbH=topH+barMax+botH;
