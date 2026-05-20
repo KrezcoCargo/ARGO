@@ -985,9 +985,11 @@ function _exportBodegaPDF(view){
 
   } else if(view==='lastmile'){
     const lm=d.lastmile||{};
-    const pivot=(lm.pivot||[]).filter(r=>r.transportista&&!/^total/i.test(r.transportista));
+    const pivotAll=(lm.pivot||[]).filter(r=>r.transportista&&!/^total/i.test(r.transportista));
     // Exclude fallback cols (B1..B15) AND any pre-computed total column
-    const vk=pivot.length?Object.keys(pivot[0]).filter(k=>k!=='transportista'&&!/^B\d+$/.test(k)&&!/total/i.test(k)):[];
+    const vk=pivotAll.length?Object.keys(pivotAll[0]).filter(k=>k!=='transportista'&&!/^B\d+$/.test(k)&&!/total/i.test(k)):[];
+    // Solo transportistas con al menos 1 error
+    const pivot=pivotAll.filter(r=>vk.reduce((a,k)=>a+(Number(r[k])||0),0)>0);
     const totErr=pivot.reduce((a,r)=>a+vk.reduce((b,k)=>b+(Number(r[k])||0),0),0);
     const res=lm.resumen||[];
     kpiRow([
