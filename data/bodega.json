@@ -1107,10 +1107,10 @@
   ],
   "notasEntrega": {
     "planificadas": 801,
-    "recibidas": 536,
-    "pendientes": 265,
-    "pctRecibidas": "67%",
-    "pctPendientes": "33%",
+    "recibidas": 567,
+    "pendientes": 234,
+    "pctRecibidas": "71%",
+    "pctPendientes": "29%",
     "racionesPlanificadas": 7216420,
     "racionesRecibidas": 7216420,
     "racionesPendientes": 0,
@@ -1180,13 +1180,13 @@
     },
     {
       "producto": "GALLETA RELLENA FRESA O FRUTOS ROJOS",
-      "ajuste": -13940,
-      "orden": -63
+      "ajuste": -4377,
+      "orden": -19
     },
     {
       "producto": "GALLETA RELLENA CHOCOLATE O FRUTOS AMARILLOS",
-      "ajuste": -33374,
-      "orden": -151
+      "ajuste": 273,
+      "orden": 1
     },
     {
       "producto": "GRANOLA",
@@ -5832,9 +5832,9 @@
       }
     ]
   },
-  "updatedAt": "20/05/2026 13:58",
+  "updatedAt": "20/05/2026 14:57",
   "_meta": {
-    "generado": "20/05/2026 13:58",
+    "generado": "20/05/2026 14:57",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
