@@ -1170,13 +1170,13 @@
     },
     {
       "producto": "EXTRUIDO JAMÓN SERRANO",
-      "ajuste": -1070,
-      "orden": -5
+      "ajuste": 890,
+      "orden": 4
     },
     {
       "producto": "EXTRUIDO POLLO A LA BRASA",
-      "ajuste": -9535,
-      "orden": -47
+      "ajuste": 665,
+      "orden": 3
     },
     {
       "producto": "GALLETA RELLENA FRESA O FRUTOS ROJOS",
@@ -1185,28 +1185,28 @@
     },
     {
       "producto": "GALLETA RELLENA CHOCOLATE O FRUTOS AMARILLOS",
-      "ajuste": -33405,
+      "ajuste": -33374,
       "orden": -151
     },
     {
       "producto": "GRANOLA",
-      "ajuste": -22340,
-      "orden": -79
+      "ajuste": 690,
+      "orden": 2
     },
     {
       "producto": "GALLETA SAL",
-      "ajuste": -43005,
-      "orden": -238
+      "ajuste": -15,
+      "orden": 0
     },
     {
       "producto": "GALLETA DULCE",
-      "ajuste": -70680,
-      "orden": -314
+      "ajuste": 2153,
+      "orden": 9
     },
     {
       "producto": "TOTAL GALLETA",
-      "ajuste": -113685,
-      "orden": -505
+      "ajuste": 2138,
+      "orden": 9
     }
   ],
   "inventarioSemanal": [
@@ -5832,9 +5832,9 @@
       }
     ]
   },
-  "updatedAt": "20/05/2026 13:03",
+  "updatedAt": "20/05/2026 13:58",
   "_meta": {
-    "generado": "20/05/2026 13:03",
+    "generado": "20/05/2026 13:58",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
