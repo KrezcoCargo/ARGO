@@ -1111,8 +1111,8 @@ function _exportBodegaPDF(view){
         styles:{fontSize:8,cellPadding:{top:3,bottom:3,left:5,right:5},textColor:navy},
         headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:7.5},
         columnStyles:hasCajas?
-          {0:{cellWidth:62},1:{cellWidth:58},2:{cellWidth:22,halign:'right'},3:{cellWidth:18,halign:'right'}}:
-          {0:{cellWidth:62},1:{cellWidth:68},2:{cellWidth:22,halign:'right'}},
+          {0:{cellWidth:62},1:{cellWidth:80},2:{cellWidth:22,halign:'right'},3:{cellWidth:18,halign:'right'}}:
+          {0:{cellWidth:62},1:{cellWidth:98},2:{cellWidth:22,halign:'right'}},
         didParseCell:function(data){
           if(data.section!=='body')return;
           const r=invSorted[data.row.index];if(!r)return;
