@@ -892,13 +892,35 @@ function _exportBodegaPDF(view){
     doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...gray);
     doc.text('CUMPLIMIENTO GLOBAL DE PROVEEDORES',14,y);y+=4;
     progBar(pctG,col);
+    const bodyRowsP=rows.map(r=>{
+      const deficit=Math.min(0,(r.ingresos||0)-(r.planificado||0));
+      return[r.producto||'—',_eN(r.planificado),_eN(r.ingresos),deficit===0?'0':_eN(deficit),Math.round((r.pct||0)*100)+'%'];
+    });
     doc.autoTable({startY:y,
       head:[['Proveedor / Producto','Planificado','Ingresos','Por Recibir','Cumplimiento']],
-      body:rows.map(r=>[r.producto||'—',_eN(r.planificado),_eN(r.ingresos),_eN(r.porRecibir),Math.round((r.pct||0)*100)+'%']),
+      body:bodyRowsP,
       styles:{fontSize:8,cellPadding:2.5,textColor:navy},
       headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:7.5},
       alternateRowStyles:{fillColor:[248,249,252]},
-      didParseCell:_coverageHook(rows,4),
+      columnStyles:{0:{cellWidth:'auto'},1:{halign:'right'},2:{halign:'right'},3:{halign:'right'},4:{halign:'right'}},
+      didParseCell(data){
+        if(data.section!=='body')return;
+        const r=rows[data.row.index];if(!r)return;
+        const deficit=Math.min(0,(r.ingresos||0)-(r.planificado||0));
+        const pct=r.pct||0;
+        if(data.column.index===3){
+          data.cell.styles.fontStyle='bold';
+          if(deficit===0){data.cell.styles.fillColor=[220,252,231];data.cell.styles.textColor=[21,128,61];}
+          else{data.cell.styles.fillColor=[254,226,226];data.cell.styles.textColor=[185,28,28];}
+        }
+        if(data.column.index===4){
+          data.cell.styles.fontStyle='bold';
+          const fc=pct>=1?[21,128,61]:pct>=0.7?[194,120,10]:[185,28,28];
+          const bc=pct>=1?[220,252,231]:pct>=0.7?[254,243,199]:[254,226,226];
+          data.cell.styles.fillColor=bc;data.cell.styles.textColor=fc;
+        }
+        if(deficit<0&&data.column.index<3){data.cell.styles.fillColor=[255,248,248];}
+      },
       margin:{left:14,right:14}});
 
   } else if(view==='lotesFinales'){
@@ -910,13 +932,35 @@ function _exportBodegaPDF(view){
       {label:'Total productos',val:rows.length,bg:lightbg,vc:gray,lc:gray},
       {label:'Actualizado',val:upd,bg:lightbg,vc:gray,lc:gray},
     ]);
+    const bodyRowsL=rows.map(r=>{
+      const deficit=Math.min(0,r.porRecibir||0);
+      return[r.producto||'—',deficit===0?'0':_eN(deficit),Math.round((r.pct||0)*100)+'%',r.lotes&&r.lotes!=='-'?r.lotes:'—'];
+    });
     doc.autoTable({startY:y,
       head:[['Producto','Por Recibir','Cobertura','Lote']],
-      body:rows.map(r=>[r.producto||'—',_eN(r.porRecibir),Math.round((r.pct||0)*100)+'%',r.lotes&&r.lotes!=='-'?r.lotes:'—']),
+      body:bodyRowsL,
       styles:{fontSize:8,cellPadding:2.5,textColor:navy},
       headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:7.5},
       alternateRowStyles:{fillColor:[248,249,252]},
-      didParseCell:_coverageHook(rows,2),
+      columnStyles:{0:{cellWidth:'auto'},1:{halign:'right'},2:{halign:'right'},3:{halign:'left'}},
+      didParseCell(data){
+        if(data.section!=='body')return;
+        const r=rows[data.row.index];if(!r)return;
+        const deficit=Math.min(0,r.porRecibir||0);
+        const pct=r.pct||0;
+        if(data.column.index===1){
+          data.cell.styles.fontStyle='bold';
+          if(deficit===0){data.cell.styles.fillColor=[220,252,231];data.cell.styles.textColor=[21,128,61];}
+          else{data.cell.styles.fillColor=[254,226,226];data.cell.styles.textColor=[185,28,28];}
+        }
+        if(data.column.index===2){
+          data.cell.styles.fontStyle='bold';
+          const fc=pct>=1?[21,128,61]:pct>=0.7?[194,120,10]:[185,28,28];
+          const bc=pct>=1?[220,252,231]:pct>=0.7?[254,243,199]:[254,226,226];
+          data.cell.styles.fillColor=bc;data.cell.styles.textColor=fc;
+        }
+        if(deficit<0&&data.column.index===0){data.cell.styles.fillColor=[255,248,248];}
+      },
       margin:{left:14,right:14}});
 
   } else if(view==='reqDiario'){
