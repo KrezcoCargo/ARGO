@@ -674,7 +674,7 @@
       "producto": "LECHE ENTERA",
       "porRecibir": 31806,
       "pct": 1.0125882445600745,
-      "lotes": "VITA107 (33000)"
+      "lotes": "VITA107 (59461)"
     },
     {
       "producto": "NÉCTAR PERA",
@@ -5832,9 +5832,9 @@
       }
     ]
   },
-  "updatedAt": "20/05/2026 08:57",
+  "updatedAt": "20/05/2026 08:59",
   "_meta": {
-    "generado": "20/05/2026 08:57",
+    "generado": "20/05/2026 08:59",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
