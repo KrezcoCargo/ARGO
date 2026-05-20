@@ -846,13 +846,35 @@ function _exportBodegaPDF(view){
       {label:'Criticos <70%',val:crit,bg:[254,226,226],vc:red,lc:red},
       {label:'Total productos',val:rows.length,bg:lightbg,vc:gray,lc:gray},
     ]);
+    const bodyRowsA=rows.map(r=>{
+      const deficit=Math.min(0,(r.ingresos||0)-(r.totalReq||0));
+      return[r.producto||'—',_eN(r.ingresos),_eN(r.totalReq),deficit===0?'0':_eN(deficit),Math.round((r.pct||0)*100)+'%'];
+    });
     doc.autoTable({startY:y,
       head:[['Producto','Ingresos','Requerido','Por Recibir','Cobertura']],
-      body:rows.map(r=>[r.producto||'—',_eN(r.ingresos),_eN(r.totalReq),_eN(r.porRecibir),Math.round((r.pct||0)*100)+'%']),
+      body:bodyRowsA,
       styles:{fontSize:8,cellPadding:2.5,textColor:navy},
       headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:7.5},
       alternateRowStyles:{fillColor:[248,249,252]},
-      didParseCell:_coverageHook(rows,4),
+      columnStyles:{0:{cellWidth:'auto'},1:{halign:'right'},2:{halign:'right'},3:{halign:'right'},4:{halign:'right'}},
+      didParseCell(data){
+        if(data.section!=='body')return;
+        const r=rows[data.row.index];if(!r)return;
+        const deficit=Math.min(0,(r.ingresos||0)-(r.totalReq||0));
+        const pct=r.pct||0;
+        if(data.column.index===3){
+          data.cell.styles.fontStyle='bold';
+          if(deficit===0){data.cell.styles.fillColor=[220,252,231];data.cell.styles.textColor=[21,128,61];}
+          else{data.cell.styles.fillColor=[254,226,226];data.cell.styles.textColor=[185,28,28];}
+        }
+        if(data.column.index===4){
+          data.cell.styles.fontStyle='bold';
+          const fc=pct>=1?[21,128,61]:pct>=0.7?[194,120,10]:[185,28,28];
+          const bc=pct>=1?[220,252,231]:pct>=0.7?[254,243,199]:[254,226,226];
+          data.cell.styles.fillColor=bc;data.cell.styles.textColor=fc;
+        }
+        if(deficit<0&&data.column.index<3){data.cell.styles.fillColor=[255,248,248];}
+      },
       margin:{left:14,right:14}});
 
   } else if(view==='proveedores'){
