@@ -1159,14 +1159,22 @@ function _exportBodegaPDF(view){
     const sem=d.inventarioSemanal||[];
     if(sem.length){
       const keys=Object.keys(sem[0]||{}).filter(k=>k!=='dia'&&k!=='__rowNum');
+      doc.addPage();
+      y=16;
       doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...navy);
-      doc.text('INVENTARIO SEMANAL',14,y);y+=4;
+      doc.text('INVENTARIO SEMANAL',14,y);y+=5;
       doc.autoTable({startY:y,
-        head:[['Dia',...keys]],
+        head:[['Día',...keys.map(k=>k.charAt(0).toUpperCase()+k.slice(1))]],
         body:sem.map(r=>[r.dia||'—',...keys.map(k=>r[k]!=null?String(r[k]):'—')]),
-        styles:{fontSize:8,cellPadding:2.5,textColor:navy},
+        styles:{fontSize:8,cellPadding:3,textColor:navy},
         headStyles:{fillColor:navy,textColor:[255,255,255],fontStyle:'bold',fontSize:7.5},
         alternateRowStyles:{fillColor:[248,249,252]},
+        didParseCell(data){
+          if(data.section==='body'&&data.column.index===0){
+            data.cell.styles.fontStyle='bold';
+            data.cell.styles.textColor=[244,124,32];
+          }
+        },
         margin:{left:14,right:14}});
     }
   }
