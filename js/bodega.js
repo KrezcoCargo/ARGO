@@ -461,32 +461,37 @@ function _barChart(data,title,dec=0,barColor='#2574A9'){
   </div>`;
 }
 
-/* ── Horizontal Bar (Inventario) — HTML/CSS (no SVG scaling issues) ── */
+/* ── Horizontal Bar (Inventario) — UNIDADES + CAJAS ── */
 function _hbarChart(rows){
   if(!rows.length)return'';
   const vals=rows.filter(r=>r.ajuste!=null&&!isNaN(Number(r.ajuste)))
                .slice().sort((a,b)=>(a.orden??9999)-(b.orden??9999));
   if(!vals.length)return'';
   const mx=Math.max(...vals.map(r=>Math.abs(Number(r.ajuste))),1);
+  const hasCajas=vals.some(r=>r.cajas!=null);
   const items=vals.map(r=>{
     const v=Number(r.ajuste),neg=v<0;
     const pct=Math.max(0.5,Math.round(Math.abs(v)/mx*100));
     const col=neg?'#F47C20':'#3D8EB9';
-    const track=neg?'rgba(244,124,32,.1)':'rgba(61,142,185,.1)';
-    return`<div style="display:flex;align-items:center;gap:10px;padding:3px 0">
-      <div style="flex:0 0 34%;min-width:0;text-align:right;font-size:11px;font-weight:600;
+    const track=neg?'rgba(244,124,32,.08)':'rgba(61,142,185,.08)';
+    const cajasV=r.cajas!=null?Number(r.cajas):null;
+    const cajasStr=cajasV!=null?_N(cajasV,1)+' cj':'';
+    return`<div style="display:flex;align-items:center;gap:10px;padding:4px 0;border-bottom:1px solid #F1F5F9">
+      <div style="flex:0 0 32%;min-width:0;text-align:right;font-size:11px;font-weight:600;
                   color:#1E293B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"
            title="${(r.producto||'').replace(/"/g,'&quot;')}">${r.producto||'—'}</div>
-      <div style="flex:1;height:24px;background:${track};border-radius:5px;overflow:hidden;min-width:0">
-        <div style="width:${pct}%;height:100%;background:${col};border-radius:5px;
+      <div style="flex:1;height:20px;background:${track};border-radius:4px;overflow:hidden;min-width:0">
+        <div style="width:${pct}%;height:100%;background:${col};border-radius:4px;
                     transition:width .45s cubic-bezier(.2,.8,.3,1)"></div>
       </div>
-      <div style="flex:0 0 62px;text-align:right;font-size:11.5px;font-weight:700;color:${col};
-                  white-space:nowrap">${_N(v)}</div>
+      <div style="flex:0 0 ${hasCajas?'110px':'66px'};display:flex;flex-direction:column;align-items:flex-end;gap:1px">
+        <span style="font-size:12px;font-weight:700;color:${col};white-space:nowrap">${_N(v)}</span>
+        ${cajasStr?`<span style="font-size:10px;font-weight:500;color:#94A3B8;white-space:nowrap">${cajasStr}</span>`:''}
+      </div>
     </div>`;
   }).join('');
   return`<div class="bdg-tbl-wrap" style="padding:16px 20px">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
       <div class="bdg-chart-title" style="text-align:left;margin:0">AJUSTE DE INVENTARIO</div>
       <div style="display:flex;gap:14px;font-size:10px;color:#64748B;margin-left:auto">
         <span style="display:flex;align-items:center;gap:4px">
@@ -497,7 +502,12 @@ function _hbarChart(rows){
         </span>
       </div>
     </div>
-    <div style="display:flex;flex-direction:column;gap:2px">${items}</div>
+    <div style="display:flex;align-items:center;padding:0 0 6px 0;margin-bottom:4px;border-bottom:2px solid #E2E8F0">
+      <div style="flex:0 0 32%;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;color:#94A3B8">Producto</div>
+      <div style="flex:1"></div>
+      <div style="flex:0 0 ${hasCajas?'110px':'66px'};text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;color:#94A3B8">Unidades${hasCajas?' / Cajas':''}</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:0">${items}</div>
   </div>`;
 }
 
