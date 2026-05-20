@@ -1120,93 +1120,93 @@
   "inventario": [
     {
       "producto": "LECHE ENTERA",
-      "ajuste": -484375,
-      "orden": 1
+      "ajuste": -59461,
+      "orden": -2477
     },
     {
       "producto": "NÉCTAR PERA",
-      "ajuste": -181,
-      "orden": 2
+      "ajuste": -7855,
+      "orden": -327
     },
     {
       "producto": "NÉCTAR PERA-BANANO O MANGO-BANANA",
-      "ajuste": 35,
-      "orden": 3
+      "ajuste": -16423,
+      "orden": -684
     },
     {
       "producto": "NÉCTAR PERA-MANGO",
-      "ajuste": -69397,
-      "orden": 4
+      "ajuste": -5239,
+      "orden": -218
     },
     {
       "producto": "NÉCTAR MANGO-BANANA",
       "ajuste": 0,
-      "orden": 5
+      "orden": 0
     },
     {
       "producto": "PURÉ MANGO-PERA",
-      "ajuste": -244962,
-      "orden": 6
+      "ajuste": -85130,
+      "orden": -773
     },
     {
       "producto": "LECHE CEREAL CHOCOLATE",
-      "ajuste": -2546,
-      "orden": 7
+      "ajuste": -12110,
+      "orden": -504
     },
     {
       "producto": "LECHE CEREAL FRESA",
-      "ajuste": -205,
-      "orden": 8
+      "ajuste": -7927,
+      "orden": -330
     },
     {
       "producto": "LECHE SABORIZADA CHOCOLATE",
-      "ajuste": -142802,
-      "orden": 9
+      "ajuste": -14486,
+      "orden": -603
     },
     {
       "producto": "LECHE SABORIZADA FRESA",
-      "ajuste": -75061,
-      "orden": 10
+      "ajuste": -10903,
+      "orden": -454
     },
     {
       "producto": "EXTRUIDO JAMÓN SERRANO",
-      "ajuste": 1014,
-      "orden": 11
+      "ajuste": -1070,
+      "orden": -5
     },
     {
       "producto": "EXTRUIDO POLLO A LA BRASA",
-      "ajuste": 907,
-      "orden": 12
+      "ajuste": -9535,
+      "orden": -47
     },
     {
       "producto": "GALLETA RELLENA FRESA O FRUTOS ROJOS",
-      "ajuste": -4412,
-      "orden": 13
+      "ajuste": -13940,
+      "orden": -63
     },
     {
       "producto": "GALLETA RELLENA CHOCOLATE O FRUTOS AMARILLOS",
-      "ajuste": 921,
-      "orden": 14
+      "ajuste": -33405,
+      "orden": -151
     },
     {
       "producto": "GRANOLA",
-      "ajuste": 748,
-      "orden": 15
+      "ajuste": -22340,
+      "orden": -79
     },
     {
       "producto": "GALLETA SAL",
-      "ajuste": -399,
-      "orden": 16
+      "ajuste": -43005,
+      "orden": -238
     },
     {
       "producto": "GALLETA DULCE",
-      "ajuste": 1966,
-      "orden": 17
+      "ajuste": -70680,
+      "orden": -314
     },
     {
       "producto": "TOTAL GALLETA",
-      "ajuste": 1567,
-      "orden": 18
+      "ajuste": -113685,
+      "orden": -505
     }
   ],
   "inventarioSemanal": [
@@ -5832,9 +5832,9 @@
       }
     ]
   },
-  "updatedAt": "20/05/2026 10:24",
+  "updatedAt": "20/05/2026 11:02",
   "_meta": {
-    "generado": "20/05/2026 10:24",
+    "generado": "20/05/2026 11:02",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
