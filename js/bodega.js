@@ -806,12 +806,13 @@ function renderInvSemanal(d){
   const invRows=d.inventario||[];
   const filtInv=_bdgRows('invSemanal',invRows);
   const keys=Object.keys(semRows[0]||{}).filter(k=>k!=='dia'&&k!=='__rowNum');
+  const _cap=s=>s?s.charAt(0).toUpperCase()+s.slice(1):s;
   const semHtml=semRows.length?`
     ${_subLabel('INVENTARIO SEMANAL')}
     <div class="bdg-tbl-wrap" style="flex:none;max-height:220px"><table class="bdg-tbl">
       <thead><tr>
         <th style="min-width:80px">Día</th>
-        ${keys.map(k=>`<th class="r" style="text-transform:capitalize;min-width:90px">${k}</th>`).join('')}
+        ${keys.map(k=>`<th class="r" style="min-width:90px">${_cap(k)}</th>`).join('')}
       </tr></thead>
       <tbody>${semRows.map(r=>`<tr>
         <td style="font-weight:700;color:var(--orange);white-space:nowrap;font-size:12px">${r.dia||'—'}</td>
