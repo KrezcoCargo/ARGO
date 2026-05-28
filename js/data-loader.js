@@ -1,4 +1,36 @@
-﻿function navTo(page){
+﻿/* ── UTM Zona 17 → WGS84 (Transverse Mercator inverso) ────────────────────
+   Acepta Zona 17S (Y>5M con falso norte) y Zona 17N (Y pequeño, sin falso norte).
+   yAdj = northing ya ajustado (10M restado si era Zona 17S).               */
+function _utmToLat(e,yAdj){
+  const a=6378137,f=1/298.257223563,e2=2*f-f*f;
+  const e1=(1-Math.sqrt(1-e2))/(1+Math.sqrt(1-e2));
+  const M=yAdj/0.9996,mu=M/(a*(1-e2/4-3*e2*e2/64-5*e2*e2*e2/256));
+  const p1=(3*e1/2-27*e1*e1*e1/32)*Math.sin(2*mu);
+  const p2=(21*e1*e1/16-55*e1*e1*e1*e1/32)*Math.sin(4*mu);
+  const p3=(151*e1*e1*e1/96)*Math.sin(6*mu);
+  const phi1=mu+p1+p2+p3;
+  const N1=a/Math.sqrt(1-e2*Math.sin(phi1)**2);
+  const T1=Math.tan(phi1)**2,C1=(e2/(1-e2))*Math.cos(phi1)**2;
+  const R1=a*(1-e2)/(1-e2*Math.sin(phi1)**2)**1.5;
+  const D=(e-500000)/(N1*0.9996);
+  const lat=phi1-(N1*Math.tan(phi1)/R1)*(D*D/2-(5+3*T1+10*C1-4*C1*C1-9*e2/(1-e2))*D*D*D*D/24);
+  return lat*180/Math.PI;
+}
+function _utmToLon(e,yAdj,latDeg){
+  const a=6378137,f=1/298.257223563,e2=2*f-f*f;
+  const e1=(1-Math.sqrt(1-e2))/(1+Math.sqrt(1-e2));
+  const M=yAdj/0.9996,mu=M/(a*(1-e2/4-3*e2*e2/64-5*e2*e2*e2/256));
+  const p1=(3*e1/2-27*e1*e1*e1/32)*Math.sin(2*mu);
+  const phi1=mu+p1;
+  const N1=a/Math.sqrt(1-e2*Math.sin(phi1)**2);
+  const T1=Math.tan(phi1)**2,C1=(e2/(1-e2))*Math.cos(phi1)**2;
+  const D=(e-500000)/(N1*0.9996);
+  const lon0=-81*Math.PI/180;  // meridiano central Zona 17
+  const lon=lon0+(D-(1+2*T1+C1)*D*D*D/6)/Math.cos(phi1);
+  return lon*180/Math.PI;
+}
+
+function navTo(page){
   currentPage=page;
   sessionStorage.setItem('kc_last_page', page);  // remember for F5 restore
   document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
@@ -382,7 +414,7 @@ function mapRow(row){
     problema:'problema',problem:'problema',novedad:'problema',con_problema:'problema',no_entregado_problema:'problema'};
   const estado=eMap[eRaw]||'pendiente';
 
-  // Coordenadas: 1) lat/lon directas del Excel, 2) UTM Zone 17S (X/Y), 3) null
+  // Coordenadas: 1) lat/lon directas del Excel, 2) UTM Zona 17S o 17N (X/Y), 3) null
   let xlat=null,xlon=null;
   const directLat=nvF(['lat','latitud','latitude','latdec','y_dd'],null);
   const directLon=nvF(['lon','lng','longitud','longitude','londec','x_dd'],null);
@@ -390,9 +422,11 @@ function mapRow(row){
     xlat=directLat; xlon=directLon;
   } else {
     const utmX=nvF(['x','este','easting'],null),utmY=nvF(['y','norte','northing'],null);
-    if(utmX&&utmY&&utmX>100000&&utmY>1000000){
-      xlat=(utmY-10000000)/111320;
-      xlon=-81+(utmX-500000)/(111320*Math.cos((xlat||0)*Math.PI/180));
+    // Zona 17S: Y > 5 000 000 (con falso norte 10M) | Zona 17N: Y <= 5 000 000 (sin falso norte)
+    if(utmX&&utmY&&utmX>100000&&utmX<900000&&utmY>0){
+      const yAdj=utmY>5000000?utmY-10000000:utmY;
+      xlat=_utmToLat(utmX,yAdj);
+      xlon=_utmToLon(utmX,yAdj,xlat);
       if(xlat<-6||xlat>2||xlon<-92||xlon>-75){xlat=null;xlon=null;}
     }
   }
