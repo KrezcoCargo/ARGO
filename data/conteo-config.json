@@ -364,10 +364,10 @@
       ]
     }
   ],
-  "updatedAt": "29/05/2026 16:18",
+  "updatedAt": "29/05/2026 16:20",
   "_meta": {
-    "generado": "29/05/2026 16:18",
-    "fuente": "PROYECCIONES.xlsm · hoja INVENTARIO",
+    "generado": "29/05/2026 16:20",
+    "fuente": "PROYECCIONES.xlsm hoja INVENTARIO",
     "script": "seed manual"
   }
 }
