@@ -27,7 +27,7 @@ function navTo(page){
   const pc=document.getElementById('pg-'+page);
   if(pc)pc.classList.add('active');
   // Topbar
-  const titles={dashboard:'Dashboard',map:'Mapa de Rutas',bodega:'Bodega',upload:'Cargar Planificación',config:'Configuración',users:'Gestión de Usuarios'};
+  const titles={dashboard:'Dashboard',map:'Mapa de Rutas',bodega:'Bodega',conteo:'Conteo de Inventario',upload:'Cargar Planificación',config:'Configuración',users:'Gestión de Usuarios'};
   document.getElementById('tb-title').textContent=titles[page]||page;
   const tenantName=ACTIVE_TENANT?ACTIVE_TENANT.name:'KrezcoCargo SAS';
   document.getElementById('tb-sub').textContent=SESSION?`${SESSION.name} · ${tenantName}`:tenantName;
@@ -38,6 +38,7 @@ function navTo(page){
   if(page==='upload')buildUploadTenantSelect();
   if(page==='map'){renderMapStats();initSICMap();if(_mapCreated&&SCHOOLS.length>0)renderMapMarkers();}
   if(page==='bodega')loadBodega();
+  if(page==='conteo')loadConteo();
 }
 
 /* ═══════════════════════════════════════════════════════════
