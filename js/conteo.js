@@ -412,8 +412,8 @@ function _appendRow(sk, origKey, idx){
   // Si la fila anterior (idx-1) no tenía botón de borrar (era la única), añadirlo ahora
   _ensureDeleteBtn(sk, origKey, idx-1);
 
-  // Focus en el nuevo campo de pallets
-  setTimeout(()=>document.getElementById(`ct-pallets-${sk}-${idx}`)?.focus(), 40);
+  // NO mover el foco: el usuario sigue escribiendo en el campo actual.
+  // La nueva fila vacía queda lista abajo para cuando él decida usarla.
 }
 
 /* Agrega botón 🗑 a una fila existente que todavía no lo tiene */
