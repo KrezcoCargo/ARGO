@@ -105,5 +105,16 @@
     "tenants": [
       "krezco"
     ]
+  },
+  {
+    "username": "cisnerosj",
+    "name": "Jonathan Cisneros",
+    "role": "viewer",
+    "pwdHash": "6ee68a20a752d0fef6a8257450c8c23f46d3f99fe7e01f226ef18107877fc48a",
+    "created": "2026-05-29T17:27:07.935Z",
+    "locked": false,
+    "tenants": [
+      "krezco"
+    ]
   }
 ]
