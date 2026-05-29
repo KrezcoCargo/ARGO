@@ -83,5 +83,16 @@
     "tenants": [
       "krezco"
     ]
+  },
+  {
+    "username": "santic",
+    "name": "Carlos Santi",
+    "role": "viewer",
+    "pwdHash": "5e5792ac097e3ff7965510e58c35a5aa692ef341c3f53790803bf4b49db969c8",
+    "created": "2026-05-29T17:26:11.257Z",
+    "locked": false,
+    "tenants": [
+      "krezco"
+    ]
   }
 ]
