@@ -54,6 +54,7 @@ const NAV_ITEMS = {
     {id:'dashboard',icon:'📊',label:'Dashboard'},
     {id:'map',icon:'🗺️',label:'Mapa'},
     {id:'bodega',icon:'📦',label:'Bodega'},
+    {id:'conteo',icon:'🧮',label:'Conteo'},
     {id:'upload',icon:'📂',label:'Cargar Planificación'},
     {id:'config',icon:'⚙️',label:'Configuración'},
     {id:'users',icon:'👥',label:'Crear Usuarios'},
@@ -62,12 +63,14 @@ const NAV_ITEMS = {
     {id:'dashboard',icon:'📊',label:'Dashboard'},
     {id:'map',icon:'🗺️',label:'Mapa'},
     {id:'bodega',icon:'📦',label:'Bodega'},
+    {id:'conteo',icon:'🧮',label:'Conteo'},
     {id:'upload',icon:'📂',label:'Cargar Planificación'},
   ],
   viewer:[
     {id:'dashboard',icon:'📊',label:'Dashboard'},
     {id:'map',icon:'🗺️',label:'Mapa'},
     {id:'bodega',icon:'📦',label:'Bodega'},
+    {id:'conteo',icon:'🧮',label:'Conteo'},
   ]
 };
 
