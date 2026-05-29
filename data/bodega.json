@@ -1106,11 +1106,11 @@
     }
   ],
   "notasEntrega": {
-    "planificadas": 801,
-    "recibidas": 668,
-    "pendientes": 133,
-    "pctRecibidas": "83%",
-    "pctPendientes": "17%",
+    "planificadas": 802,
+    "recibidas": 802,
+    "pendientes": 0,
+    "pctRecibidas": "100%",
+    "pctPendientes": "0%",
     "racionesPlanificadas": 7216420,
     "racionesRecibidas": 7216420,
     "racionesPendientes": 0,
@@ -1254,27 +1254,27 @@
     },
     {
       "dia": "MIÉRCOLES",
-      "carlos": "INVENTARIO GENERAL",
-      "stalyn": "INVENTARIO GENERAL",
-      "jonathan": "INVENTARIO GENERAL"
+      "carlos": "LECHE ENTERA",
+      "stalyn": "PURÉ",
+      "jonathan": "GRANOLA"
     },
     {
       "dia": "JUEVES",
-      "carlos": "-",
-      "stalyn": "-",
-      "jonathan": "-"
+      "carlos": "CEREAL CHOCOLATE",
+      "stalyn": "NÉCTAR PERA",
+      "jonathan": "GALLETA DE SAL"
     },
     {
       "dia": "JUEVES",
-      "carlos": "-",
-      "stalyn": "-",
-      "jonathan": "-"
+      "carlos": "CEREAL FRESA",
+      "stalyn": "NÉCTAR PERA-BANANO",
+      "jonathan": "GALLETA DE DULCE"
     },
     {
       "dia": "VIERNES",
-      "carlos": "-",
-      "stalyn": "-",
-      "jonathan": "-"
+      "carlos": "INVENTARIO GENERAL",
+      "stalyn": "INVENTARIO GENERAL",
+      "jonathan": "INVENTARIO GENERAL"
     }
   ],
   "historialErrores": [
@@ -5850,9 +5850,9 @@
       }
     ]
   },
-  "updatedAt": "20/05/2026 16:39",
+  "updatedAt": "29/05/2026 15:18",
   "_meta": {
-    "generado": "20/05/2026 16:39",
+    "generado": "29/05/2026 15:18",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
