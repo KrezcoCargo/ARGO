@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   CONTEO DE INVENTARIO  — conteo.js  v1
+   CONTEO DE INVENTARIO  — conteo.js  v2
    Calculadora de pallets × cajas/pallet + sueltas + unidades
    Validación con excedente configurable (solo admin)
 ═══════════════════════════════════════════════════════════ */
@@ -17,9 +17,18 @@ let _conteoLog  = [];     // [ { fecha, dia, operador, producto, totalCajas, tot
 /* ══════════════════════════════════════════════════════════
    INIT
 ══════════════════════════════════════════════════════════ */
-function loadConteo(){
+async function loadConteo(){
   try { _excedentes = JSON.parse(localStorage.getItem(_CONTEO_CFG_KEY)||'{}'); } catch{}
   try { _conteoLog  = JSON.parse(localStorage.getItem(_CONTEO_LOG_KEY)||'[]'); } catch{}
+
+  // Si los datos de bodega no están cargados, buscarlos primero
+  if(!_bodegaData){
+    const el = document.getElementById('pg-conteo');
+    if(el) el.innerHTML=`<div style="display:flex;align-items:center;justify-content:center;height:220px;gap:14px;color:#94A3B8">
+      <div style="width:26px;height:26px;border:3px solid #E2E8F0;border-top-color:#F47C20;border-radius:50%;animation:bdgSpin .8s linear infinite"></div>
+      <div style="font-size:13px;font-weight:600">Cargando datos de bodega…</div></div>`;
+    try { _bodegaData = await fetchBodegaFromGitHub(); } catch(e){ _bodegaData = null; }
+  }
   renderConteoPage();
 }
 
@@ -32,7 +41,6 @@ function _getSemRows(){
 function _getAllProductos(){
   const prov = ((_bodegaData||{}).proveedores||[]).map(r=>r.producto).filter(Boolean);
   const cob  = ((_bodegaData||{}).cobertura||[]).map(r=>r.producto).filter(Boolean);
-  // Combinar y deduplicar
   return [...new Set([...prov,...cob])].sort();
 }
 function _getOperadores(){
@@ -44,18 +52,38 @@ function _getDias(){
   const dias = [...new Set(_getSemRows().map(r=>r.dia).filter(Boolean))];
   return dias.sort((a,b)=>DIAS_ORD.indexOf(a.toUpperCase())-DIAS_ORD.indexOf(b.toUpperCase()));
 }
+
+/* Detecta qué operador corresponde al usuario actual según SESSION */
+function _getMyOperador(){
+  if(!SESSION) return null;
+  const ops = _getOperadores();
+  if(!ops.length) return null;
+  const me = (SESSION.name || SESSION.username || '').toLowerCase().trim();
+  // Coincidencia exacta primero
+  const exact = ops.find(o=>o.toLowerCase()===me);
+  if(exact) return exact;
+  // Coincidencia parcial (el nombre del usuario contiene el nombre del operador o viceversa)
+  const partial = ops.find(o=>me.includes(o.toLowerCase())||o.toLowerCase().includes(me));
+  return partial || null;
+}
+
+/* Productos para un día y operador.
+   Si la columna del operador dice "INVENTARIO GENERAL" → todos los productos.
+   En cualquier otro caso → solo los productos de ese operador. */
 function _getProductosParaDia(dia, operador){
   const sem = _getSemRows();
   const rows = sem.filter(r=>(r.dia||'').toUpperCase()===dia.toUpperCase());
   if(!rows.length) return [];
-  // ¿Es inventario general?
-  const esGeneral = rows.some(r=>
-    Object.values(r).some(v=>String(v||'').toUpperCase().includes('INVENTARIO GENERAL'))
-  );
+
+  // Valores del operador en ese día
+  const opValues = rows.map(r=>(r[operador]||'')).filter(Boolean);
+
+  // ¿El operador tiene asignado "INVENTARIO GENERAL"?
+  const esGeneral = opValues.some(v=>v.toUpperCase().includes('INVENTARIO GENERAL'));
   if(esGeneral) return _getAllProductos();
-  // Productos de ese operador en ese día
-  const prods = rows.map(r=>(r[operador]||'')).filter(v=>v&&!v.toUpperCase().includes('INVENTARIO'));
-  return prods.filter(Boolean);
+
+  // Productos específicos del operador (excluir cualquier texto que no sea un producto)
+  return opValues.filter(v=>v && !v.toUpperCase().includes('INVENTARIO'));
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -65,7 +93,7 @@ function renderConteoPage(){
   const el = document.getElementById('pg-conteo');
   if(!el) return;
 
-  const sem = _getSemRows();
+  const sem  = _getSemRows();
   const dias = _getDias();
   const ops  = _getOperadores();
   const isAdmin = SESSION && (SESSION.role==='superadmin'||SESSION.role==='editor');
@@ -79,8 +107,16 @@ function renderConteoPage(){
     return;
   }
 
+  // Operador efectivo: admin elige, operador usa el suyo
+  const myOp = isAdmin ? null : _getMyOperador();
+
   const savedDia = localStorage.getItem('kc_conteo_dia') || dias[0] || '';
-  const savedOp  = localStorage.getItem('kc_conteo_op')  || ops[0] || '';
+  // Para no-admin usamos su propio operador directamente
+  const savedOp = isAdmin
+    ? (localStorage.getItem('kc_conteo_op') || ops[0] || '')
+    : (myOp || ops[0] || '');
+
+  const today = new Date().toISOString().slice(0,10);
 
   el.innerHTML=`
   <div style="padding:16px 20px;max-width:900px;margin:0 auto">
@@ -88,24 +124,42 @@ function renderConteoPage(){
     <!-- TÍTULO + CONTROLES -->
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px">
       <div style="font-size:18px;font-weight:800;color:#14213D;flex:1">🧮 Conteo de Inventario</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+
+        <!-- Día -->
         <div style="display:flex;flex-direction:column;gap:2px">
           <label style="font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase">Día</label>
           <select id="ct-dia" onchange="onConteoDiaChange()" style="${_ctSelect()}">
             ${dias.map(d=>`<option value="${d}" ${d===savedDia?'selected':''}>${d.charAt(0)+d.slice(1).toLowerCase()}</option>`).join('')}
           </select>
         </div>
+
+        <!-- Operador: selector para admin, texto fijo para operadores -->
         <div style="display:flex;flex-direction:column;gap:2px">
           <label style="font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase">Operador</label>
-          <select id="ct-op" onchange="onConteoOpChange()" style="${_ctSelect()}">
-            ${ops.map(o=>`<option value="${o}" ${o===savedOp?'selected':''}>${o.charAt(0).toUpperCase()+o.slice(1)}</option>`).join('')}
-          </select>
+          ${isAdmin
+            ? `<select id="ct-op" onchange="onConteoOpChange()" style="${_ctSelect()}">
+                 ${ops.map(o=>`<option value="${o}" ${o===savedOp?'selected':''}>${o.charAt(0).toUpperCase()+o.slice(1)}</option>`).join('')}
+               </select>`
+            : `<input type="hidden" id="ct-op" value="${_safeAttr(savedOp)}">
+               <div style="${_ctSelect()};background:#F1F5F9;cursor:default;color:#475569;font-weight:700">
+                 👷 ${savedOp ? savedOp.charAt(0).toUpperCase()+savedOp.slice(1) : '—'}
+               </div>`
+          }
         </div>
-        <div style="display:flex;flex-direction:column;gap:2px">
-          <label style="font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase">Fecha</label>
-          <input type="date" id="ct-fecha" value="${new Date().toISOString().slice(0,10)}"
-            style="${_ctSelect()};min-width:130px">
-        </div>
+
+        <!-- Fecha: editable para admin, solo lectura para operadores -->
+        ${isAdmin
+          ? `<div style="display:flex;flex-direction:column;gap:2px">
+               <label style="font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase">Fecha</label>
+               <input type="date" id="ct-fecha" value="${today}" style="${_ctSelect()};min-width:130px">
+             </div>`
+          : `<div style="display:flex;flex-direction:column;gap:2px">
+               <label style="font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase">Fecha</label>
+               <input type="hidden" id="ct-fecha" value="${today}">
+               <div style="${_ctSelect()};background:#F1F5F9;cursor:default;color:#475569">📅 ${today}</div>
+             </div>`
+        }
       </div>
     </div>
 
@@ -130,7 +184,18 @@ function renderConteoPage(){
     ${isAdmin ? _renderAdminPanel() : ''}
   </div>`;
 
+  // Sincronizar el operador oculto para que renderConteoProductos() lo lea correctamente
+  _syncConteoOp(savedOp);
   renderConteoProductos();
+}
+
+/* Escapa valor para atributo HTML */
+function _safeAttr(s){ return String(s||'').replace(/"/g,'&quot;'); }
+
+/* Asegura que ct-op tenga el valor correcto después del render */
+function _syncConteoOp(op){
+  const el = document.getElementById('ct-op');
+  if(el && el.tagName==='INPUT') el.value = op;
 }
 
 function _ctSelect(){
@@ -147,8 +212,12 @@ function renderConteoProductos(){
   const dia = (document.getElementById('ct-dia')||{}).value || '';
   const op  = (document.getElementById('ct-op')||{}).value  || '';
   const prods = _getProductosParaDia(dia, op);
-  const esGeneral = _getSemRows().some(r=>(r.dia||'').toUpperCase()===dia.toUpperCase()&&
-    Object.values(r).some(v=>String(v||'').toUpperCase().includes('INVENTARIO GENERAL')));
+
+  // ¿El operador tiene INVENTARIO GENERAL en ese día?
+  const sem = _getSemRows();
+  const rows = sem.filter(r=>(r.dia||'').toUpperCase()===dia.toUpperCase());
+  const opValues = rows.map(r=>(r[op]||'')).filter(Boolean);
+  const esGeneral = opValues.some(v=>v.toUpperCase().includes('INVENTARIO GENERAL'));
 
   if(!prods.length){
     el.innerHTML=`<div style="text-align:center;padding:32px;color:#94A3B8;background:#F8FAFC;border-radius:12px">
@@ -159,7 +228,7 @@ function renderConteoProductos(){
   }
 
   el.innerHTML=`
-  ${esGeneral?`<div style="background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;font-weight:700;color:#92400E">⚠️ INVENTARIO GENERAL — Se muestran todos los productos</div>`:''}
+  ${esGeneral?`<div style="background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;font-weight:700;color:#92400E">📋 INVENTARIO GENERAL — Todos los productos asignados</div>`:''}
   <div style="display:flex;flex-direction:column;gap:10px">
     ${prods.map(prod=>_renderProductoCard(prod, dia, op)).join('')}
   </div>`;
