@@ -199,6 +199,18 @@ async function fetchBodegaFromGitHub(){
   return null;
 }
 
+/* ── Conteo: leer data/conteo-config.json (esperado/colchón desde PROYECCIONES) ── */
+async function fetchConteoConfigFromGitHub(){
+  const owner=GH_REPO_CFG.owner||'';const repo=GH_REPO_CFG.repo||'';const branch=GH_REPO_CFG.branch||'main';
+  if(!owner||!repo)return null;
+  try{
+    const url=`https://raw.githubusercontent.com/${owner}/${repo}/${branch}/data/conteo-config.json?_=${Date.now()}`;
+    const r=await fetch(url,{cache:'no-store'});
+    if(r.ok)return await r.json();
+  }catch{}
+  return null;
+}
+
 function loadConfig2GH(){
   const cfg=JSON.parse(localStorage.getItem('kc_gh_cfg')||'{}');
   setField('gh-owner',cfg.owner||'');
