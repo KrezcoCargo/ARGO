@@ -53,6 +53,17 @@ function _getDias(){
   return dias.sort((a,b)=>DIAS_ORD.indexOf(a.toUpperCase())-DIAS_ORD.indexOf(b.toUpperCase()));
 }
 
+/* Devuelve el día de la semana actual en mayúsculas (LUNES, MARTES…).
+   Si ese día no existe en el horario, devuelve el primer día disponible. */
+function _getTodayDia(availDias){
+  const WD_ES = ['DOMINGO','LUNES','MARTES','MIÉRCOLES','JUEVES','VIERNES','SÁBADO'];
+  const hoy = WD_ES[new Date().getDay()];
+  // Buscar coincidencia (normaliza tilde: MIERCOLES == MIÉRCOLES)
+  const normalize = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase();
+  const match = availDias.find(d => normalize(d) === normalize(hoy));
+  return match || availDias[0] || '';
+}
+
 /* Detecta qué operador corresponde al usuario actual según SESSION */
 function _getMyOperador(){
   if(!SESSION) return null;
@@ -110,7 +121,11 @@ function renderConteoPage(){
   // Operador efectivo: admin elige, operador usa el suyo
   const myOp = isAdmin ? null : _getMyOperador();
 
-  const savedDia = localStorage.getItem('kc_conteo_dia') || dias[0] || '';
+  // Día: siempre arranca en el día de hoy; admin puede cambiarlo
+  const todayDia = _getTodayDia(dias);
+  const savedDia = isAdmin
+    ? (localStorage.getItem('kc_conteo_dia') || todayDia)
+    : todayDia;
   // Para no-admin usamos su propio operador directamente
   const savedOp = isAdmin
     ? (localStorage.getItem('kc_conteo_op') || ops[0] || '')
@@ -126,12 +141,18 @@ function renderConteoPage(){
       <div style="font-size:18px;font-weight:800;color:#14213D;flex:1">🧮 Conteo de Inventario</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
 
-        <!-- Día -->
+        <!-- Día: selector para admin, texto fijo para operadores -->
         <div style="display:flex;flex-direction:column;gap:2px">
           <label style="font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase">Día</label>
-          <select id="ct-dia" onchange="onConteoDiaChange()" style="${_ctSelect()}">
-            ${dias.map(d=>`<option value="${d}" ${d===savedDia?'selected':''}>${d.charAt(0)+d.slice(1).toLowerCase()}</option>`).join('')}
-          </select>
+          ${isAdmin
+            ? `<select id="ct-dia" onchange="onConteoDiaChange()" style="${_ctSelect()}">
+                 ${dias.map(d=>`<option value="${d}" ${d===savedDia?'selected':''}>${d.charAt(0)+d.slice(1).toLowerCase()}</option>`).join('')}
+               </select>`
+            : `<input type="hidden" id="ct-dia" value="${_safeAttr(savedDia)}">
+               <div style="${_ctSelect()};background:#F1F5F9;cursor:default;color:#475569;font-weight:700">
+                 📅 ${savedDia.charAt(0)+savedDia.slice(1).toLowerCase()}
+               </div>`
+          }
         </div>
 
         <!-- Operador: selector para admin, texto fijo para operadores -->
@@ -456,7 +477,7 @@ function _renderLogPanel(){
 ══════════════════════════════════════════════════════════ */
 function onConteoDiaChange(){
   const v = document.getElementById('ct-dia')?.value||'';
-  localStorage.setItem('kc_conteo_dia', v);
+  localStorage.setItem('kc_conteo_dia', v);  // solo admin llega aquí
   renderConteoProductos();
 }
 function onConteoOpChange(){
