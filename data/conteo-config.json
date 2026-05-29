@@ -1,0 +1,373 @@
+{
+  "grupos": [
+    {
+      "grupo": "LECHE ENTERA",
+      "saldo": 31806,
+      "caja": 24,
+      "saldoCajas": 1325.25,
+      "activo": "LECHE ENTERA SIN SABOR CARTON ASEPTICO 200ML",
+      "detalles": [
+        {
+          "producto": "LECHE ENTERA SIN SABOR CARTON ASEPTICO 200ML",
+          "saldo": 31806,
+          "caja": 24
+        }
+      ]
+    },
+    {
+      "grupo": "NÉCTAR PERA",
+      "saldo": 2074,
+      "caja": 24,
+      "saldoCajas": 86.42,
+      "activo": "NECTAR FRUTAS PERA CARTON ASEPTICO 200ML",
+      "detalles": [
+        {
+          "producto": "NECTAR FRUTAS PERA CARTON ASEPTICO 200ML",
+          "saldo": 2074,
+          "caja": 24
+        }
+      ]
+    },
+    {
+      "grupo": "NÉCTAR PERA-MANGO",
+      "saldo": 2081,
+      "caja": 24,
+      "saldoCajas": 86.71,
+      "activo": "NECTAR FRUTAS PERA MANGO CARTON ASEPTICO 200ML",
+      "detalles": [
+        {
+          "producto": "NECTAR FRUTAS PERA MANGO CARTON ASEPTICO 200ML",
+          "saldo": 2081,
+          "caja": 24
+        }
+      ]
+    },
+    {
+      "grupo": "NÉCTAR PERA-BANANO O MANGO-BANANA",
+      "saldo": 9806,
+      "caja": 24,
+      "saldoCajas": 408.58,
+      "activo": "NECTAR FRUTAS PERA BANANO CARTON ASEPTICO 200ML",
+      "detalles": [
+        {
+          "producto": "NECTAR FRUTAS PERA BANANO CARTON ASEPTICO 200ML",
+          "saldo": 9806,
+          "caja": 24
+        },
+        {
+          "producto": "NECTAR FRUTAS MANGO BANANA CARTON ASEPTICO 200ML",
+          "saldo": 0,
+          "caja": 24
+        }
+      ]
+    },
+    {
+      "grupo": "PURÉ MANGO-PERA",
+      "saldo": 63145,
+      "caja": 110,
+      "saldoCajas": 574.05,
+      "activo": "PURE DE FRUTAS MANGO PERA DOYPACK 100 G",
+      "detalles": [
+        {
+          "producto": "PURE DE FRUTAS MANGO DOYPACK 100 G",
+          "saldo": 0,
+          "caja": 110
+        },
+        {
+          "producto": "PURE DE FRUTAS MANGO PERA DOYPACK 100 G",
+          "saldo": 63145,
+          "caja": 110
+        },
+        {
+          "producto": "PURE DE FRUTAS BANANO-MANGO DOYPACK 100 G",
+          "saldo": 0,
+          "caja": 110
+        },
+        {
+          "producto": "PURE DE FRUTAS BANANO-MANZANA-MARACUYA DOYPACK 100 G",
+          "saldo": 0,
+          "caja": 110
+        },
+        {
+          "producto": "PURE DE FRUTAS PERA BANANO Y PIÑA DOYPACK 100 G",
+          "saldo": 0,
+          "caja": 110
+        },
+        {
+          "producto": "PURE DE FRUTAS MANGO BANANO PIÑA DOYPACK 100 G",
+          "saldo": 0,
+          "caja": 110
+        }
+      ]
+    },
+    {
+      "grupo": "LECHE CEREAL CHOCOLATE",
+      "saldo": 3531,
+      "caja": 24,
+      "saldoCajas": 147.12,
+      "activo": "LECHE CON CEREALES CHOCOLATE CARTON ASEPTICO 200ML",
+      "detalles": [
+        {
+          "producto": "LECHE CON CEREALES CHOCOLATE CARTON ASEPTICO 200ML",
+          "saldo": 3531,
+          "caja": 24
+        }
+      ]
+    },
+    {
+      "grupo": "LECHE CEREAL FRESA",
+      "saldo": 2034,
+      "caja": 24,
+      "saldoCajas": 84.75,
+      "activo": "LECHE CON CEREALES FRESA CARTON ASEPTICO 200ML",
+      "detalles": [
+        {
+          "producto": "LECHE CON CEREALES FRESA CARTON ASEPTICO 200ML",
+          "saldo": 2034,
+          "caja": 24
+        }
+      ]
+    },
+    {
+      "grupo": "LECHE SABORIZADA CHOCOLATE",
+      "saldo": 3918,
+      "caja": 24,
+      "saldoCajas": 163.25,
+      "activo": "LECHE SABORIZADA CHOCOLATE CARTON ASEPTICO 200ML",
+      "detalles": [
+        {
+          "producto": "LECHE SABORIZADA CHOCOLATE CARTON ASEPTICO 200ML",
+          "saldo": 3918,
+          "caja": 24
+        },
+        {
+          "producto": "LECHE SABORIZADA NARANJA CARTON ASEPTICO 200ML",
+          "saldo": 0,
+          "caja": 24
+        }
+      ]
+    },
+    {
+      "grupo": "LECHE SABORIZADA FRESA",
+      "saldo": 2219,
+      "caja": 24,
+      "saldoCajas": 92.46,
+      "activo": "LECHE SABORIZADA FRESA CARTON ASEPTICO 200ML",
+      "detalles": [
+        {
+          "producto": "LECHE SABORIZADA FRESA CARTON ASEPTICO 200ML",
+          "saldo": 2219,
+          "caja": 24
+        },
+        {
+          "producto": "LECHE SABORIZADA VAINILLA CARTON ASEPTICO 200ML",
+          "saldo": 0,
+          "caja": 24
+        }
+      ]
+    },
+    {
+      "grupo": "EXTRUIDO JAMÓN SERRANO",
+      "saldo": 558,
+      "caja": 200,
+      "saldoCajas": 2.79,
+      "activo": "EXTRUIDO DE CEREALES JAMÓN SERRANO FUNDA",
+      "detalles": [
+        {
+          "producto": "EXTRUIDO DE CEREALES JAMÓN SERRANO FUNDA",
+          "saldo": 558,
+          "caja": 200
+        }
+      ]
+    },
+    {
+      "grupo": "EXTRUIDO POLLO A LA BRASA",
+      "saldo": 423,
+      "caja": 200,
+      "saldoCajas": 2.12,
+      "activo": "EXTRUIDO DE CEREALES POLLO A LA BRASA FUNDA",
+      "detalles": [
+        {
+          "producto": "EXTRUIDO DE CEREALES TOMATE Y ALBAHACA FUNDA",
+          "saldo": 0,
+          "caja": 200
+        },
+        {
+          "producto": "GALLETA DE SAL LIMÓN PICANTE FUNDA",
+          "saldo": 0,
+          "caja": 150
+        },
+        {
+          "producto": "EXTRUIDO DE CEREALES POLLO A LA BRASA FUNDA",
+          "saldo": 423,
+          "caja": 200
+        }
+      ]
+    },
+    {
+      "grupo": "GALLETA RELLENA FRESA O FRUTOS ROJOS",
+      "saldo": 991,
+      "caja": 240,
+      "saldoCajas": 4.13,
+      "activo": "GALLETA CON RELLENO FRESA FUNDA",
+      "detalles": [
+        {
+          "producto": "GALLETA CON RELLENO FRESA FUNDA",
+          "saldo": 988,
+          "caja": 240
+        },
+        {
+          "producto": "GALLETA CON RELLENO FRUTOS ROJOS FUNDA",
+          "saldo": 3,
+          "caja": 200
+        }
+      ]
+    },
+    {
+      "grupo": "GALLETA RELLENA CHOCOLATE O FRUTOS AMARILLOS",
+      "saldo": 22371,
+      "caja": 240,
+      "saldoCajas": 93.21,
+      "activo": "GALLETA CON RELLENO CHOCOLATE FUNDA",
+      "detalles": [
+        {
+          "producto": "GALLETA CON RELLENO CHOCOLATE FUNDA",
+          "saldo": 22371,
+          "caja": 240
+        },
+        {
+          "producto": "GALLETA CON RELLENO FRUTOS AMARILLOS FUNDA",
+          "saldo": 0,
+          "caja": 200
+        },
+        {
+          "producto": "GALLETA CON RELLENO VAINILLA FUNDA",
+          "saldo": 0,
+          "caja": 200
+        }
+      ]
+    },
+    {
+      "grupo": "GRANOLA",
+      "saldo": 935,
+      "caja": 280,
+      "saldoCajas": 3.34,
+      "activo": "GRANOLA DE CEREALES CHOCOPASAS FUNDA",
+      "detalles": [
+        {
+          "producto": "GRANOLA DE CEREALES COCO FUNDA",
+          "saldo": 0,
+          "caja": 280
+        },
+        {
+          "producto": "GRANOLA DE CEREALES CHOCOPASAS FUNDA",
+          "saldo": 935,
+          "caja": 280
+        },
+        {
+          "producto": "GRANOLA DE CEREALES COCO FRUTOS TROPICALES FUNDA",
+          "saldo": 0,
+          "caja": 280
+        },
+        {
+          "producto": "GRANOLA DE CEREALES COCO LIMON FUNDA",
+          "saldo": 0,
+          "caja": 280
+        }
+      ]
+    },
+    {
+      "grupo": "GALLETA SAL",
+      "saldo": 27869,
+      "caja": 180,
+      "saldoCajas": 154.83,
+      "activo": "GALLETA DE SAL TOMATE Y QUESO FUNDA",
+      "detalles": [
+        {
+          "producto": "GALLETA DE SAL TOMATE Y QUESO FUNDA",
+          "saldo": 27869,
+          "caja": 180
+        },
+        {
+          "producto": "GALLETA DE SAL MANTEQUILLA FUNDA",
+          "saldo": 0,
+          "caja": 300
+        }
+      ]
+    },
+    {
+      "grupo": "GALLETA DULCE",
+      "saldo": 2562,
+      "caja": 240,
+      "saldoCajas": 10.68,
+      "activo": "GALLETA DULCE CHOCOCHIPS FUNDA",
+      "detalles": [
+        {
+          "producto": "GALLETA DULCE NARANJA Y MIEL FUNDA",
+          "saldo": 0,
+          "caja": 195
+        },
+        {
+          "producto": "GALLETA DULCE COCO FUNDA",
+          "saldo": 0,
+          "caja": 240
+        },
+        {
+          "producto": "GALLETA DULCE CHOCOCHIPS FUNDA",
+          "saldo": 2562,
+          "caja": 240
+        },
+        {
+          "producto": "GALLETA DULCE MARACUYA FUNDA",
+          "saldo": 0,
+          "caja": 150
+        }
+      ]
+    },
+    {
+      "grupo": "TOTAL GALLETA",
+      "saldo": 30431,
+      "caja": 180,
+      "saldoCajas": 169.06,
+      "activo": "GALLETA DE SAL TOMATE Y QUESO FUNDA",
+      "detalles": [
+        {
+          "producto": "GALLETA DE SAL TOMATE Y QUESO FUNDA",
+          "saldo": 27869,
+          "caja": 180
+        },
+        {
+          "producto": "GALLETA DE SAL MANTEQUILLA FUNDA",
+          "saldo": 0,
+          "caja": 300
+        },
+        {
+          "producto": "GALLETA DULCE NARANJA Y MIEL FUNDA",
+          "saldo": 0,
+          "caja": 195
+        },
+        {
+          "producto": "GALLETA DULCE COCO FUNDA",
+          "saldo": 0,
+          "caja": 240
+        },
+        {
+          "producto": "GALLETA DULCE CHOCOCHIPS FUNDA",
+          "saldo": 2562,
+          "caja": 240
+        },
+        {
+          "producto": "GALLETA DULCE MARACUYA FUNDA",
+          "saldo": 0,
+          "caja": 150
+        }
+      ]
+    }
+  ],
+  "updatedAt": "29/05/2026 16:18",
+  "_meta": {
+    "generado": "29/05/2026 16:18",
+    "fuente": "PROYECCIONES.xlsm · hoja INVENTARIO",
+    "script": "seed manual"
+  }
+}
