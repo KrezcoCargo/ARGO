@@ -94,5 +94,16 @@
     "tenants": [
       "krezco"
     ]
+  },
+  {
+    "username": "sanchezs",
+    "name": "Stalyn Sanchez",
+    "role": "viewer",
+    "pwdHash": "a74f274603a63613396753d2a3bfbddb6c3707a2678b098330736b047ad31faa",
+    "created": "2026-05-29T17:26:46.206Z",
+    "locked": false,
+    "tenants": [
+      "krezco"
+    ]
   }
 ]
