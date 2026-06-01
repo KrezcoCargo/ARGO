@@ -5850,9 +5850,9 @@
       }
     ]
   },
-  "updatedAt": "01/06/2026 06:44",
+  "updatedAt": "01/06/2026 07:44",
   "_meta": {
-    "generado": "01/06/2026 06:44",
+    "generado": "01/06/2026 07:44",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
