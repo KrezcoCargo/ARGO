@@ -540,6 +540,7 @@ function _renderAdminPanel(){
 ══════════════════════════════════════════════════════════ */
 function _renderLogPanel(){
   if(!_conteoLog.length) return `<div style="text-align:center;padding:20px;color:#94A3B8;font-size:12px">Sin conteos guardados aún</div>`;
+  const isAdmin = SESSION && (SESSION.role==='superadmin'||SESSION.role==='editor');
   const recent=[..._conteoLog].reverse().slice(0,60);
   const grupos={};
   recent.forEach(e=>{
@@ -547,6 +548,16 @@ function _renderLogPanel(){
     if(!grupos[gk]) grupos[gk]={fecha:e.fecha,dia:e.dia,op:e.operador,items:[]};
     grupos[gk].items.push(e);
   });
+  // Texto de diferencia (SOLO admin) para confirmaciones marcadas
+  const revisarTxt = it => {
+    if(it.contadoUnidades==null || it.esperadoUnidades==null) return '';
+    const cfg = _matchConfigGroup(it.producto);
+    const caja = (cfg && cfg.caja) || 1;
+    const d = it.contadoUnidades - it.esperadoUnidades;
+    const cajas = caja>0 ? Math.round((d/caja)*10)/10 : d;
+    const signo = d>0?'+':'';
+    return `${signo}${d} u (${signo}${cajas} cajas)`;
+  };
   return Object.values(grupos).map(g=>`
     <div style="background:#fff;border:1px solid #E2E8F0;border-radius:10px;padding:12px;margin-bottom:8px">
       <div style="font-size:12px;font-weight:700;color:#14213D;margin-bottom:8px">
@@ -558,9 +569,12 @@ function _renderLogPanel(){
           <th style="text-align:center;padding:5px 8px;color:#475569;font-weight:700">Cajas</th>
           <th style="text-align:center;padding:5px 8px;color:#475569;font-weight:700">Unidades</th>
           <th style="text-align:center;padding:5px 8px;color:#475569;font-weight:700">Estado</th>
+          ${isAdmin?`<th style="text-align:center;padding:5px 8px;color:#7C3AED;font-weight:700">Revisar (admin)</th>`:''}
         </tr></thead>
-        <tbody>${g.items.map(it=>`
-          <tr style="border-bottom:1px solid #F1F5F9">
+        <tbody>${g.items.map(it=>{
+          const revisar = it.estado==='confirmado';
+          return `
+          <tr style="border-bottom:1px solid #F1F5F9;${revisar?'background:#FEF7ED':''}">
             <td style="padding:5px 8px;color:#14213D">${it.producto}</td>
             <td style="padding:5px 8px;text-align:center;font-weight:600;color:#1E40AF">${it.totalCajas}</td>
             <td style="padding:5px 8px;text-align:center;color:#64748B">${it.unidades||0}</td>
@@ -570,7 +584,8 @@ function _renderLogPanel(){
               it.estado==='bajo'?'<span style="color:#DC2626">❌</span>':
               it.estado==='excedente'?'<span style="color:#D97706">⚠️</span>':'—'
             }</td>
-          </tr>`).join('')}
+            ${isAdmin?`<td style="padding:5px 8px;text-align:center;font-weight:700;color:${revisar?'#D97706':'#CBD5E1'}">${revisar?'⚠ '+revisarTxt(it):'—'}</td>`:''}
+          </tr>`;}).join('')}
         </tbody>
       </table>
     </div>`).join('');
