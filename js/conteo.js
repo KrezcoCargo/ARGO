@@ -482,8 +482,8 @@ function _validarProducto(key, prod, totalCajas, unidades){
   if(e.estado==='sin_config' || e.estado==='vacio') return '';
   if(_confirmed[key]) return _badge('#DCFCE7','#16A34A','✅ Confirmado (doble conteo)');
   if(e.estado==='ok') return _badge('#DCFCE7','#16A34A','✅ Conteo correcto');
-  if(e.estado==='bajo') return _badge('#FEE2E2','#DC2626',`❌ Faltan ${_cajasTxt(-e.diffU,e.caja)} — vuelva a contar`);
-  return _badge('#FEF3C7','#D97706',`⚠️ Sobran ${_cajasTxt(e.diffU,e.caja)} — vuelva a contar`);
+  if(e.estado==='bajo') return _badge('#FEE2E2','#DC2626','❌ Falta producto — vuelva a contar');
+  return _badge('#FEF3C7','#D97706','⚠️ Sobra producto — vuelva a contar');
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -625,7 +625,7 @@ function ctGuardar(){
         estado = 'confirmado';
       } else {
         _firstAttempt[key] = e.contadoU;   // guardar este intento
-        recount.push({prod, txt:(e.estado==='bajo'?'faltan':'sobran')+' '+_cajasTxt(Math.abs(e.diffU),e.caja)});
+        recount.push({prod, txt:(e.estado==='bajo'?'falta':'sobra')+' producto'});
       }
     } else if(estado==='ok'){
       _confirmed[key]=false;
