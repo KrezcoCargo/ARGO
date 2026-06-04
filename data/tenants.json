@@ -1,6 +1,26 @@
 [
-  {"id":"krezco","name":"KrezcoCargo","dataPath":"data.json","color":"#F47C20"},
-  {"id":"gloria","name":"Grupo Gloria","dataPath":"data/gloria.json","color":"#1565C0"},
-  {"id":"worldvision","name":"World Vision Ecuador","dataPath":"data/worldvision.json","color":"#2E7D32"},
-  {"id":"pruebas","name":"Pruebas","dataPath":"data/pruebas.json","color":"#888888"}
+  {
+    "id": "krezco",
+    "name": "KrezcoCargo",
+    "dataPath": "data.json",
+    "color": "#F47C20"
+  },
+  {
+    "id": "gloria",
+    "name": "Grupo Gloria",
+    "dataPath": "data/gloria.json",
+    "color": "#1565C0"
+  },
+  {
+    "id": "worldvision",
+    "name": "World Vision Ecuador",
+    "dataPath": "data/worldvision.json",
+    "color": "#2E7D32"
+  },
+  {
+    "id": "pruebas",
+    "name": "Tradesur",
+    "dataPath": "data/pruebas.json",
+    "color": "#888888"
+  }
 ]
