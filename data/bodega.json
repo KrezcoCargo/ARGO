@@ -2,87 +2,87 @@
   "cobertura": [
     {
       "producto": "LECHE ENTERA",
-      "ingresos": 2558449,
-      "totalReq": 2526643,
-      "saldo": 31806,
+      "ingresos": 33445,
+      "totalReq": 107891,
+      "saldo": 33445,
       "porDia": [
-        2299701,
-        2049157,
-        1759294,
-        1549518,
-        1295523,
-        1031343,
-        805327,
-        480912,
-        224180,
-        105880,
-        31806
+        -75342,
+        -75342,
+        -75342,
+        -75342,
+        -75342,
+        -75342,
+        -75342,
+        -75342,
+        -75342,
+        -75342,
+        -75342
       ],
-      "porRecibir": 31806,
-      "pct": 1.0125882445600745
+      "porRecibir": -74446,
+      "pct": 0.30998878497743093
     },
     {
       "producto": "NÉCTAR PERA",
-      "ingresos": 363023,
-      "totalReq": 360949,
-      "saldo": 2074,
+      "ingresos": 2320,
+      "totalReq": 15413,
+      "saldo": 2320,
       "porDia": [
-        326059,
-        290267,
-        248858,
-        218890,
-        182605,
-        144865,
-        112577,
-        66232,
-        29556,
-        12656,
-        2074
+        -13221,
+        -13221,
+        -13221,
+        -13221,
+        -13221,
+        -13221,
+        -13221,
+        -13221,
+        -13221,
+        -13221,
+        -13221
       ],
-      "porRecibir": 2074,
-      "pct": 1.0057459641112734
+      "porRecibir": -13093,
+      "pct": 0.1505222863816259
     },
     {
       "producto": "NÉCTAR PERA-BANANO O MANGO-BANANA",
-      "ingresos": 370755,
-      "totalReq": 360949,
-      "saldo": 9806,
+      "ingresos": 10012,
+      "totalReq": 15413,
+      "saldo": 10012,
       "porDia": [
-        333791,
-        297999,
-        256590,
-        226622,
-        190337,
-        152597,
-        120309,
-        73964,
-        37288,
-        20388,
-        9806
+        -5529,
+        -5529,
+        -5529,
+        -5529,
+        -5529,
+        -5529,
+        -5529,
+        -5529,
+        -5529,
+        -5529,
+        -5529
       ],
-      "porRecibir": 9806,
-      "pct": 1.0271672729388361
+      "porRecibir": -5401,
+      "pct": 0.6495815220917407
     },
     {
       "producto": "NÉCTAR PERA-MANGO",
-      "ingresos": 363030,
-      "totalReq": 360949,
-      "saldo": 2081,
+      "ingresos": 2336,
+      "totalReq": 15413,
+      "saldo": 2336,
       "porDia": [
-        326066,
-        290274,
-        248865,
-        218897,
-        182612,
-        144872,
-        112584,
-        66239,
-        29563,
-        12663,
-        2081
+        -13205,
+        -13205,
+        -13205,
+        -13205,
+        -13205,
+        -13205,
+        -13205,
+        -13205,
+        -13205,
+        -13205,
+        -13205
       ],
-      "porRecibir": 2081,
-      "pct": 1.0057653574327674
+      "porRecibir": -13077,
+      "pct": 0.15156037111529228
     },
     {
       "producto": "NÉCTAR MANGO-BANANA",
@@ -107,255 +107,255 @@
     },
     {
       "producto": "PURÉ MANGO-PERA",
-      "ingresos": 1506941,
-      "totalReq": 1443796,
-      "saldo": 63145,
+      "ingresos": 65175,
+      "totalReq": 61652,
+      "saldo": 65175,
       "porDia": [
-        1359085,
-        1215917,
-        1050281,
-        930409,
-        785269,
-        634309,
-        505157,
-        319777,
-        173073,
-        105473,
-        63145
+        3011,
+        3011,
+        3011,
+        3011,
+        3011,
+        3011,
+        3011,
+        3011,
+        3011,
+        3011,
+        3011
       ],
-      "porRecibir": 63145,
-      "pct": 1.0437354030624826
+      "porRecibir": 3523,
+      "pct": 1.0571433205735419
     },
     {
       "producto": "LECHE CEREAL CHOCOLATE",
-      "ingresos": 725429,
-      "totalReq": 721898,
-      "saldo": 3531,
+      "ingresos": 4026,
+      "totalReq": 30826,
+      "saldo": 4026,
       "porDia": [
-        651501,
-        579917,
-        497099,
-        437163,
-        364593,
-        289113,
-        224537,
-        131847,
-        58495,
-        24695,
-        3531
+        -27056,
+        -27056,
+        -27056,
+        -27056,
+        -27056,
+        -27056,
+        -27056,
+        -27056,
+        -27056,
+        -27056,
+        -27056
       ],
-      "porRecibir": 3531,
-      "pct": 1.0048912727282802
+      "porRecibir": -26800,
+      "pct": 0.13060403555440211
     },
     {
       "producto": "LECHE CEREAL FRESA",
-      "ingresos": 362983,
-      "totalReq": 360949,
-      "saldo": 2034,
+      "ingresos": 2293,
+      "totalReq": 15413,
+      "saldo": 2293,
       "porDia": [
-        326019,
-        290227,
-        248818,
-        218850,
-        182565,
-        144825,
-        112537,
-        66192,
-        29516,
-        12616,
-        2034
+        -13248,
+        -13248,
+        -13248,
+        -13248,
+        -13248,
+        -13248,
+        -13248,
+        -13248,
+        -13248,
+        -13248,
+        -13248
       ],
-      "porRecibir": 2034,
-      "pct": 1.0056351451313066
+      "porRecibir": -13120,
+      "pct": 0.14877051839356387
     },
     {
       "producto": "LECHE SABORIZADA CHOCOLATE",
-      "ingresos": 725816,
-      "totalReq": 721898,
-      "saldo": 3918,
+      "ingresos": 4419,
+      "totalReq": 30826,
+      "saldo": 4419,
       "porDia": [
-        651888,
-        580304,
-        497486,
-        437550,
-        364980,
-        289500,
-        224924,
-        132234,
-        58882,
-        25082,
-        3918
+        -26663,
+        -26663,
+        -26663,
+        -26663,
+        -26663,
+        -26663,
+        -26663,
+        -26663,
+        -26663,
+        -26663,
+        -26663
       ],
-      "porRecibir": 3918,
-      "pct": 1.005427359543869
+      "porRecibir": -26407,
+      "pct": 0.14335301368974243
     },
     {
       "producto": "LECHE SABORIZADA FRESA",
-      "ingresos": 363168,
-      "totalReq": 360949,
-      "saldo": 2219,
+      "ingresos": 2501,
+      "totalReq": 15413,
+      "saldo": 2501,
       "porDia": [
-        326204,
-        290412,
-        249003,
-        219035,
-        182750,
-        145010,
-        112722,
-        66377,
-        29701,
-        12801,
-        2219
+        -13040,
+        -13040,
+        -13040,
+        -13040,
+        -13040,
+        -13040,
+        -13040,
+        -13040,
+        -13040,
+        -13040,
+        -13040
       ],
-      "porRecibir": 2219,
-      "pct": 1.0061476829136526
+      "porRecibir": -12912,
+      "pct": 0.16226561993122687
     },
     {
       "producto": "EXTRUIDO JAMÓN SERRANO",
-      "ingresos": 722456,
-      "totalReq": 721898,
-      "saldo": 558,
+      "ingresos": 660,
+      "totalReq": 30826,
+      "saldo": 660,
       "porDia": [
-        648528,
-        576944,
-        494126,
-        434190,
-        361620,
-        286140,
-        221564,
-        128874,
-        55522,
-        21722,
-        558
+        -30422,
+        -30422,
+        -30422,
+        -30422,
+        -30422,
+        -30422,
+        -30422,
+        -30422,
+        -30422,
+        -30422,
+        -30422
       ],
-      "porRecibir": 558,
-      "pct": 1.0007729623852677
+      "porRecibir": -30166,
+      "pct": 0.0214104976318692
     },
     {
       "producto": "EXTRUIDO POLLO A LA BRASA",
-      "ingresos": 361372,
-      "totalReq": 360949,
-      "saldo": 423,
+      "ingresos": 470,
+      "totalReq": 15413,
+      "saldo": 470,
       "porDia": [
-        324408,
-        288616,
-        247207,
-        217239,
-        180954,
-        143214,
-        110926,
-        64581,
-        27905,
-        11005,
-        423
+        -15071,
+        -15071,
+        -15071,
+        -15071,
+        -15071,
+        -15071,
+        -15071,
+        -15071,
+        -15071,
+        -15071,
+        -15071
       ],
-      "porRecibir": 423,
-      "pct": 1.0011719107131478
+      "porRecibir": -14943,
+      "pct": 0.030493739051450076
     },
     {
       "producto": "GALLETA RELLENA FRESA O FRUTOS ROJOS",
-      "ingresos": 1444787,
-      "totalReq": 1443796,
-      "saldo": 991,
+      "ingresos": 39488,
+      "totalReq": 61652,
+      "saldo": 39488,
       "porDia": [
-        1296931,
-        1153763,
-        988127,
-        868255,
-        723115,
-        572155,
-        443003,
-        257623,
-        110919,
-        43319,
-        991
+        -22676,
+        -22676,
+        -22676,
+        -22676,
+        -22676,
+        -22676,
+        -22676,
+        -22676,
+        -22676,
+        -22676,
+        -22676
       ],
-      "porRecibir": 991,
-      "pct": 1.0006863850571688
+      "porRecibir": -22164,
+      "pct": 0.6404982806721599
     },
     {
       "producto": "GALLETA RELLENA CHOCOLATE O FRUTOS AMARILLOS",
-      "ingresos": 1105218,
-      "totalReq": 1082847,
-      "saldo": 22371,
+      "ingresos": 48127,
+      "totalReq": 46239,
+      "saldo": 48127,
       "porDia": [
-        994326,
-        886950,
-        762723,
-        672819,
-        563964,
-        450744,
-        353880,
-        214845,
-        104817,
-        54117,
-        22371
+        1504,
+        1504,
+        1504,
+        1504,
+        1504,
+        1504,
+        1504,
+        1504,
+        1504,
+        1504,
+        1504
       ],
-      "porRecibir": 22371,
-      "pct": 1.0206594283402919
+      "porRecibir": 1888,
+      "pct": 1.0408313328575445
     },
     {
       "producto": "GRANOLA",
-      "ingresos": 1444731,
-      "totalReq": 1443796,
-      "saldo": 935,
+      "ingresos": 65235,
+      "totalReq": 61652,
+      "saldo": 65235,
       "porDia": [
-        1296875,
-        1153707,
-        988071,
-        868199,
-        723059,
-        572099,
-        442947,
-        257567,
-        110863,
-        43263,
-        935
+        3071,
+        3071,
+        3071,
+        3071,
+        3071,
+        3071,
+        3071,
+        3071,
+        3071,
+        3071,
+        3071
       ],
-      "porRecibir": 935,
-      "pct": 1.0006475984141805
+      "porRecibir": 3583,
+      "pct": 1.058116525011354
     },
     {
       "producto": "GALLETA SAL",
-      "ingresos": 1110716,
-      "totalReq": 1082847,
-      "saldo": 27869,
+      "ingresos": 40862,
+      "totalReq": 46239,
+      "saldo": 40862,
       "porDia": [
-        999824,
-        892448,
-        768221,
-        678317,
-        569462,
-        456242,
-        359378,
-        220343,
-        110315,
-        59615,
-        27869
+        -5761,
+        -5761,
+        -5761,
+        -5761,
+        -5761,
+        -5761,
+        -5761,
+        -5761,
+        -5761,
+        -5761,
+        -5761
       ],
-      "porRecibir": 27869,
-      "pct": 1.0257367846057661
+      "porRecibir": -5377,
+      "pct": 0.8837128830640801
     },
     {
       "producto": "GALLETA DULCE",
-      "ingresos": 1085409,
-      "totalReq": 1082847,
-      "saldo": 2562,
+      "ingresos": 41511,
+      "totalReq": 46239,
+      "saldo": 41511,
       "porDia": [
-        974517,
-        867141,
-        742914,
-        653010,
-        544155,
-        430935,
-        334071,
-        195036,
-        85008,
-        34308,
-        2562
+        -5112,
+        -5112,
+        -5112,
+        -5112,
+        -5112,
+        -5112,
+        -5112,
+        -5112,
+        -5112,
+        -5112,
+        -5112
       ],
-      "porRecibir": 2562,
-      "pct": 1.002365985222289
+      "porRecibir": -4728,
+      "pct": 0.897748653733861
     }
   ],
   "diaLabels": [
@@ -374,31 +374,31 @@
   "abastecimiento": [
     {
       "producto": "LECHE ENTERA",
-      "ingresos": 2558449,
-      "totalReq": 2526643,
-      "porRecibir": 31806,
-      "pct": 1.0125882445600745
+      "ingresos": 33445,
+      "totalReq": 107891,
+      "porRecibir": -74446,
+      "pct": 0.30998878497743093
     },
     {
       "producto": "NÉCTAR PERA",
-      "ingresos": 363023,
-      "totalReq": 360949,
-      "porRecibir": 2074,
-      "pct": 1.0057459641112734
+      "ingresos": 2320,
+      "totalReq": 15413,
+      "porRecibir": -13093,
+      "pct": 0.1505222863816259
     },
     {
       "producto": "NÉCTAR PERA-BANANO O MANGO-BANANA",
-      "ingresos": 370755,
-      "totalReq": 360949,
-      "porRecibir": 9806,
-      "pct": 1.0271672729388361
+      "ingresos": 10012,
+      "totalReq": 15413,
+      "porRecibir": -5401,
+      "pct": 0.6495815220917407
     },
     {
       "producto": "NÉCTAR PERA-MANGO",
-      "ingresos": 363030,
-      "totalReq": 360949,
-      "porRecibir": 2081,
-      "pct": 1.0057653574327674
+      "ingresos": 2336,
+      "totalReq": 15413,
+      "porRecibir": -13077,
+      "pct": 0.15156037111529228
     },
     {
       "producto": "NÉCTAR MANGO-BANANA",
@@ -409,94 +409,94 @@
     },
     {
       "producto": "PURÉ MANGO-PERA",
-      "ingresos": 1506941,
-      "totalReq": 1443796,
-      "porRecibir": 63145,
-      "pct": 1.0437354030624826
+      "ingresos": 65175,
+      "totalReq": 61652,
+      "porRecibir": 3523,
+      "pct": 1.0571433205735419
     },
     {
       "producto": "LECHE CEREAL CHOCOLATE",
-      "ingresos": 725429,
-      "totalReq": 721898,
-      "porRecibir": 3531,
-      "pct": 1.0048912727282802
+      "ingresos": 4026,
+      "totalReq": 30826,
+      "porRecibir": -26800,
+      "pct": 0.13060403555440211
     },
     {
       "producto": "LECHE CEREAL FRESA",
-      "ingresos": 362983,
-      "totalReq": 360949,
-      "porRecibir": 2034,
-      "pct": 1.0056351451313066
+      "ingresos": 2293,
+      "totalReq": 15413,
+      "porRecibir": -13120,
+      "pct": 0.14877051839356387
     },
     {
       "producto": "LECHE SABORIZADA CHOCOLATE",
-      "ingresos": 725816,
-      "totalReq": 721898,
-      "porRecibir": 3918,
-      "pct": 1.005427359543869
+      "ingresos": 4419,
+      "totalReq": 30826,
+      "porRecibir": -26407,
+      "pct": 0.14335301368974243
     },
     {
       "producto": "LECHE SABORIZADA FRESA",
-      "ingresos": 363168,
-      "totalReq": 360949,
-      "porRecibir": 2219,
-      "pct": 1.0061476829136526
+      "ingresos": 2501,
+      "totalReq": 15413,
+      "porRecibir": -12912,
+      "pct": 0.16226561993122687
     },
     {
       "producto": "EXTRUIDO JAMÓN SERRANO",
-      "ingresos": 722456,
-      "totalReq": 721898,
-      "porRecibir": 558,
-      "pct": 1.0007729623852677
+      "ingresos": 660,
+      "totalReq": 30826,
+      "porRecibir": -30166,
+      "pct": 0.0214104976318692
     },
     {
       "producto": "EXTRUIDO POLLO A LA BRASA",
-      "ingresos": 361372,
-      "totalReq": 360949,
-      "porRecibir": 423,
-      "pct": 1.0011719107131478
+      "ingresos": 470,
+      "totalReq": 15413,
+      "porRecibir": -14943,
+      "pct": 0.030493739051450076
     },
     {
       "producto": "GALLETA RELLENA FRESA O FRUTOS ROJOS",
-      "ingresos": 1444787,
-      "totalReq": 1443796,
-      "porRecibir": 991,
-      "pct": 1.0006863850571688
+      "ingresos": 39488,
+      "totalReq": 61652,
+      "porRecibir": -22164,
+      "pct": 0.6404982806721599
     },
     {
       "producto": "GALLETA RELLENA CHOCOLATE O FRUTOS AMARILLOS",
-      "ingresos": 1105218,
-      "totalReq": 1082847,
-      "porRecibir": 22371,
-      "pct": 1.0206594283402919
+      "ingresos": 48127,
+      "totalReq": 46239,
+      "porRecibir": 1888,
+      "pct": 1.0408313328575445
     },
     {
       "producto": "GRANOLA",
-      "ingresos": 1444731,
-      "totalReq": 1443796,
-      "porRecibir": 935,
-      "pct": 1.0006475984141805
+      "ingresos": 65235,
+      "totalReq": 61652,
+      "porRecibir": 3583,
+      "pct": 1.058116525011354
     },
     {
       "producto": "GALLETA SAL",
-      "ingresos": 1110716,
-      "totalReq": 1082847,
-      "porRecibir": 27869,
-      "pct": 1.0257367846057661
+      "ingresos": 40862,
+      "totalReq": 46239,
+      "porRecibir": -5377,
+      "pct": 0.8837128830640801
     },
     {
       "producto": "GALLETA DULCE",
-      "ingresos": 1085409,
-      "totalReq": 1082847,
-      "porRecibir": 2562,
-      "pct": 1.002365985222289
+      "ingresos": 41511,
+      "totalReq": 46239,
+      "porRecibir": -4728,
+      "pct": 0.897748653733861
     },
     {
       "producto": "TOTAL GALLETA",
-      "ingresos": 2196125,
-      "totalReq": 2165694,
-      "porRecibir": 30431,
-      "pct": 1.0140513849140276
+      "ingresos": 82373,
+      "totalReq": 92478,
+      "porRecibir": -10105,
+      "pct": 0.8907307683989706
     }
   ],
   "proveedores": [
@@ -510,93 +510,93 @@
     {
       "producto": "LECHE ENTERA (VITA)",
       "planificado": 2133552,
-      "ingresos": 2030839,
-      "pct": 0.9518582157828822,
-      "porRecibir": -102713
+      "ingresos": -494165,
+      "pct": -0.2316161030994323,
+      "porRecibir": -2627717
     },
     {
       "producto": "NÉCTAR PERA",
       "planificado": 373204,
-      "ingresos": 363023,
-      "pct": 0.9727200137190384,
-      "porRecibir": -10181
+      "ingresos": 2320,
+      "pct": 0.006216439266460166,
+      "porRecibir": -370884
     },
     {
       "producto": "NÉCTAR PERA-BANANO",
       "planificado": 373204,
-      "ingresos": 360508,
-      "pct": 0.9659810720142336,
-      "porRecibir": -12696
+      "ingresos": 10012,
+      "pct": 0.026827150834396202,
+      "porRecibir": -363192
     },
     {
       "producto": "NÉCTAR PERA-MANGO",
       "planificado": 373204,
-      "ingresos": 363030,
-      "pct": 0.9727387702168251,
-      "porRecibir": -10174
+      "ingresos": 2336,
+      "pct": 0.006259311261401271,
+      "porRecibir": -370868
     },
     {
       "producto": "NÉCTAR MANGO-BANANA",
       "planificado": 0,
-      "ingresos": 10247,
+      "ingresos": 0,
       "pct": 0,
-      "porRecibir": 10247
+      "porRecibir": 0
     },
     {
       "producto": "PURÉ MANGO-PERA",
       "planificado": 1492816,
-      "ingresos": 1506941,
-      "pct": 1.009461983258486,
-      "porRecibir": 14125
+      "ingresos": 65175,
+      "pct": 0.04365909797322644,
+      "porRecibir": -1427641
     },
     {
       "producto": "LECHE CEREAL CHOCOLATE",
       "planificado": 746408,
-      "ingresos": 725429,
-      "pct": 0.9718933880665802,
-      "porRecibir": -20979
+      "ingresos": 4026,
+      "pct": 0.005393832863527722,
+      "porRecibir": -742382
     },
     {
       "producto": "LECHE CEREAL FRESA",
       "planificado": 373204,
-      "ingresos": 362983,
-      "pct": 0.9726128337316856,
-      "porRecibir": -10221
+      "ingresos": 2293,
+      "pct": 0.006144092774997053,
+      "porRecibir": -370911
     },
     {
       "producto": "LECHE SABORIZADA CHOCOLATE",
       "planificado": 746408,
-      "ingresos": 725816,
-      "pct": 0.9724118712553992,
-      "porRecibir": -20592
+      "ingresos": 4419,
+      "pct": 0.005920354551398163,
+      "porRecibir": -741989
     },
     {
       "producto": "LECHE SABORIZADA FRESA",
       "planificado": 373204,
-      "ingresos": 363168,
-      "pct": 0.9731085411731921,
-      "porRecibir": -10036
+      "ingresos": 2501,
+      "pct": 0.006701428709231412,
+      "porRecibir": -370703
     },
     {
       "producto": "EXTRUIDO JAMÓN SERRANO",
       "planificado": 746408,
-      "ingresos": 722456,
-      "pct": 0.9679103117865832,
-      "porRecibir": -23952
+      "ingresos": 660,
+      "pct": 0.0008842348956602823,
+      "porRecibir": -745748
     },
     {
       "producto": "GALLETA DULCE MARACUYÁ",
       "planificado": 0,
-      "ingresos": 710,
+      "ingresos": 1509,
       "pct": 0,
-      "porRecibir": 710
+      "porRecibir": 1509
     },
     {
       "producto": "EXTRUIDO POLLO A LA BRASA",
       "planificado": 372800,
-      "ingresos": 361372,
-      "pct": 0.9693454935622318,
-      "porRecibir": -11428
+      "ingresos": 470,
+      "pct": 0.0012607296137339056,
+      "porRecibir": -372330
     },
     {
       "producto": "GALLETA SAL LIMÓN PICANTE",
@@ -608,91 +608,91 @@
     {
       "producto": "GALLETA RELLENA FRESA",
       "planificado": 342240,
-      "ingresos": 312512,
-      "pct": 0.9131369798971481,
-      "porRecibir": -29728
+      "ingresos": 988,
+      "pct": 0.0028868630201028516,
+      "porRecibir": -341252
     },
     {
       "producto": "GALLETA RELLENA FRUTOS ROJOS",
       "planificado": 1150000,
-      "ingresos": 1132275,
-      "pct": 0.9845869565217391,
-      "porRecibir": -17725
+      "ingresos": 38500,
+      "pct": 0.033478260869565214,
+      "porRecibir": -1111500
     },
     {
       "producto": "GALLETA RELLENA CHOCOLATE",
       "planificado": 218880,
-      "ingresos": 204000,
-      "pct": 0.9320175438596491,
-      "porRecibir": -14880
+      "ingresos": 22371,
+      "pct": 0.10220668859649122,
+      "porRecibir": -196509
     },
     {
       "producto": "GALLETA RELLENA FRUTOS AMARILLOS",
       "planificado": 900000,
-      "ingresos": 901218,
-      "pct": 1.0013533333333333,
-      "porRecibir": 1218
+      "ingresos": 25600,
+      "pct": 0.028444444444444446,
+      "porRecibir": -874400
     },
     {
       "producto": "GRANOLA",
       "planificado": 1258600,
-      "ingresos": 1444731,
-      "pct": 1.1478873351342762,
-      "porRecibir": 186131
+      "ingresos": 65235,
+      "pct": 0.05183139996821866,
+      "porRecibir": -1193365
     },
     {
       "producto": "GALLETA SAL TOMATE Y QUESO",
       "planificado": 1119420,
-      "ingresos": 1110716,
-      "pct": 0.9922245448535849,
-      "porRecibir": -8704
+      "ingresos": 40862,
+      "pct": 0.03650283182362295,
+      "porRecibir": -1078558
     },
     {
       "producto": "GALLETA DULCE CHOCOCHIPS",
       "planificado": 835920,
-      "ingresos": 817440,
-      "pct": 0.977892621303474,
-      "porRecibir": -18480
+      "ingresos": 2562,
+      "pct": 0.003064886592018375,
+      "porRecibir": -833358
     },
     {
       "producto": "GALLETA DULCE NARANJA Y MIEL",
       "planificado": 283920,
-      "ingresos": 267259,
-      "pct": 0.9413179768948999,
-      "porRecibir": -16661
+      "ingresos": 37440,
+      "pct": 0.13186813186813187,
+      "porRecibir": -246480
     },
     {
       "producto": "TOTAL GALLETA",
       "planificado": 2239260,
-      "ingresos": 2196125,
-      "pct": 0.9807369398819252,
-      "porRecibir": -43135
+      "ingresos": 82373,
+      "pct": 0.03678581317042237,
+      "porRecibir": -2156887
     }
   ],
   "lotesFinales": [
     {
       "producto": "LECHE ENTERA",
-      "porRecibir": 31806,
-      "pct": 1.0125882445600745,
-      "lotes": "VITA107 (59461)"
+      "porRecibir": -74446,
+      "pct": 0.30998878497743093,
+      "lotes": "-"
     },
     {
       "producto": "NÉCTAR PERA",
-      "porRecibir": 2074,
-      "pct": 1.0057459641112734,
-      "lotes": "L6076A (7912)"
+      "porRecibir": -13093,
+      "pct": 0.1505222863816259,
+      "lotes": "-"
     },
     {
       "producto": "NÉCTAR PERA-BANANO O MANGO-BANANA",
-      "porRecibir": 9806,
-      "pct": 1.0271672729388361,
-      "lotes": "L6087B (11040); L6078A (5419)"
+      "porRecibir": -5401,
+      "pct": 0.6495815220917407,
+      "lotes": "-"
     },
     {
       "producto": "NÉCTAR PERA-MANGO",
-      "porRecibir": 2081,
-      "pct": 1.0057653574327674,
-      "lotes": "L6097E (5239)"
+      "porRecibir": -13077,
+      "pct": 0.15156037111529228,
+      "lotes": "-"
     },
     {
       "producto": "NÉCTAR MANGO-BANANA",
@@ -702,80 +702,80 @@
     },
     {
       "producto": "PURÉ MANGO-PERA",
-      "porRecibir": 63145,
-      "pct": 1.0437354030624826,
-      "lotes": "M05 (83260)"
+      "porRecibir": 3523,
+      "pct": 1.0571433205735419,
+      "lotes": "-"
     },
     {
       "producto": "LECHE CEREAL CHOCOLATE",
-      "porRecibir": 3531,
-      "pct": 1.0048912727282802,
-      "lotes": "L6127H (12110)"
+      "porRecibir": -26800,
+      "pct": 0.13060403555440211,
+      "lotes": "-"
     },
     {
       "producto": "LECHE CEREAL FRESA",
-      "porRecibir": 2034,
-      "pct": 1.0056351451313066,
-      "lotes": "L6109E (6360); L6109B (1567)"
+      "porRecibir": -13120,
+      "pct": 0.14877051839356387,
+      "lotes": "-"
     },
     {
       "producto": "LECHE SABORIZADA CHOCOLATE",
-      "porRecibir": 3918,
-      "pct": 1.005427359543869,
-      "lotes": "L6123A (14486)"
+      "porRecibir": -26407,
+      "pct": 0.14335301368974243,
+      "lotes": "-"
     },
     {
       "producto": "LECHE SABORIZADA FRESA",
-      "porRecibir": 2219,
-      "pct": 1.0061476829136526,
-      "lotes": "L6083B (10903)"
+      "porRecibir": -12912,
+      "pct": 0.16226561993122687,
+      "lotes": "-"
     },
     {
       "producto": "EXTRUIDO JAMÓN SERRANO",
-      "porRecibir": 558,
-      "pct": 1.0007729623852677,
-      "lotes": "DEL18 (1994)"
+      "porRecibir": -30166,
+      "pct": 0.0214104976318692,
+      "lotes": "-"
     },
     {
       "producto": "EXTRUIDO POLLO A LA BRASA",
-      "porRecibir": 423,
-      "pct": 1.0011719107131478,
-      "lotes": "DEL18 (9535)"
+      "porRecibir": -14943,
+      "pct": 0.030493739051450076,
+      "lotes": "-"
     },
     {
       "producto": "GALLETA RELLENA FRESA O FRUTOS ROJOS",
-      "porRecibir": 991,
-      "pct": 1.0006863850571688,
-      "lotes": "17G23 (13940)"
+      "porRecibir": -22164,
+      "pct": 0.6404982806721599,
+      "lotes": "-"
     },
     {
       "producto": "GALLETA RELLENA CHOCOLATE O FRUTOS AMARILLOS",
-      "porRecibir": 22371,
-      "pct": 1.0206594283402919,
-      "lotes": "17G23 (33405)"
+      "porRecibir": 1888,
+      "pct": 1.0408313328575445,
+      "lotes": "-"
     },
     {
       "producto": "GRANOLA",
-      "porRecibir": 935,
-      "pct": 1.0006475984141805,
-      "lotes": "LM-0032 (22340)"
+      "porRecibir": 3583,
+      "pct": 1.058116525011354,
+      "lotes": "-"
     },
     {
       "producto": "GALLETA SAL",
-      "porRecibir": 27869,
-      "pct": 1.0257367846057661,
-      "lotes": "04-26-105 (43005)"
+      "porRecibir": -5377,
+      "pct": 0.8837128830640801,
+      "lotes": "-"
     },
     {
       "producto": "GALLETA DULCE",
-      "porRecibir": 2562,
-      "pct": 1.002365985222289,
-      "lotes": "17G23 (70680)"
+      "porRecibir": -4728,
+      "pct": 0.897748653733861,
+      "lotes": "-"
     },
     {
       "producto": "TOTAL GALLETA",
-      "porRecibir": 30431,
-      "pct": 1.0140513849140276,
+      "porRecibir": -10105,
+      "pct": 0.8907307683989706,
       "lotes": "-"
     }
   ],
@@ -783,73 +783,73 @@
     {
       "producto": "LECHE ENTERA",
       "dias": [
-        257852,
-        250544,
-        289863,
-        209776,
-        253995,
-        264180,
-        226016,
-        324415,
-        256732,
-        118300,
-        74074
+        107891,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
-      "distributivo": 2526643,
+      "distributivo": 107891,
       "numDias": null
     },
     {
       "producto": "NÉCTAR PERA",
       "dias": [
-        36836,
-        35792,
-        41409,
-        29968,
-        36285,
-        37740,
-        32288,
-        46345,
-        36676,
-        16900,
-        10582
+        15413,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
-      "distributivo": 360949,
+      "distributivo": 15413,
       "numDias": null
     },
     {
       "producto": "NÉCTAR PERA-BANANO O MANGO-BANANA",
       "dias": [
-        36836,
-        35792,
-        41409,
-        29968,
-        36285,
-        37740,
-        32288,
-        46345,
-        36676,
-        16900,
-        10582
+        15413,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
-      "distributivo": 360949,
+      "distributivo": 15413,
       "numDias": null
     },
     {
       "producto": "NÉCTAR PERA-MANGO",
       "dias": [
-        36836,
-        35792,
-        41409,
-        29968,
-        36285,
-        37740,
-        32288,
-        46345,
-        36676,
-        16900,
-        10582
+        15413,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
-      "distributivo": 360949,
+      "distributivo": 15413,
       "numDias": null
     },
     {
@@ -873,235 +873,235 @@
     {
       "producto": "PURÉ MANGO-PERA",
       "dias": [
-        147344,
-        143168,
-        165636,
-        119872,
-        145140,
-        150960,
-        129152,
-        185380,
-        146704,
-        67600,
-        42328
+        61652,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
-      "distributivo": 1443796,
+      "distributivo": 61652,
       "numDias": null
     },
     {
       "producto": "LECHE CEREAL CHOCOLATE",
       "dias": [
-        73672,
-        71584,
-        82818,
-        59936,
-        72570,
-        75480,
-        64576,
-        92690,
-        73352,
-        33800,
-        21164
+        30826,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
-      "distributivo": 721898,
+      "distributivo": 30826,
       "numDias": null
     },
     {
       "producto": "LECHE CEREAL FRESA",
       "dias": [
-        36836,
-        35792,
-        41409,
-        29968,
-        36285,
-        37740,
-        32288,
-        46345,
-        36676,
-        16900,
-        10582
+        15413,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
-      "distributivo": 360949,
+      "distributivo": 15413,
       "numDias": null
     },
     {
       "producto": "LECHE SABORIZADA CHOCOLATE",
       "dias": [
-        73672,
-        71584,
-        82818,
-        59936,
-        72570,
-        75480,
-        64576,
-        92690,
-        73352,
-        33800,
-        21164
+        30826,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
-      "distributivo": 721898,
+      "distributivo": 30826,
       "numDias": null
     },
     {
       "producto": "LECHE SABORIZADA FRESA",
       "dias": [
-        36836,
-        35792,
-        41409,
-        29968,
-        36285,
-        37740,
-        32288,
-        46345,
-        36676,
-        16900,
-        10582
+        15413,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
-      "distributivo": 360949,
+      "distributivo": 15413,
       "numDias": null
     },
     {
       "producto": "EXTRUIDO JAMÓN SERRANO",
       "dias": [
-        73672,
-        71584,
-        82818,
-        59936,
-        72570,
-        75480,
-        64576,
-        92690,
-        73352,
-        33800,
-        21164
+        30826,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
-      "distributivo": 721898,
+      "distributivo": 30826,
       "numDias": null
     },
     {
       "producto": "EXTRUIDO POLLO A LA BRASA",
       "dias": [
-        36836,
-        35792,
-        41409,
-        29968,
-        36285,
-        37740,
-        32288,
-        46345,
-        36676,
-        16900,
-        10582
+        15413,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
-      "distributivo": 360949,
+      "distributivo": 15413,
       "numDias": null
     },
     {
       "producto": "GALLETA RELLENA FRESA O FRUTOS ROJOS",
       "dias": [
-        147344,
-        143168,
-        165636,
-        119872,
-        145140,
-        150960,
-        129152,
-        185380,
-        146704,
-        67600,
-        42328
+        61652,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
-      "distributivo": 1443796,
+      "distributivo": 61652,
       "numDias": null
     },
     {
       "producto": "GALLETA RELLENA CHOCOLATE O FRUTOS AMARILLOS",
       "dias": [
-        110508,
-        107376,
-        124227,
-        89904,
-        108855,
-        113220,
-        96864,
-        139035,
-        110028,
-        50700,
-        31746
+        46239,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
-      "distributivo": 1082847,
+      "distributivo": 46239,
       "numDias": null
     },
     {
       "producto": "GRANOLA",
       "dias": [
-        147344,
-        143168,
-        165636,
-        119872,
-        145140,
-        150960,
-        129152,
-        185380,
-        146704,
-        67600,
-        42328
+        61652,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
-      "distributivo": 1443796,
+      "distributivo": 61652,
       "numDias": null
     },
     {
       "producto": "GALLETA SAL",
       "dias": [
-        110508,
-        107376,
-        124227,
-        89904,
-        108855,
-        113220,
-        96864,
-        139035,
-        110028,
-        50700,
-        31746
+        46239,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
-      "distributivo": 1082847,
+      "distributivo": 46239,
       "numDias": null
     },
     {
       "producto": "GALLETA DULCE",
       "dias": [
-        110508,
-        107376,
-        124227,
-        89904,
-        108855,
-        113220,
-        96864,
-        139035,
-        110028,
-        50700,
-        31746
+        46239,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
-      "distributivo": 1082847,
+      "distributivo": 46239,
       "numDias": null
     },
     {
       "producto": "TOTAL GALLETA",
       "dias": [
-        221016,
-        214752,
-        248454,
-        179808,
-        217710,
-        226440,
-        193728,
-        278070,
-        220056,
-        101400,
-        63492
+        92478,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       ],
-      "distributivo": 2165694,
+      "distributivo": 92478,
       "numDias": null
     }
   ],
@@ -1120,26 +1120,26 @@
   "inventario": [
     {
       "producto": "LECHE ENTERA",
-      "ajuste": -2341,
-      "cajas": -97.54166666666667,
+      "ajuste": 0,
+      "cajas": 0.0,
       "orden": 1
     },
     {
       "producto": "NÉCTAR PERA",
-      "ajuste": -185,
-      "cajas": -7.708333333333333,
+      "ajuste": 0,
+      "cajas": 0.0,
       "orden": 2
     },
     {
       "producto": "NÉCTAR PERA-BANANO O MANGO-BANANA",
-      "ajuste": -511,
-      "cajas": -21.291666666666668,
+      "ajuste": 0,
+      "cajas": 0.0,
       "orden": 3
     },
     {
       "producto": "NÉCTAR PERA-MANGO",
-      "ajuste": 425,
-      "cajas": 17.708333333333332,
+      "ajuste": 0,
+      "cajas": 0.0,
       "orden": 4
     },
     {
@@ -1150,80 +1150,80 @@
     },
     {
       "producto": "PURÉ MANGO-PERA",
-      "ajuste": -330,
-      "cajas": -3.0,
+      "ajuste": 0,
+      "cajas": 0.0,
       "orden": 6
     },
     {
       "producto": "LECHE CEREAL CHOCOLATE",
-      "ajuste": -2522,
-      "cajas": -105.08333333333333,
+      "ajuste": 0,
+      "cajas": 0.0,
       "orden": 7
     },
     {
       "producto": "LECHE CEREAL FRESA",
-      "ajuste": -199,
-      "cajas": -8.291666666666666,
+      "ajuste": 0,
+      "cajas": 0.0,
       "orden": 8
     },
     {
       "producto": "LECHE SABORIZADA CHOCOLATE",
-      "ajuste": -206,
-      "cajas": -8.583333333333334,
+      "ajuste": 0,
+      "cajas": 0.0,
       "orden": 9
     },
     {
       "producto": "LECHE SABORIZADA FRESA",
-      "ajuste": 2382,
-      "cajas": 99.25,
+      "ajuste": 0,
+      "cajas": 0.0,
       "orden": 10
     },
     {
       "producto": "EXTRUIDO JAMÓN SERRANO",
-      "ajuste": 890,
-      "cajas": 4.45,
+      "ajuste": 0,
+      "cajas": 0.0,
       "orden": 11
     },
     {
       "producto": "EXTRUIDO POLLO A LA BRASA",
-      "ajuste": 665,
-      "cajas": 3.325,
+      "ajuste": 0,
+      "cajas": 0.0,
       "orden": 12
     },
     {
       "producto": "GALLETA RELLENA FRESA O FRUTOS ROJOS",
-      "ajuste": -4377,
-      "cajas": -19.895454545454545,
+      "ajuste": 0,
+      "cajas": 0.0,
       "orden": 13
     },
     {
       "producto": "GALLETA RELLENA CHOCOLATE O FRUTOS AMARILLOS",
-      "ajuste": 273,
-      "cajas": 1.240909090909091,
+      "ajuste": 0,
+      "cajas": 0.0,
       "orden": 14
     },
     {
       "producto": "GRANOLA",
-      "ajuste": 690,
-      "cajas": 2.4642857142857144,
+      "ajuste": 0,
+      "cajas": 0.0,
       "orden": 15
     },
     {
       "producto": "GALLETA SAL",
-      "ajuste": -15,
-      "cajas": -0.08333333333333333,
+      "ajuste": 0,
+      "cajas": 0.0,
       "orden": 16
     },
     {
       "producto": "GALLETA DULCE",
-      "ajuste": 2153,
-      "cajas": 9.568888888888889,
+      "ajuste": 0,
+      "cajas": 0.0,
       "orden": 17
     },
     {
       "producto": "TOTAL GALLETA",
-      "ajuste": 2138,
-      "cajas": 9.502222222222223,
+      "ajuste": 0,
+      "cajas": 0.0,
       "orden": 18
     }
   ],
@@ -5850,9 +5850,9 @@
       }
     ]
   },
-  "updatedAt": "04/06/2026 14:18",
+  "updatedAt": "04/06/2026 16:08",
   "_meta": {
-    "generado": "04/06/2026 14:18",
+    "generado": "04/06/2026 16:08",
     "fuente": "POWER BI.xlsx",
     "tenant": "KrezcoCargo",
     "script": "sync-bodega-gui.py v1"
