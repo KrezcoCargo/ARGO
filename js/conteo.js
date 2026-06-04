@@ -10,22 +10,22 @@ const DIAS_ORD = ['LUNES','MARTES','MIÉRCOLES','JUEVES','VIERNES','SÁBADO','DO
 
 /* ── Storage keys ── */
 const _CONTEO_LOG_KEY = 'kc_conteo_log_v1';
-const _CONTEO_TOL_KEY = 'kc_tolerancia_v1';   // tolerancia % por grupo (admin)
+const _CONTEO_MOD_KEY = 'kc_colchon_mod_v1';   // colchón modificable (UNIDADES) por grupo
 
 /* ── Estado en memoria ── */
 let _conteoLog    = [];
 let _conteoConfig = { grupos: [] };  // esperado/caja por grupo (sincronizado)
-let _tolerancia   = {};              // { grupo: porcentaje }
+let _colchonMod   = {};              // { grupo: unidades } colchón modificable (manual)
 let _firstAttempt = {};              // { key: unidadesContadas } primer intento fuera de rango
 let _confirmed    = {};              // { key: true } aceptado por doble conteo
-const _TOL_DEFAULT = 1;              // % por defecto (columna E de tu Excel)
+const _MOD_DEFAULT = 0;              // colchón modificable por defecto (unidades)
 
 /* ══════════════════════════════════════════════════════════
    INIT
 ══════════════════════════════════════════════════════════ */
 async function loadConteo(){
   try { _conteoLog  = JSON.parse(localStorage.getItem(_CONTEO_LOG_KEY)||'[]'); } catch{}
-  try { _tolerancia = JSON.parse(localStorage.getItem(_CONTEO_TOL_KEY)||'{}'); } catch{}
+  try { _colchonMod = JSON.parse(localStorage.getItem(_CONTEO_MOD_KEY)||'{}'); } catch{}
 
   const el = document.getElementById('pg-conteo');
   if(el && (!_bodegaData || !_conteoConfig.grupos.length)){
@@ -120,8 +120,28 @@ function _matchConfigGroup(prod){
   g = grupos.find(x=>(x.detalles||[]).some(d=>{const dn=_norm(d.producto);return dn.includes(n)||n.includes(dn);}));
   return g||null;
 }
-function _tolPct(grupo){
-  return (_tolerancia[grupo]!=null && _tolerancia[grupo]!=='') ? Number(_tolerancia[grupo]) : _TOL_DEFAULT;
+/* Colchón modificable (unidades) configurado por admin para un grupo */
+function _colchonModU(grupo){
+  return (_colchonMod[grupo]!=null && _colchonMod[grupo]!=='') ? Number(_colchonMod[grupo]) : _MOD_DEFAULT;
+}
+
+/* Colchón que quedó del ÚLTIMO conteo previo (en unidades) = arrastre.
+   = contado − esperado(base) del registro más reciente de fecha anterior. */
+function _carryColchon(prod, fechaActual){
+  const reg = _conteoLog
+    .filter(e => _norm(e.producto)===_norm(prod)
+              && e.contadoUnidades!=null && e.esperadoUnidades!=null
+              && (!fechaActual || e.fecha < fechaActual))
+    .slice(-1)[0];
+  if(!reg) return 0;
+  return (Number(reg.contadoUnidades)||0) - (Number(reg.esperadoUnidades)||0);
+}
+
+/* Objetivo de hoy = esperado sincronizado + colchón que quedó ayer */
+function _objetivoU(cfg, prod, fechaActual){
+  const base  = Number(cfg.saldo)||0;
+  const carry = _carryColchon(prod, fechaActual);
+  return { base, carry, objetivo: base + carry };
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -459,16 +479,21 @@ function _rerenderRows(sk, origKey, rows){
 function _badge(bg,col,txt){
   return `<span style="background:${bg};color:${col};padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700">${txt}</span>`;
 }
-/* Devuelve {estado, html, contadoU, esperadoU, margenU} */
+function _curFecha(){ return document.getElementById('ct-fecha')?.value || new Date().toISOString().slice(0,10); }
+
+/* Evalúa el conteo contra el objetivo (esperado + colchón arrastrado) con
+   tolerancia en UNIDADES (colchón modificable). */
 function _evalConteo(prod, totalCajas, unidades){
   const cfg = _matchConfigGroup(prod);
-  if(!cfg) return {estado:'sin_config', html:'', contadoU:0};
-  const esperadoU = Number(cfg.saldo)||0;
-  const caja      = Number(cfg.caja)||1;
-  const contadoU  = (Number(totalCajas)||0)*caja + (Number(unidades)||0);
-  const margenU   = Math.max(Math.round(esperadoU * _tolPct(cfg.grupo)/100), 0);
-  const diffU     = contadoU - esperadoU;
-  return {cfg, esperadoU, caja, contadoU, margenU, diffU,
+  if(!cfg) return {estado:'sin_config', contadoU:0};
+  const caja    = Number(cfg.caja)||1;
+  const contadoU= (Number(totalCajas)||0)*caja + (Number(unidades)||0);
+  const o       = _objetivoU(cfg, prod, _curFecha());   // {base, carry, objetivo}
+  const margenU = Math.max(_colchonModU(cfg.grupo), 0); // tolerancia en unidades
+  const diffU   = contadoU - o.objetivo;
+  return {cfg, caja, contadoU,
+          esperadoBase:o.base, carry:o.carry, objetivoU:o.objetivo,
+          margenU, diffU,
           estado: contadoU===0 ? 'vacio'
                 : Math.abs(diffU)<=margenU ? 'ok'
                 : diffU<0 ? 'bajo' : 'excedente'};
@@ -492,15 +517,20 @@ function _validarProducto(key, prod, totalCajas, unidades){
 function _renderAdminPanel(){
   const grupos = _conteoConfig.grupos||[];
   const ts = _conteoConfig.updatedAt||'—';
+  const GC = '1fr 80px 95px 90px 95px';  // grilla de columnas
   const filas = grupos.map(g=>{
-    const sid = _safeId(g.grupo);
-    const tol = _tolerancia[g.grupo]!=null ? _tolerancia[g.grupo] : '';
-    const cajas = g.saldoCajas!=null ? g.saldoCajas : (g.caja?Math.round((g.saldo/g.caja)*100)/100:'—');
-    return `<div style="display:grid;grid-template-columns:1fr 90px 90px 90px;gap:6px;align-items:center;padding:5px 6px;background:#fff;border-radius:8px;border:1px solid #EDE9FE">
+    const sid   = _safeId(g.grupo);
+    const mod   = _colchonMod[g.grupo]!=null ? _colchonMod[g.grupo] : '';
+    const carry = _carryColchon(g.grupo, _curFecha());        // colchón fijo (arrastre)
+    const base  = Number(g.saldo)||0;
+    const obj   = base + carry;                                // objetivo de hoy
+    const carryTxt = (carry>0?'+':'') + carry;
+    return `<div style="display:grid;grid-template-columns:${GC};gap:6px;align-items:center;padding:5px 6px;background:#fff;border-radius:8px;border:1px solid #EDE9FE">
       <span style="font-size:12px;font-weight:600;color:#14213D">${g.grupo}</span>
-      <span style="font-size:12px;text-align:center;color:#1E40AF;font-weight:700">${g.saldo??'—'}</span>
-      <span style="font-size:12px;text-align:center;color:#64748B">${cajas}</span>
-      <input type="number" min="0" step="0.5" placeholder="${_TOL_DEFAULT}" id="adm-tol-${sid}" value="${tol}"
+      <span style="font-size:12px;text-align:center;color:#1E40AF;font-weight:700">${base}</span>
+      <span style="font-size:12px;text-align:center;color:${carry?'#D97706':'#94A3B8'};font-weight:700">${carryTxt}</span>
+      <span style="font-size:12px;text-align:center;color:#0F766E;font-weight:700">${obj}</span>
+      <input type="number" min="0" step="1" placeholder="${_MOD_DEFAULT}" id="adm-mod-${sid}" value="${mod}"
         style="border:1px solid #DDD6FE;border-radius:6px;padding:5px 6px;font-size:12px;text-align:center;width:100%">
     </div>`;
   }).join('');
@@ -508,22 +538,24 @@ function _renderAdminPanel(){
   return `
   <div style="margin-top:28px;border-top:2px dashed #E2E8F0;padding-top:20px">
     <div onclick="ctToggleAdmin()" style="cursor:pointer;display:flex;align-items:center;gap:10px;margin-bottom:4px">
-      <span style="font-size:13px;font-weight:800;color:#7C3AED">⚙️ Esperado y colchón (tolerancia)</span>
+      <span style="font-size:13px;font-weight:800;color:#7C3AED">⚙️ Esperado y colchón (en unidades)</span>
       <span style="font-size:10px;background:#EDE9FE;color:#7C3AED;padding:2px 7px;border-radius:20px;font-weight:700">Solo Admin</span>
       <span id="ct-admin-arrow" style="margin-left:auto;color:#94A3B8;font-size:12px">▼</span>
     </div>
     <div style="font-size:11px;color:#94A3B8;margin-bottom:10px">
-      El <b>esperado</b> se sincroniza automáticamente desde PROYECCIONES.xlsm (hoja INVENTARIO) — última: ${ts}.
-      Solo defines el <b>colchón %</b>: si el conteo queda dentro de ±% del esperado, se acepta. (Por defecto ${_TOL_DEFAULT}%.)
+      El <b>esperado</b> se sincroniza solo desde PROYECCIONES.xlsm (hoja INVENTARIO) — última: ${ts}.
+      El <b>colchón fijo</b> es el excedente que quedó del último conteo (se arrastra). El <b>objetivo</b> = esperado + colchón fijo.
+      El <b>colchón modificable</b> (unidades) es el margen de tolerancia que defines tú, por si acaso.
     </div>
     <div id="ct-admin-panel" style="display:none">
       <div style="background:#FAF5FF;border:1px solid #DDD6FE;border-radius:12px;padding:14px">
         ${grupos.length? `
-        <div style="display:grid;grid-template-columns:1fr 90px 90px 90px;gap:6px;margin-bottom:8px;padding:0 6px">
-          <span style="font-size:10px;font-weight:700;color:#7C3AED;text-transform:uppercase">Grupo</span>
-          <span style="font-size:10px;font-weight:700;color:#7C3AED;text-transform:uppercase;text-align:center">Esperado (u)</span>
-          <span style="font-size:10px;font-weight:700;color:#7C3AED;text-transform:uppercase;text-align:center">≈ Cajas</span>
-          <span style="font-size:10px;font-weight:700;color:#7C3AED;text-transform:uppercase;text-align:center">Colchón %</span>
+        <div style="display:grid;grid-template-columns:${GC};gap:6px;margin-bottom:8px;padding:0 6px">
+          <span style="font-size:9px;font-weight:700;color:#7C3AED;text-transform:uppercase">Grupo</span>
+          <span style="font-size:9px;font-weight:700;color:#7C3AED;text-transform:uppercase;text-align:center">Esperado</span>
+          <span style="font-size:9px;font-weight:700;color:#7C3AED;text-transform:uppercase;text-align:center">Colchón fijo</span>
+          <span style="font-size:9px;font-weight:700;color:#7C3AED;text-transform:uppercase;text-align:center">Objetivo</span>
+          <span style="font-size:9px;font-weight:700;color:#7C3AED;text-transform:uppercase;text-align:center">Colchón modif. (u)</span>
         </div>
         <div style="display:flex;flex-direction:column;gap:4px;max-height:360px;overflow-y:auto">${filas}</div>
         <div style="margin-top:12px;display:flex;justify-content:flex-end">
@@ -550,10 +582,11 @@ function _renderLogPanel(){
   });
   // Texto de diferencia (SOLO admin) para confirmaciones marcadas
   const revisarTxt = it => {
-    if(it.contadoUnidades==null || it.esperadoUnidades==null) return '';
+    const ref = it.objetivoUnidades!=null ? it.objetivoUnidades : it.esperadoUnidades;
+    if(it.contadoUnidades==null || ref==null) return '';
     const cfg = _matchConfigGroup(it.producto);
     const caja = (cfg && cfg.caja) || 1;
-    const d = it.contadoUnidades - it.esperadoUnidades;
+    const d = it.contadoUnidades - ref;
     const cajas = caja>0 ? Math.round((d/caja)*10)/10 : d;
     const signo = d>0?'+':'';
     return `${signo}${d} u (${signo}${cajas} cajas)`;
@@ -652,7 +685,9 @@ function ctGuardar(){
     return {fecha,dia,operador:op,producto:prod,
             rows:rows.map(r=>({pallets:r.p,cajasXPlt:r.cx})),
             suelta,unidades,totalCajas,
-            contadoUnidades:e.contadoU, esperadoUnidades:e.esperadoU??null,
+            contadoUnidades:e.contadoU,
+            esperadoUnidades:e.esperadoBase??null,   // base (saldo sincronizado)
+            objetivoUnidades:e.objetivoU??null,      // base + colchón arrastrado
             estado};
   });
 
@@ -673,11 +708,11 @@ function ctGuardar(){
 function ctGuardarAdmin(){
   (_conteoConfig.grupos||[]).forEach(g=>{
     const sid = _safeId(g.grupo);
-    const v = document.getElementById(`adm-tol-${sid}`)?.value;
-    if(v!=='' && v!=null) _tolerancia[g.grupo] = Number(v);
-    else delete _tolerancia[g.grupo];
+    const v = document.getElementById(`adm-mod-${sid}`)?.value;
+    if(v!=='' && v!=null) _colchonMod[g.grupo] = Number(v);
+    else delete _colchonMod[g.grupo];
   });
-  localStorage.setItem(_CONTEO_TOL_KEY, JSON.stringify(_tolerancia));
+  localStorage.setItem(_CONTEO_MOD_KEY, JSON.stringify(_colchonMod));
   showToast('💾 Colchones guardados');
   renderConteoProductos();
 }
