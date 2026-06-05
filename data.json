@@ -17645,9 +17645,9 @@
       "notas": ""
     }
   ],
-  "updatedAt": "05/06/2026 10:31",
+  "updatedAt": "05/06/2026 11:31",
   "_meta": {
-    "generado": "05/06/2026 10:31",
+    "generado": "05/06/2026 11:31",
     "fuente": "Plantilla KrezcoCargo - copia.xlsx",
     "script": "sync-bodega-gui.py"
   }
